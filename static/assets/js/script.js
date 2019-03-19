@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import WebFont from 'webfontloader'
+import Vs from 'd3-vs'
 
 // Init Google Fonts
 WebFont.load({
@@ -9,6 +10,8 @@ WebFont.load({
     families: ['Open+Sans:300,400']
   }
 })
+
+Vue.use(Vs);
 
 // Init Vue app
 const kickstart_app = new Vue({
