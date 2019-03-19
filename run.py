@@ -67,4 +67,7 @@ def get_static_files(filename):
 
 
 # Run server
-run(app, server='auto', host='localhost', port=8080, reloader=True)
+if os.environ.get('APP_LOCATION') == 'heroku':
+    run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+else:
+    run(app, server='auto', host='localhost', port=8080, reloader=True, debug=True)
