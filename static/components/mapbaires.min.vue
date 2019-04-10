@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -148,45 +148,6 @@ function toComment(sourceMap) {
 
 /***/ }),
 
-/***/ 11:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mapbaires_vue__ = __webpack_require__(5);
-/* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_d0f7d9fe_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__ = __webpack_require__(58);
-function injectStyle (ssrContext) {
-  __webpack_require__(56)
-}
-var normalizeComponent = __webpack_require__(3)
-/* script */
-
-
-/* template */
-
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-d0f7d9fe"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mapbaires_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_d0f7d9fe_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__["a" /* default */],
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-
-/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
-
-
-/***/ }),
-
 /***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -206,7 +167,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(4)
+var listToStyles = __webpack_require__(3)
 
 /*
 type StyleObject = {
@@ -419,6 +380,40 @@ function applyToTag (styleElement, obj) {
 /***/ 3:
 /***/ (function(module, exports) {
 
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ }),
+
+/***/ 4:
+/***/ (function(module, exports) {
+
 /* globals __VUE_SSR_CONTEXT__ */
 
 // IMPORTANT: Do NOT use ES2015 features in this file.
@@ -526,40 +521,6 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ 4:
-/***/ (function(module, exports) {
-
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-module.exports = function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
-
-
-/***/ }),
-
 /***/ 5:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -595,15 +556,15 @@ module.exports = function listToStyles (parentId, list) {
     // Set svg width & height
     var centered = undefined;
     var mapCenter = {
-      lat: 1.4,
-      lng: 117.5
+      lat: -34.6,
+      lng: -58.4
     };
     var size = {
       height: 700,
       width: d3.select('.map-wrapper').node().getBoundingClientRect().width
     };
     var color = d3.scale.linear().domain([1, 20]).clamp(true).range(['#08304b', '#08304b']);
-    var projection = d3.geo.equirectangular().scale(1400).center([mapCenter.lng, mapCenter.lat]).translate([size.width / 2, size.height / 2]);
+    var projection = d3.geo.equirectangular().scale(100000).center([mapCenter.lng, mapCenter.lat]).translate([size.width / 2, size.height / 2]);
     var path = d3.geo.path().projection(projection);
     var svg = d3.select('svg').attr('width', size.width).attr('height', size.height); // Add background
 
@@ -612,7 +573,7 @@ module.exports = function listToStyles (parentId, list) {
     var effectLayer = g.append('g').classed('effect-layer', true);
     var mapLayer = g.append('g').classed('map-layer', true); // Load map data
 
-    var geoJsonUrl = 'https://raw.githubusercontent.com/superpikar/indonesia-geojson/master/indonesia.geojson';
+    var geoJsonUrl = '/static/geojson/baires.json';
     d3.json(geoJsonUrl, function (error, mapData) {
       var features = mapData.features; // Update color scale domain based on data
 
@@ -699,21 +660,21 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ }),
 
-/***/ 56:
+/***/ 83:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(57);
+var content = __webpack_require__(84);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("c72b4822", content, true, {});
+var update = __webpack_require__(2)("36ec07f6", content, true, {});
 
 /***/ }),
 
-/***/ 57:
+/***/ 84:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -721,14 +682,14 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, ".map-wrapper[data-v-d0f7d9fe]{.province-title{position:absolute;top:50px;left:150px;color:#fff}.province-info{background:#fff;position:absolute;top:150px;right:20px;height:400px;width:300px}.background{fill:#021019;pointer-events:all}.map-layer{fill:#08304b;stroke:#021019;stroke-width:1px}}", ""]);
+exports.push([module.i, ".map-wrapper[data-v-b2d34e60]{.province-title{position:absolute;top:50px;left:150px;color:#fff}.province-info{background:#fff;position:absolute;top:150px;right:20px;height:400px;width:300px}.background{fill:#021019;pointer-events:all}.map-layer{fill:#08304b;stroke:#021019;stroke-width:1px}}", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 58:
+/***/ 85:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -736,6 +697,45 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
 var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"container"},[_c('p',[_vm._v("Reference")]),_vm._v(" "),_c('ul',[_c('li',[_c('a',{attrs:{"href":"https://bl.ocks.org/john-guerra/43c7656821069d00dcbc"}},[_vm._v("https://bl.ocks.org/john-guerra/43c7656821069d00dcbc")])])])])}]
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
+
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mapbaires_vue__ = __webpack_require__(5);
+/* empty harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b2d34e60_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__ = __webpack_require__(85);
+function injectStyle (ssrContext) {
+  __webpack_require__(83)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-b2d34e60"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mapbaires_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b2d34e60_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+
+/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
+
 
 /***/ })
 

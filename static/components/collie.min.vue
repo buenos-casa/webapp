@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ 	return __webpack_require__(__webpack_require__.s = 49);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */,
-/* 1 */
+/******/ ({
+
+/***/ 1:
 /***/ (function(module, exports) {
 
 /*
@@ -147,7 +147,158 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 2 */
+
+/***/ 19:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["a"] = ({
+  mounted: function mounted() {
+    this.after_style = "visibility:hidden;";
+    this.title_first = document.getElementById("svg-title-first");
+    this.title_last = document.getElementById("svg-title-last").getElementsByTagName('span')[0];
+    document.documentElement.style.setProperty('--main-animation-duration', this.total_time + "s");
+    this.order = [{
+      name: 'rpi',
+      desc: ['IoT', 'Maker']
+    }, {
+      name: 'lgbt',
+      desc: ['LGBT', 'Advocate']
+    }, {
+      name: 'collie',
+      desc: ['Dog', 'Communicator']
+    }, {
+      name: 'ai',
+      desc: ['AI', 'Researcher']
+    }, {
+      name: 'raccoon',
+      desc: ['Raccoon', 'Apologist']
+    }];
+    this.looping();
+  },
+  props: ['total_time'],
+  watch: {},
+  methods: {
+    looping: function looping() {
+      var _this = this;
+
+      var i = 0;
+      var ob = this.order[i];
+      this.animate(ob.name);
+      this.renderDescriptor(ob.desc);
+      i += 1;
+      setInterval(function () {
+        ob = _this.order[i];
+
+        _this.animate(ob.name);
+
+        _this.renderDescriptor(ob.desc);
+
+        i = (i + 1) % _this.order.length;
+      }, this.total_time * 1000);
+    },
+    animate: function animate(icon) {
+      var _this2 = this;
+
+      var svg_str = "svg-" + icon;
+      var svg = document.getElementById(svg_str);
+      svg.classList.add(icon);
+      svg.addEventListener("animationend", function () {
+        svg.classList.remove(icon);
+        svg.style = _this2.after_style;
+      }, false);
+    },
+    renderDescriptor: function renderDescriptor(desc) {
+      document.documentElement.style.setProperty('--main-em-size', desc[0].length / 2 + 1 + "em");
+      this.title_first.innerHTML = desc[0]; // document.documentElement.style.setProperty('--main-em-last-size', desc[1].length + "em");
+
+      this.title_last.innerHTML = desc[1];
+    }
+  }
+});
+
+/***/ }),
+
+/***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -166,7 +317,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(4)
+var listToStyles = __webpack_require__(3)
 
 /*
 type StyleObject = {
@@ -375,7 +526,42 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 3 */
+
+/***/ 3:
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ }),
+
+/***/ 4:
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -484,213 +670,19 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
 
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-module.exports = function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
-
-
-/***/ }),
-/* 5 */,
-/* 6 */,
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["a"] = ({
-  mounted: function mounted() {
-    this.after_style = "visibility:hidden;";
-    this.title_first = document.getElementById("svg-title-first");
-    this.title_last = document.getElementById("svg-title-last").getElementsByTagName('span')[0];
-    document.documentElement.style.setProperty('--main-animation-duration', this.total_time + "s");
-    this.order = [{
-      name: 'rpi',
-      desc: ['IoT', 'Maker']
-    }, {
-      name: 'lgbt',
-      desc: ['LGBT', 'Advocate']
-    }, {
-      name: 'collie',
-      desc: ['Dog', 'Communicator']
-    }, {
-      name: 'ai',
-      desc: ['AI', 'Researcher']
-    }, {
-      name: 'raccoon',
-      desc: ['Raccoon', 'Apologist']
-    }];
-    this.looping();
-  },
-  props: ['total_time'],
-  watch: {},
-  methods: {
-    looping: function looping() {
-      var _this = this;
-
-      var i = 0;
-      var ob = this.order[i];
-      this.animate(ob.name);
-      this.renderDescriptor(ob.desc);
-      i += 1;
-      setInterval(function () {
-        ob = _this.order[i];
-
-        _this.animate(ob.name);
-
-        _this.renderDescriptor(ob.desc);
-
-        i = (i + 1) % _this.order.length;
-      }, this.total_time * 1000);
-    },
-    animate: function animate(icon) {
-      var _this2 = this;
-
-      var svg_str = "svg-" + icon;
-      var svg = document.getElementById(svg_str);
-      svg.classList.add(icon);
-      svg.addEventListener("animationend", function () {
-        svg.classList.remove(icon);
-        svg.style = _this2.after_style;
-      }, false);
-    },
-    renderDescriptor: function renderDescriptor(desc) {
-      document.documentElement.style.setProperty('--main-em-size', desc[0].length / 2 + 1 + "em");
-      this.title_first.innerHTML = desc[0]; // document.documentElement.style.setProperty('--main-em-last-size', desc[1].length + "em");
-
-      this.title_last.innerHTML = desc[1];
-    }
-  }
-});
-
-/***/ }),
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */
+/***/ 49:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_collie_vue__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_collie_vue__ = __webpack_require__(19);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0513c902_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_collie_vue__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0513c902_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_collie_vue__ = __webpack_require__(52);
 function injectStyle (ssrContext) {
-  __webpack_require__(20)
+  __webpack_require__(50)
 }
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(4)
 /* script */
 
 
@@ -717,20 +709,22 @@ var Component = normalizeComponent(
 
 
 /***/ }),
-/* 20 */
+
+/***/ 50:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(21);
+var content = __webpack_require__(51);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var update = __webpack_require__(2)("006d95be", content, true, {});
 
 /***/ }),
-/* 21 */
+
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -744,7 +738,8 @@ exports.push([module.i, ":root{--main-animation-duration:10s;--main-em-size:5em;
 
 
 /***/ }),
-/* 22 */
+
+/***/ 52:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -754,4 +749,5 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
 
 /***/ })
-/******/ ]);
+
+/******/ });

@@ -31,8 +31,8 @@ export default {
         // Set svg width & height
         let centered = undefined;
         const mapCenter = {
-        lat: 1.4,
-        lng: 117.5
+        lat: -34.6,
+        lng: -58.4
         };
         const size = {
         height: 700,
@@ -45,7 +45,7 @@ export default {
         .range(['#08304b', '#08304b']);
 
         const projection = d3.geo.equirectangular()
-        .scale(1400)
+        .scale(100000)
         .center([mapCenter.lng, mapCenter.lat])
         .translate([size.width / 2, size.height / 2]);
 
@@ -71,7 +71,7 @@ export default {
         .classed('map-layer', true);
         
         // Load map data
-        const geoJsonUrl = 'https://raw.githubusercontent.com/superpikar/indonesia-geojson/master/indonesia.geojson';
+        const geoJsonUrl = '/static/geojson/baires.json';
         d3.json(geoJsonUrl, function(error, mapData) {
         var features = mapData.features;
 
