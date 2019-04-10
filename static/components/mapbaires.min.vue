@@ -543,12 +543,6 @@ module.exports = function normalizeComponent (
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["a"] = ({
   name: "mapbaires",
   template: "<mapbaires\>",
@@ -660,21 +654,21 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ 83:
+/***/ 86:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(84);
+var content = __webpack_require__(87);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("36ec07f6", content, true, {});
+var update = __webpack_require__(2)("0730db5e", content, true, {});
 
 /***/ }),
 
-/***/ 84:
+/***/ 87:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(1)(false);
@@ -682,19 +676,19 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, ".map-wrapper[data-v-b2d34e60]{.province-title{position:absolute;top:50px;left:150px;color:#fff}.province-info{background:#fff;position:absolute;top:150px;right:20px;height:400px;width:300px}.background{fill:#021019;pointer-events:all}.map-layer{fill:#08304b;stroke:#021019;stroke-width:1px}}", ""]);
+exports.push([module.i, ".map-wrapper[data-v-35df3be4]{.province-title{position:absolute;top:50px;left:150px;color:#fff}.province-info{background:#fff;position:absolute;top:150px;right:20px;height:400px;width:300px}.background{fill:#021019;pointer-events:all}.map-layer{fill:#08304b;stroke:#021019;stroke-width:1px}}", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ 85:
+/***/ 88:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"height":"1000px"}},[_c('div',{staticClass:"map-wrapper"},[(_vm.province)?_c('h2',{staticClass:"province-title"},[_vm._v(_vm._s(_vm.province.state))]):_vm._e(),_vm._v(" "),(_vm.currentProvince)?_c('div',{staticClass:"province-info"},[_c('h3',{staticClass:"text-center"},[_vm._v(_vm._s(_vm.currentProvince.state))]),_vm._v(" "),_c('ul',[_c('li',[_vm._v("cartodb_id: "+_vm._s(_vm.currentProvince.cartodb_id))]),_vm._v(" "),_c('li',[_vm._v("slug: "+_vm._s(_vm.currentProvince.slug))])])]):_vm._e(),_vm._v(" "),_c('svg')]),_vm._v(" "),_vm._m(0)])}
-var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"container"},[_c('p',[_vm._v("Reference")]),_vm._v(" "),_c('ul',[_c('li',[_c('a',{attrs:{"href":"https://bl.ocks.org/john-guerra/43c7656821069d00dcbc"}},[_vm._v("https://bl.ocks.org/john-guerra/43c7656821069d00dcbc")])])])])}]
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"height":"1000px"}},[_c('div',{staticClass:"map-wrapper"},[(_vm.province)?_c('h2',{staticClass:"province-title"},[_vm._v(_vm._s(_vm.province.state))]):_vm._e(),_vm._v(" "),(_vm.currentProvince)?_c('div',{staticClass:"province-info"},[_c('h3',{staticClass:"text-center"},[_vm._v(_vm._s(_vm.currentProvince.state))]),_vm._v(" "),_c('ul',[_c('li',[_vm._v("cartodb_id: "+_vm._s(_vm.currentProvince.cartodb_id))]),_vm._v(" "),_c('li',[_vm._v("slug: "+_vm._s(_vm.currentProvince.slug))])])]):_vm._e(),_vm._v(" "),_c('svg')])])}
+var staticRenderFns = []
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
 
@@ -707,9 +701,9 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mapbaires_vue__ = __webpack_require__(5);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b2d34e60_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_35df3be4_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__ = __webpack_require__(88);
 function injectStyle (ssrContext) {
-  __webpack_require__(83)
+  __webpack_require__(86)
 }
 var normalizeComponent = __webpack_require__(4)
 /* script */
@@ -722,12 +716,12 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-b2d34e60"
+var __vue_scopeId__ = "data-v-35df3be4"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mapbaires_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b2d34e60_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_35df3be4_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,

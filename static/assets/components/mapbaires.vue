@@ -11,12 +11,6 @@
             </div>
             <svg></svg>
         </div>
-        <div class="container">
-            <p>Reference</p>
-            <ul>
-            <li><a href="https://bl.ocks.org/john-guerra/43c7656821069d00dcbc">https://bl.ocks.org/john-guerra/43c7656821069d00dcbc</a></li>
-            </ul>
-        </div>
     </div>
 </template>
 
