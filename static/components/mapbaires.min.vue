@@ -63,9 +63,9 @@
 /******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 1:
+/******/ ([
+/* 0 */,
+/* 1 */
 /***/ (function(module, exports) {
 
 /*
@@ -147,8 +147,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-
-/***/ 2:
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -376,8 +375,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-
-/***/ 3:
+/* 3 */
 /***/ (function(module, exports) {
 
 /**
@@ -410,8 +408,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-
-/***/ 4:
+/* 4 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -520,8 +517,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-
-/***/ 5:
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -547,7 +543,8 @@ module.exports = function normalizeComponent (
   name: "mapbaires",
   template: "<mapbaires\>",
   mounted: function mounted() {
-    // Set svg width & height
+    var vue_ref = this; // Set svg width & height
+
     var centered = undefined;
     var mapCenter = {
       lat: -34.6,
@@ -585,13 +582,13 @@ module.exports = function normalizeComponent (
         y = centroid[1];
         k = 4;
         centered = d;
-        this.openInfo(d.properties);
+        vue_ref.openInfo(d.properties);
       } else {
         x = size.width / 2;
         y = size.height / 2;
         k = 1;
         centered = null;
-        this.closeInfo();
+        vue_ref.closeInfo();
       } // Highlight the clicked province
 
 
@@ -607,12 +604,12 @@ module.exports = function normalizeComponent (
       d3.select(this).style('fill', '#1483ce');
 
       if (d) {
-        this.selectProvince(d.properties);
+        vue_ref.selectProvince(d.properties);
       }
     }
 
     function mouseout(d) {
-      this.selectProvince(undefined); // Reset province color
+      vue_ref.selectProvince(undefined); // Reset province color
 
       mapLayer.selectAll('path').style('fill', function (d) {
         return centered && d === centered ? '#D5708B' : fillFn(d);
@@ -653,57 +650,19 @@ module.exports = function normalizeComponent (
 });
 
 /***/ }),
-
-/***/ 86:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(87);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("0730db5e", content, true, {});
-
-/***/ }),
-
-/***/ 87:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, ".map-wrapper[data-v-35df3be4]{.province-title{position:absolute;top:50px;left:150px;color:#fff}.province-info{background:#fff;position:absolute;top:150px;right:20px;height:400px;width:300px}.background{fill:#021019;pointer-events:all}.map-layer{fill:#08304b;stroke:#021019;stroke-width:1px}}", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 88:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"height":"1000px"}},[_c('div',{staticClass:"map-wrapper"},[(_vm.province)?_c('h2',{staticClass:"province-title"},[_vm._v(_vm._s(_vm.province.state))]):_vm._e(),_vm._v(" "),(_vm.currentProvince)?_c('div',{staticClass:"province-info"},[_c('h3',{staticClass:"text-center"},[_vm._v(_vm._s(_vm.currentProvince.state))]),_vm._v(" "),_c('ul',[_c('li',[_vm._v("cartodb_id: "+_vm._s(_vm.currentProvince.cartodb_id))]),_vm._v(" "),_c('li',[_vm._v("slug: "+_vm._s(_vm.currentProvince.slug))])])]):_vm._e(),_vm._v(" "),_c('svg')])])}
-var staticRenderFns = []
-var esExports = { render: render, staticRenderFns: staticRenderFns }
-/* harmony default export */ __webpack_exports__["a"] = (esExports);
-
-/***/ }),
-
-/***/ 9:
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mapbaires_vue__ = __webpack_require__(5);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_35df3be4_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7eb81946_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__ = __webpack_require__(12);
 function injectStyle (ssrContext) {
-  __webpack_require__(86)
+  __webpack_require__(10)
 }
 var normalizeComponent = __webpack_require__(4)
 /* script */
@@ -716,12 +675,12 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-35df3be4"
+var __vue_scopeId__ = "data-v-7eb81946"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mapbaires_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_35df3be4_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7eb81946_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mapbaires_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -731,6 +690,42 @@ var Component = normalizeComponent(
 /* harmony default export */ __webpack_exports__["default"] = (Component.exports);
 
 
-/***/ })
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/******/ });
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(11);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("9fd6fd9c", content, true, {});
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, ".map-wrapper[data-v-7eb81946]{.province-title{position:absolute;top:50px;left:150px;color:#fff}.province-info{background:#fff;position:absolute;top:150px;right:20px;height:400px;width:300px}.background{fill:#021019;pointer-events:all}.map-layer{fill:#08304b;stroke:#021019;stroke-width:1px}}", ""]);
+
+// exports
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"height":"1000px"}},[_c('div',{staticClass:"map-wrapper"},[(_vm.province)?_c('h2',{staticClass:"province-title"},[_vm._v(_vm._s(_vm.province.state))]):_vm._e(),_vm._v(" "),(_vm.currentProvince)?_c('div',{staticClass:"province-info"},[_c('h3',{staticClass:"text-center"},[_vm._v(_vm._s(_vm.currentProvince.state))]),_vm._v(" "),_c('ul',[_c('li',[_vm._v("cartodb_id: "+_vm._s(_vm.currentProvince.cartodb_id))]),_vm._v(" "),_c('li',[_vm._v("slug: "+_vm._s(_vm.currentProvince.slug))])])]):_vm._e(),_vm._v(" "),_c('svg')])])}
+var staticRenderFns = []
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+
+/***/ })
+/******/ ]);
