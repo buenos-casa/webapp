@@ -40,13 +40,14 @@ import {
   d3LHeat
 } from 'd3-vs';
 
-
 // Init Google Fonts
 WebFont.load({
   google: {
     families: ['Open+Sans:300,400']
   }
 })
+
+Vue.use(Vs);
 
 // Init Vue app
 const vue_app = new Vue({
