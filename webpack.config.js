@@ -5,7 +5,10 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
   entry: {
     'js/script.min.js': './static/assets/js/script.js',
-    'css/style.min.css': './static/assets/scss/style.scss'
+    'css/style.min.css': './static/assets/scss/style.scss',
+    'components/mapbaires.min.vue': './static/assets/components/mapbaires.vue',
+    'components/main-content.min.vue': './static/assets/components/main-content.vue',
+    'components/collie.min.vue': './static/assets/components/collie.vue'
   },
   output: {
     path: path.resolve(__dirname, 'static'),
