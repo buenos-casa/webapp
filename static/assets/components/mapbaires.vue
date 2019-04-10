@@ -1,5 +1,5 @@
 <template>
-    <div style="height:1000px">
+    <div style="height:auto">
         <div class="map-wrapper">
             <h2 v-if="province" class="province-title">{{province.state}}</h2>
             <div v-if="currentProvince" class="province-info">
