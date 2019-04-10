@@ -1,0 +1,757 @@
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */,
+/* 1 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(4)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
+
+  options = _options || {}
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ }),
+/* 5 */,
+/* 6 */,
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["a"] = ({
+  mounted: function mounted() {
+    this.after_style = "visibility:hidden;";
+    this.title_first = document.getElementById("svg-title-first");
+    this.title_last = document.getElementById("svg-title-last").getElementsByTagName('span')[0];
+    document.documentElement.style.setProperty('--main-animation-duration', this.total_time + "s");
+    this.order = [{
+      name: 'rpi',
+      desc: ['IoT', 'Maker']
+    }, {
+      name: 'lgbt',
+      desc: ['LGBT', 'Advocate']
+    }, {
+      name: 'collie',
+      desc: ['Dog', 'Communicator']
+    }, {
+      name: 'ai',
+      desc: ['AI', 'Researcher']
+    }, {
+      name: 'raccoon',
+      desc: ['Raccoon', 'Apologist']
+    }];
+    this.looping();
+  },
+  props: ['total_time'],
+  watch: {},
+  methods: {
+    looping: function looping() {
+      var _this = this;
+
+      var i = 0;
+      var ob = this.order[i];
+      this.animate(ob.name);
+      this.renderDescriptor(ob.desc);
+      i += 1;
+      setInterval(function () {
+        ob = _this.order[i];
+
+        _this.animate(ob.name);
+
+        _this.renderDescriptor(ob.desc);
+
+        i = (i + 1) % _this.order.length;
+      }, this.total_time * 1000);
+    },
+    animate: function animate(icon) {
+      var _this2 = this;
+
+      var svg_str = "svg-" + icon;
+      var svg = document.getElementById(svg_str);
+      svg.classList.add(icon);
+      svg.addEventListener("animationend", function () {
+        svg.classList.remove(icon);
+        svg.style = _this2.after_style;
+      }, false);
+    },
+    renderDescriptor: function renderDescriptor(desc) {
+      document.documentElement.style.setProperty('--main-em-size', desc[0].length / 2 + 1 + "em");
+      this.title_first.innerHTML = desc[0]; // document.documentElement.style.setProperty('--main-em-last-size', desc[1].length + "em");
+
+      this.title_last.innerHTML = desc[1];
+    }
+  }
+});
+
+/***/ }),
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_collie_vue__ = __webpack_require__(7);
+/* empty harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0513c902_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_collie_vue__ = __webpack_require__(22);
+function injectStyle (ssrContext) {
+  __webpack_require__(20)
+}
+var normalizeComponent = __webpack_require__(3)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_collie_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0513c902_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_collie_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+
+/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(21);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("006d95be", content, true, {});
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, ":root{--main-animation-duration:10s;--main-em-size:5em;--main-em-last-size:-800px}.float-svg{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;position:absolute;height:250px;width:100%;bottom:50px;stroke:hsla(0,0%,100%,.3)}.float-svg svg{z-index:999;position:absolute;width:200px;height:200px;top:0;stroke-miterlimit:10;fill:none;-webkit-animation-duration:var(--main-animation-duration);animation-duration:var(--main-animation-duration);-webkit-animation-fill-mode:forwards;animation-fill-mode:forwards;-webkit-animation-iteration-count:1;animation-iteration-count:1;-webkit-animation-timing-function:ease-in-out;animation-timing-function:ease-in-out;stroke:#fff;mix-blend-mode:difference;stroke-width:2;stroke-dasharray:400px;stroke-dashoffset:400px}.rpi{stroke-width:1!important}.collie{stroke-width:3!important}.ai,.collie,.lgbt,.raccoon,.rpi{-webkit-animation-name:draw;animation-name:draw}.descriptor,.name-class{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;color:hsla(0,0%,100%,.3);font-family:Playfair Display,serif}.name-class{font-size:5em}.descriptor{font-size:2em;bottom:0}#name,#svg-title-first,#svg-title-last{position:absolute;overflow:hidden;color:#fff;mix-blend-mode:difference}#svg-title-first,#svg-title-last{bottom:0}#name{top:15%;right:15%}@-webkit-keyframes draw{0%{visibility:visible}30%,80%{stroke-dashoffset:0}to{visibility:hidden}}@keyframes draw{0%{visibility:visible}30%,80%{stroke-dashoffset:0}to{visibility:hidden}}@-webkit-keyframes draw-fill{0%{visibility:visible}15%{fill:transparent}30%,80%{stroke-dashoffset:0;fill:#000}95%{fill:transparent}to{visibility:hidden}}@keyframes draw-fill{0%{visibility:visible}15%{fill:transparent}30%,80%{stroke-dashoffset:0;fill:#000}95%{fill:transparent}to{visibility:hidden}}.descriptor div,.name-class{display:inline-block;overflow:hidden;white-space:nowrap}#svg-title-first{-webkit-animation:showup infinite;animation:showup infinite;-webkit-animation-duration:var(--main-animation-duration);animation-duration:var(--main-animation-duration);text-anchor:start}#svg-title-last{width:0;-webkit-animation:reveal infinite;animation:reveal infinite;-webkit-animation-duration:var(--main-animation-duration);animation-duration:var(--main-animation-duration)}#svg-title-last span{margin-right:var(--main-em-last-size);text-align:left;text-anchor:start;-webkit-animation:slidein infinite;animation:slidein infinite;-webkit-animation-duration:var(--main-animation-duration);animation-duration:var(--main-animation-duration);float:right;padding-left:.5em}@-webkit-keyframes showup{0%{opacity:0;padding-right:0}20%{opacity:1;padding-right:0}35%{padding-right:var(--main-em-size)}80%{opacity:1;padding-right:var(--main-em-size)}to{opacity:0;padding-right:var(--main-em-size)}}@keyframes showup{0%{opacity:0;padding-right:0}20%{opacity:1;padding-right:0}35%{padding-right:var(--main-em-size)}80%{opacity:1;padding-right:var(--main-em-size)}to{opacity:0;padding-right:var(--main-em-size)}}@-webkit-keyframes slidein{0%{margin-right:var(--main-em-last-size)}20%{margin-right:var(--main-em-last-size)}35%{margin-right:0}to{margin-right:0}}@keyframes slidein{0%{margin-right:var(--main-em-last-size)}20%{margin-right:var(--main-em-last-size)}35%{margin-right:0}to{margin-right:0}}@-webkit-keyframes reveal{0%{opacity:0;width:0}20%{opacity:1;width:0}30%{left:50%;width:auto}80%{opacity:1}to{opacity:0;left:50%;width:auto}}@keyframes reveal{0%{opacity:0;width:0}20%{opacity:1;width:0}30%{left:50%;width:auto}80%{opacity:1}to{opacity:0;left:50%;width:auto}}", ""]);
+
+// exports
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._m(0),_vm._v(" "),_c('div',{staticClass:"float-svg"},[_vm._m(1),_vm._v(" "),_c('svg',{staticStyle:{"visibility":"hidden"},attrs:{"width":"900","height":"678","version":"1.1","viewBox":"0 0 238.12 179.39","xmlns":"http://www.w3.org/2000/svg","xmlns:cc":"http://creativecommons.org/ns#","id":"svg-collie","xmlns:dc":"http://purl.org/dc/elements/1.1/","xmlns:rdf":"http://www.w3.org/1999/02/22-rdf-syntax-ns#"}},[_c('g',{attrs:{"transform":"matrix(1.7563 0 0 1.7563 30.277 13.827)"}},[_c('g',{attrs:{"transform":"matrix(1.1953 0 0 1.1953 -7.1604 -18.245)"}},[_c('g',{attrs:{"stroke-linecap":"round","stroke-linejoin":"round"}},[_c('path',{attrs:{"d":"m50.56 22.88h-6.94c-3.8863-4.4162-8.0752-8.5694-12.562-12.376-5.1063 0.11477-10.457 0.46447-15.018 2.9934-2.2169 1.0032-4.5905 9.1241-0.47975 5.2613 0.87783-0.73552 1.759-1.4671 2.6398-2.1991"}}),_vm._v(" "),_c('path',{attrs:{"d":"m39.76 73.06c4.4802 1.2826 2.8883 6.6191 3.9008 10.022 0.95065 2.9295 3.6941 5.1538 6.8992 4.3483"}}),_vm._v(" "),_c('path',{attrs:{"d":"m13.88 20.17c5.7419 6.0924 6.166 15.025 6.4664 22.939-0.08846 7.6604 1.1083 15.238 1.9798 22.818 0.81753 3.9718 4.1391 6.6261 6.3791 9.8224 1.5349 1.9303 3.0698 3.8606 4.6047 5.7908"}}),_vm._v(" "),_c('path',{attrs:{"d":"m47.68 23.34v16.58c-2.7436 5.0181-7.41 9.3063-7.8226 15.327-0.43246 2.6142-0.86492 5.2285-1.2974 7.8427-3.0274 2.2364 0.24742 5.8019 0.70775 8.5279 0.16408 0.48069 0.32816 0.96138 0.49225 1.4421"}}),_vm._v(" "),_c('path',{attrs:{"d":"m50 58.83c-4.5655-1.583-10.629 3.4719-6.8856 7.8692 1.2444 2.8852 4.1045 5.1429 7.3756 4.5008"}}),_vm._v(" "),_c('path',{attrs:{"d":"m49.91 22.88h6.94c3.8863-4.4162 8.0752-8.5694 12.562-12.376 5.1063 0.11477 10.457 0.46447 15.018 2.9934 2.2169 1.0032 4.5905 9.1241 0.47975 5.2613-0.87783-0.73552-1.759-1.4671-2.6398-2.1991"}}),_vm._v(" "),_c('path',{attrs:{"d":"m60.71 73.06c-4.9717 1.3286-2.6406 7.5439-4.6125 11.049-0.8914 2.1633-3.1291 3.9375-5.5675 3.311"}}),_vm._v(" "),_c('path',{attrs:{"d":"m86.59 20.17c-5.7419 6.0924-6.166 15.025-6.4664 22.939 0.08846 7.6604-1.1083 15.238-1.9798 22.818-0.81753 3.9718-4.1391 6.6261-6.3791 9.8224-1.5349 1.9303-3.0698 3.8606-4.6047 5.7908"}}),_vm._v(" "),_c('path',{attrs:{"d":"m52.79 23.34v16.58c2.7436 5.0181 7.41 9.3063 7.8226 15.327 0.43246 2.6142 0.86492 5.2285 1.2974 7.8427 3.0274 2.2364-0.24742 5.8019-0.70775 8.5279-0.16408 0.48069-0.32816 0.96138-0.49225 1.4421"}}),_vm._v(" "),_c('path',{attrs:{"d":"m50 58.83c4.5055-1.5154 10.952 2.9167 7.5311 7.6627-0.61688 4.1373-7.3423 3.6511-6.9118 7.4822 0.0072 0.64169 0.01127 1.2835 6.66e-4 1.9252"}}),_vm._v(" "),_c('path',{attrs:{"d":"m43.15 75.26c4.6939 0.63704 9.4782 0.68071 14.17 0"}}),_vm._v(" "),_c('path',{attrs:{"d":"m66.81 27.18c2.9066 2.435 6.5861 4.5472 7.5438 8.5099 0.87207 1.9434 1.7441 3.8867 2.6162 5.8301"}}),_vm._v(" "),_c('path',{attrs:{"d":"m33.56 27.18c-2.9098 2.4346-6.5962 4.5436-7.5538 8.5099-0.87207 1.9434-1.7441 3.8867-2.6162 5.8301"}}),_vm._v(" "),_c('path',{attrs:{"d":"m33.31 81.54c3.6526 3.2631 6.0475 8.7151 11.411 9.4415 4.624 2.2637 9.8689 0.65686 14.448-0.79782 2.5805-2.1621 4.6099-4.9955 6.9451-7.4638 0.34861-0.3933 0.69721-0.7866 1.0458-1.1799"}})]),_vm._v(" "),_c('path',{attrs:{"d":"m39.07 42.94c-0.57082 5.4826-7.618-2.0114-2.0203-2.1736 1.1247 0.0099 2.033 1.0842 2.0203 2.1736z","stroke-miterlimit":"10"}}),_vm._v(" "),_c('path',{attrs:{"d":"m65.42 42.94c-0.57082 5.4826-7.618-2.0114-2.0203-2.1736 1.1247 0.0099 2.033 1.0842 2.0203 2.1736z","stroke-miterlimit":"10"}})])])]),_vm._v(" "),_c('svg',{staticStyle:{"visibility":"hidden"},attrs:{"width":"900","height":"678","version":"1.1","viewBox":"0 0 238.12 179.39","xmlns":"http://www.w3.org/2000/svg","xmlns:cc":"http://creativecommons.org/ns#","id":"svg-raccoon","xmlns:dc":"http://purl.org/dc/elements/1.1/","xmlns:rdf":"http://www.w3.org/1999/02/22-rdf-syntax-ns#"}},[_c('g',{attrs:{"transform":"translate(0 -117.61)"}},[_c('g',{attrs:{"transform":"matrix(1.9126 0 0 1.9126 -17.81 69.807)"}},[_c('path',{attrs:{"d":"m133.74 94.087c-3.918-5.502-10.512-15.58-11.527-19.199-2.193-7.815-5.422-14.8-9.605-20.779 0.41-8.56 0.316-26.171-7.096-28.778-0.541-0.19-1.117-0.287-1.711-0.287-4.652 0-10.514 6.688-13.836 11.043-5.531-2.085-11.549-3.141-17.92-3.141-6.229 0-12.125 1.012-17.563 3.01-3.285-4.305-9.077-10.91-13.683-10.91-0.592 0-1.165 0.096-1.703 0.285-7.199 2.533-7.315 19.499-6.924 27.813-4.515 6.178-7.977 13.487-10.296 21.745-1.016 3.619-7.609 13.697-11.526 19.199-0.55 0.772-0.702 1.76-0.411 2.662 0.292 0.902 0.992 1.613 1.89 1.919l59.251 20.13c0.313 0.106 0.639 0.159 0.965 0.159s0.652-0.053 0.965-0.159l59.25-20.13c0.898-0.306 1.6-1.017 1.891-1.919s0.138-1.891-0.411-2.663zm-61.695 18.702-54.514-18.52c3.283-4.815 8.913-13.453 10.122-17.759 2.227-7.928 5.577-14.867 9.959-20.625 0.433-0.568 0.648-1.273 0.608-1.986-0.65-11.502 0.914-21.483 2.724-22.82 1.784 0.477 6.46 5.23 10.056 10.261 0.818 1.146 2.326 1.569 3.621 1.015 4.438-1.896 9.281-2.998 14.425-3.308v19.841h6v-19.843c5.274 0.316 10.226 1.464 14.746 3.445 1.301 0.572 2.82 0.15 3.645-1.004 3.684-5.155 8.479-10.012 10.23-10.42 1.924 1.241 3.584 11.609 2.896 23.761-0.039 0.691 0.162 1.375 0.568 1.935 4.066 5.592 7.197 12.235 9.305 19.747 1.209 4.307 6.84 12.944 10.123 17.76z"}}),_vm._v(" "),_c('path',{attrs:{"d":"m65.023 81.505c4.228-7.208 1.61-15.75-5.847-19.081-7.454-3.332-16.924-0.19-21.151 7.016-4.227 7.208-6.47 13.578-6.47 13.578s29.241 5.693 33.468-1.513zm-11.835-1.947c-3.554 0-6.434-2.881-6.434-6.434 0-3.554 2.88-6.434 6.434-6.434s6.434 2.88 6.434 6.434c0 3.553-2.88 6.434-6.434 6.434z"}}),_vm._v(" "),_c('path',{attrs:{"d":"m84.907 62.424c-7.457 3.331-10.074 11.873-5.848 19.081 4.227 7.206 33.469 1.513 33.469 1.513s-2.244-6.37-6.471-13.578c-4.228-7.207-13.697-10.348-21.15-7.016zm5.988 17.134c-3.555 0-6.434-2.881-6.434-6.434 0-3.554 2.879-6.434 6.434-6.434 3.553 0 6.434 2.88 6.434 6.434 0 3.553-2.881 6.434-6.434 6.434z"}}),_vm._v(" "),_c('path',{attrs:{"d":"m77.042 93.035c1.658 0 3-1.343 3-3s-1.342-3-3-3h-10c-1.657 0-3 1.343-3 3s1.343 3 3 3h1.639l-6.838 10.077 4.965 3.369 5.492-8.093 5.491 8.093 4.965-3.369-6.837-10.077z"}})])])]),_vm._v(" "),_c('svg',{staticStyle:{"visibility":"hidden"},attrs:{"id":"svg-ai","width":"900","height":"678","version":"1.1","viewBox":"0 0 238.12 179.39","xmlns":"http://www.w3.org/2000/svg","xmlns:cc":"http://creativecommons.org/ns#","xmlns:dc":"http://purl.org/dc/elements/1.1/","xmlns:rdf":"http://www.w3.org/1999/02/22-rdf-syntax-ns#"}},[_c('path',{attrs:{"d":"m224.6 86.57c-4.8648-19.203-9.9858-38.407-14.851-57.61-0.25644-1.0242-0.76837-1.5363-1.7923-2.0484-24.068-8.4495-47.881-16.899-71.693-25.349-1.5362-0.51212-3.0725-0.76818-4.6089-0.51212-16.387 1.5363-32.774 3.3286-48.905 4.8649-1.2802 0.25606-2.8165 0.25606-4.0967 0.76818-10.242 4.8649-20.74 9.7297-31.238 14.339-0.76837 0.25606-1.5363 0.76818-2.0484 1.5363-8.7056 8.7056-17.155 17.411-25.861 26.117-0.51192 0.51212-1.0241 1.2802-1.0241 2.0484-1.7923 10.498-3.8407 20.74-5.8891 31.238-0.25645 1.2802 0.25644 2.0484 0.76837 2.8165 9.2177 11.778 18.435 23.3 27.653 35.078 0.76837 1.0242 1.7923 1.5363 3.0726 1.5363h35.59c1.2802 0 2.3043 0.25606 3.3286 1.2802 11.266 9.7298 22.532 19.459 33.798 29.189 1.0241 0.76818 1.5363 1.0242 2.5605 0 2.5604-2.0484 5.3769-4.0967 8.7055-6.6572v2.5605c0 1.5363 0 2.8165 1.5362 4.0967 11.01 8.4495 22.02 17.155 33.03 25.861 0.76837 0.76817 1.5362 1.0242 2.8164 1.0242h17.411c2.0484 0 2.0484 0 1.0242-1.7923-5.121-9.4737-9.9858-19.203-15.363-28.677-0.76836-1.2802-0.51192-1.7923 0.76837-2.8165 11.522-8.1935 23.044-16.387 34.822-24.324 0.76837-0.51211 1.5362-1.2802 2.0484-2.3044 6.1451-9.9858 12.034-19.716 18.179-29.701 0.51193-0.76818 0.51193-1.5363 0.25645-2.5605zm-168.48-58.378c8.4494-3.8407 16.899-7.9374 25.349-12.034 2.3044-1.2802 4.8648-1.5363 7.1693-1.7923 14.851-1.5363 29.701-2.8165 44.552-4.3528 0.76837 0 1.7923 0 2.5604 0.25606 22.02 7.6814 43.784 15.363 65.804 23.044 1.0241 0.25606 1.5362 0.76818 1.7923 1.7923 0.76837 3.3286 1.7923 6.9132 2.8166 10.242 0.51192 1.2802 0 1.5363-1.2803 1.5363h-40.711c-1.2803 0-2.0484 0.25606-2.8165 1.5363-2.0484 3.8407-4.3528 7.6814-6.4012 11.266-0.51192 0.76818-1.0241 1.2802-2.0483 1.2802h-39.431c-0.76837 0-1.5364-0.25606-2.0484-1.0242-1.7924-3.0725-3.3287-5.8891-5.121-8.9616-0.51193-0.76818-0.51193-1.5363 0-2.3044 2.0484-2.5605 3.8407-5.377 5.889-8.1935 0.51193-0.76818 1.0242-1.0242 2.0484-1.0242h25.092c1.0242 0 1.7924 0.51212 2.5605 1.0242 3.0726 2.0484 6.9133 1.7923 9.4737-0.76818 2.3044-2.5605 2.8166-6.4012 0.76837-9.4737-2.0484-2.8165-6.1451-4.3528-9.2176-2.3044-2.8166 2.0484-5.633 1.7923-8.4496 1.7923h-24.836c-1.2802 0-1.7923 0.25606-2.5605 1.2802-1.7923 2.8165-3.8407 5.633-5.633 8.4495-0.76837 1.0242-1.0241 1.0242-1.5362 0-0.76837-2.5605-2.5605-3.0725-5.121-3.0725-14.851 0.25606-29.701 0-44.552 0h-2.0484c2.0484-2.8165 4.0966-6.4012 7.9374-8.1935zm140.06 85.775c-13.571 9.4737-26.885 18.947-40.455 28.421-1.0241 0.76818-1.2802 1.2802-0.51192 2.5605 3.8407 7.1693 7.4253 14.339 11.266 21.508 0.25645 0.51212 0.76837 1.2802 0.51192 2.0484-9.4737-7.4253-18.691-14.595-28.165-21.764-0.76837-0.76818-0.76837-1.2802-0.76837-2.3044v-18.947c-0.76837 0-1.2803 0.51211-1.7923 1.0242-5.377 4.0967-11.01 8.4495-16.387 12.546-1.2802 1.0242-2.0484 0.76817-3.0725-0.25606-9.9858-8.7056-19.972-17.411-29.957-26.117-1.0242-0.76818-2.0484-1.2802-3.3287-1.2802h-34.566c-2.0484 0-2.8165-1.5363-3.8407-2.8165-0.51192-0.51212 0.25644-1.0242 0.51192-1.5363 1.7923-2.5605 3.5846-4.8649 5.1209-7.4253 1.5363-2.0484 4.3528-2.5605 6.4012-1.0242 4.8648 3.5846 11.01 1.2802 11.778-4.6088 0.51192-3.0725-1.0242-5.8891-3.5846-7.4253-2.5605-1.5363-6.1451-1.2802-8.1935 0.76818-0.76837 0.51212-1.2803 0.76818-2.3044 0.76818h-6.9133c-1.0241 0-1.7923 0.25606-2.3043 1.2802-2.3044 3.3286-4.6089 6.4011-6.9133 9.7297-0.76837 1.0242-1.0241 1.0242-1.7923 0-4.3528-5.8891-8.9616-11.778-13.314-17.411-0.51192-0.76818-0.76837-1.2802-0.51192-2.3044 0.25645-1.7923 0.76837-3.3286 0.76837-5.1209 0.25645-1.2802 0.76837-1.7923 2.0484-1.7923h40.711 7.6814c1.2802 0 1.7923 0.25606 2.5605 1.5363 4.0967 7.4253 8.4495 14.851 12.802 22.276 0.76837 1.2802 1.2803 2.0484 2.8165 1.7923 3.8407-0.76818 6.1451 0.76818 7.6814 4.3528 2.0484 4.6088 5.1208 8.9616 7.4253 13.314 0.51193 1.0242 1.0242 1.2802 2.0484 1.2802h8.4496c2.3044 0 4.3528 0 6.6572 1.5363 2.5604 1.7923 6.9132 1.0242 8.4494-1.2802 2.8165-3.5846 2.5605-7.6814 0-10.498-2.5604-2.5605-6.9132-3.3286-9.4737-1.0242-1.2802 1.0242-2.5605 1.0242-4.0968 1.2802-4.3528 0.76818-7.1692-0.76817-8.4495-5.1209-0.51192-1.0242-1.0241-2.0484-1.7923-3.5846h1.7923 32.774c1.2802 0 1.7923 0.25606 2.5605 1.5363 1.5362 3.0726 3.3286 5.8891 5.1209 8.7056 0.51192 1.0242 1.2802 1.2802 2.5605 1.2802h43.272 2.3044c-1.0242 1.5363-2.0484 3.0726-3.5847 4.0967zm16.899-26.885c-2.3044 3.5846-4.3528 7.1693-6.6572 10.754-0.51193 0.76818-1.0241 1.0242-2.0484 1.0242h-44.808c-1.0241 0-1.5362-0.51212-2.0484-1.2802-1.7923-3.0725-3.5846-5.8891-5.1209-8.9616-0.51192-1.0242-1.2803-1.5363-2.5605-1.5363h-51.209c-1.2802 0-2.3044-0.25606-2.8165-1.5363-4.0966-7.4253-8.4494-14.595-12.802-22.02-0.76837-1.2802-1.2802-1.5363-2.8165-1.5363h-51.977c-1.7923 0-1.7923-0.25606-1.7923-2.0484 0.51192-5.633 4.8648-8.4495 8.1934-12.29 0.51192-0.51212 1.2803-0.51212 1.7924-0.51212h25.605 25.605c1.2802 0 1.7923 0.25606 2.5604 1.5363 4.3528 7.4253 8.7056 15.107 13.058 22.532 0.51192 1.0242 1.2802 1.5363 2.5604 1.5363h50.697c1.2802 0 1.7923-0.51212 2.3044-1.5363 2.0484-3.8407 4.3527-7.6814 6.4011-11.266 0.51192-1.0242 1.0242-1.2802 2.0484-1.2802h37.895c1.2802 0 1.7923 0.51212 2.0484 1.5363 1.0241 4.6088 2.3044 9.2177 3.5846 13.826 0.51192 1.2802 0 1.7923-1.2802 1.5363h-24.58c-1.0241 0-1.5363-0.25606-2.3044-0.76818-3.3286-2.5605-7.4253-2.0484-9.9857 0.76818-2.5605 2.8165-2.5605 7.4253 0.25644 9.9858 2.8164 2.8165 6.9132 3.0726 10.242 0.25606 0.51193-0.51212 1.0242-0.51212 1.7923-0.51212h27.397c1.5362 0.25606 1.5362 0.76818 0.76837 1.7923z"}})]),_vm._v(" "),_c('svg',{staticStyle:{"visibility":"hidden"},attrs:{"id":"svg-lgbt","width":"900","height":"678","version":"1.1","viewBox":"0 0 238.12 179.39","xmlns":"http://www.w3.org/2000/svg","xmlns:cc":"http://creativecommons.org/ns#","xmlns:dc":"http://purl.org/dc/elements/1.1/","xmlns:rdf":"http://www.w3.org/1999/02/22-rdf-syntax-ns#"}},[_c('g',{attrs:{"transform":"matrix(4.2507 0 0 4.2507 17.127 -4281.3)","shape-rendering":"auto"}},[_c('path',{attrs:{"d":"m9.471 1013.8h29.104"}}),_vm._v(" "),_c('path',{attrs:{"d":"m5.4475 1021.1h37.262"}}),_vm._v(" "),_c('path',{attrs:{"d":"m1.3345 1028.4h45.555"}}),_vm._v(" "),_c('path',{attrs:{"d":"m5.4028 1035.6h37.464"}}),_vm._v(" "),_c('path',{attrs:{"d":"m9.6945 1042.9h29.059"}}),_vm._v(" "),_c('path',{attrs:{"d":"m9.5444 1042.9h29.209"}}),_vm._v(" "),_c('path',{attrs:{"d":"m12.556 1008.3h22.934l11.4 20.118-11.176 19.984-23.024 0.1342-11.355-20.118z"}})])]),_vm._v(" "),_c('svg',{staticStyle:{"visibility":"hidden"},attrs:{"id":"svg-rpi","width":"900","height":"678","version":"1.1","viewBox":"0 0 238.12 179.39","xmlns":"http://www.w3.org/2000/svg","xmlns:cc":"http://creativecommons.org/ns#","xmlns:dc":"http://purl.org/dc/elements/1.1/","xmlns:rdf":"http://www.w3.org/1999/02/22-rdf-syntax-ns#"}},[_c('g',{attrs:{"transform":"translate(0 -117.61)"}},[_c('g',{attrs:{"transform":"matrix(3.2655 0 0 3.2655 -43.456 44.661)"}},[_c('path',{attrs:{"d":"m68.8 38.6v11.7h14.2v-11.7zm12.7 7.4-5.7 1.4v-1.4l4.3-1.1v-1l-4.3-1.1v-1.5l5.7 1.4z"}}),_vm._v(" "),_c('path',{attrs:{"d":"m67.3 37.1h12.4v-14.1h-59.8v20.7l-2.9 1.4v7.3l2.9 1.5v19.8h7.3v-11.7h20.5v11.7h31.9v-22h-12.3zm8.7-12.6c1.2 0 2.2 1 2.2 2.2s-1 2.2-2.2 2.2-2.2-1-2.2-2.2c0-1.3 1-2.2 2.2-2.2zm-5.1 0h1.5v1.5h-1.5zm0 2.9h1.5v1.5h-1.5zm-2.9-2.9h1.5v1.5h-1.5zm0 2.9h1.5v1.5h-1.5zm8 40.5c1.2 0 2.2 1 2.2 2.2s-1 2.2-2.2 2.2-2.2-1-2.2-2.2 1-2.2 2.2-2.2zm-13.8-43.4h1.5v1.5h-1.5zm0 2.9h1.5v1.5h-1.5zm-2.9-2.9h1.5v1.5h-1.5zm0 2.9h1.5v1.5h-1.5zm-3-2.9h1.5v1.5h-1.5zm0 2.9h1.5v1.5h-1.5zm-3.7 33.9v-1.5h4.1v1.5zm4 1.4v1.5h-4.1v-1.5zm-4-4.3v-1.5h4.1v1.5zm0.8-33.9h1.5v1.5h-1.5zm0 2.9h1.5v1.5h-1.5zm-2.9-2.9h1.5v1.5h-1.5zm0 2.9h1.5v1.5h-1.5zm-2.9-2.9h1.5v1.5h-1.5zm0 2.9h1.5v1.5h-1.5zm-2.9-2.9h1.5v1.5h-1.5zm0 2.9h1.5v1.5h-1.5zm-2.9-2.9h1.5v1.5h-1.5zm0 2.9h1.5v1.5h-1.5zm-14.5-2.9h1.5v1.5h-1.5zm0 2.9h1.5v1.5h-1.5zm-3.7-2.9c1.2 0 2.2 1 2.2 2.2s-1 2.2-2.2 2.2-2.2-1-2.2-2.2c0-1.3 1-2.2 2.2-2.2zm0 47.7c-1.2 0-2.2-1-2.2-2.2s1-2.2 2.2-2.2 2.2 1 2.2 2.2-1 2.2-2.2 2.2zm2.4-13.2h-4.6v-20.4h4.6v2.9h-1.7v14.6h1.7zm3.9-5.1h-4.1v-1.5h4.1zm0-2.9h-4.1v-1.5h4.1zm0-2.9h-4.1v-1.5h4.1zm0-3h-4.1v-1.5h4.1zm1.7-16.3h-1.5v-1.5h1.5zm0-2.9h-1.5v-1.5h1.5zm2.9 2.9h-1.5v-1.5h1.5zm0-2.9h-1.5v-1.5h1.5zm3 2.9h-1.5v-1.5h1.5zm0-2.9h-1.5v-1.5h1.5zm2.9 2.9h-1.5v-1.5h1.5zm0-2.9h-1.5v-1.5h1.5zm0 25.8v-11.7l1.5-1.5h11.7v13.1h-13.2zm12.2 14h4.1v1.5h-4.1zm11.5 0-2.9 1.5v5.1h-4.6v-2.9h1.7v-14.7h-1.7v-2.9h4.6v5.1l2.9 1.5zm2.4-36.9h-1.5v-1.5h1.5zm0-2.9h-1.5v-1.5h1.5z"}}),_vm._v(" "),_c('path',{attrs:{"d":"m28.7 77h17.6v-13.5h-17.6zm11.1-7.2 1.1 4.2h1l1.1-4.2h1.5l-1.4 5.7h-3.2l-1.4-5.7zm-7.6 0 1.1 4.2h1l1.1-4.2h1.5l-1.4 5.7h-3.2l-1.4-5.7z"}}),_vm._v(" "),_c('circle',{attrs:{"cx":"43.4","cy":"41.6","r":"1"}})])])])])])}
+var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"name-class"},[_c('h1',{attrs:{"id":"name"}},[_vm._v("Jacob Logas")])])},function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"descriptor"},[_c('div',{attrs:{"id":"svg-title-first"}},[_vm._v("Blank")]),_vm._v(" "),_c('div',{attrs:{"id":"svg-title-last"}},[_c('span',[_vm._v("Desc")])])])}]
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+
+/***/ })
+/******/ ]);
