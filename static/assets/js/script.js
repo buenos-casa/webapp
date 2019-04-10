@@ -48,6 +48,8 @@ WebFont.load({
   }
 })
 
+Vue.use(Vs);
+
 // Init Vue app
 const vue_app = new Vue({
   el: '#app',
