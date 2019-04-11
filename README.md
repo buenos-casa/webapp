@@ -22,7 +22,7 @@ If just getting started with VueJS I suggest looking at the Single File Componen
 
 #### Color Theme:
 
-![color theme](images/buenos-aires-color-theme.png =250x250)
+![color theme](images/buenos-aires-color-theme.png)
 
 ```
 /* Color Theme Swatches in Hex */
@@ -55,11 +55,11 @@ If just getting started with VueJS I suggest looking at the Single File Componen
 font-family: 'Alegreya', serif;
 <link href="https://fonts.googleapis.com/css?family=Alegreya" rel="stylesheet">
 ```
-![alegreya](images/alegreya.png =250x250)
+![alegreya](images/alegreya.png)
 #### Lato
 ```
 font-family: 'Lato', sans-serif;
 <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 ```
-![lato](images/lato.png =250x250)
+![lato](images/lato.png)
 
