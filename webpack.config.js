@@ -6,9 +6,7 @@ module.exports = {
   entry: {
     'js/script.min.js': './static/assets/js/script.js',
     'css/style.min.css': './static/assets/scss/style.scss',
-    'components/mapbaires.min.vue': './static/assets/components/mapbaires.vue',
-    'components/main-content.min.vue': './static/assets/components/main-content.vue',
-    'components/collie.min.vue': './static/assets/components/collie.vue'
+    'components/mapgeojson.min.vue': './static/assets/components/mapgeojson.vue'
   },
   output: {
     path: path.resolve(__dirname, 'static'),
@@ -17,7 +15,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.js$/, 
         exclude: /node_modules/,
         loader: "babel-loader",
         options: {

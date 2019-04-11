@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import WebFont from 'webfontloader'
-import Mapbaires from '../components/mapbaires.vue'
+import Mapgeojson from '../components/mapgeojson.vue'
 import {
   // Flow Of transition
   d3SankeyCircular,
@@ -51,6 +51,6 @@ WebFont.load({
 const vue_app = new Vue({
   el: '#app',
   components: {
-    Mapbaires
+    Mapgeojson
   }
 });

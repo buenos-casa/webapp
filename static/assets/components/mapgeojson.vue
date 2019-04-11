@@ -19,10 +19,8 @@
 <script>
 
 export default {
-    name: "mapbaires",
-    template: "<mapbaires\>",
     mounted: function() {
-        const vue_ref = this;
+        var vue_ref = this;
         // Set svg width & height
         let centered = undefined;
         const mapCenter = {
@@ -66,8 +64,10 @@ export default {
         const mapLayer = g.append('g')
                           .classed('map-layer', true);
         
+        console.log(this.mapname);
+
         // Load map data
-        const geoJsonUrl = '/static/geojson/baires.json';
+        const geoJsonUrl = '/static/geojson/' + this.mapname + '.json';
 
         d3.json(geoJsonUrl, function(error, mapData) {
             var features = mapData.features;
@@ -152,6 +152,7 @@ export default {
             return color(nameLength(d));
         }
     },
+    props: ['mapname'],
     data: () => ({
         province: this.province,
         currentProvince: this.currentProvince,
