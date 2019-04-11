@@ -40,12 +40,15 @@ import {
   d3LHeat
 } from 'd3-vs';
 
+console.log('It\'s running!');
 // Init Google Fonts
 WebFont.load({
   google: {
     families: ['Open+Sans:300,400']
   }
 })
+
+// Following this tutorial: https://travishorn.com/interactive-maps-with-vue-leaflet-5430527353c8
 
 // Init Vue app
 const vue_app = new Vue({
