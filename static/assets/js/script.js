@@ -40,10 +40,6 @@ import {
   d3LHeat
 } from 'd3-vs';
 
-<<<<<<< HEAD
-
-=======
->>>>>>> dev
 // Init Google Fonts
 WebFont.load({
   google: {
