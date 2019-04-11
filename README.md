@@ -22,7 +22,7 @@ If just getting started with VueJS I suggest looking at the Single File Componen
 
 #### Color Theme:
 
-[!color theme](images/buenos-aires-color-theme.png)
+![color theme](images/buenos-aires-color-theme.png)
 
 ```
 /* Color Theme Swatches in Hex */
