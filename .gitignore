@@ -15,5 +15,9 @@ static/css/
 static/js/
 *.db
 
+<<<<<<< HEAD
 #VisualStudio Code
 .vscode/
+=======
+*.min.*
+>>>>>>> dev
