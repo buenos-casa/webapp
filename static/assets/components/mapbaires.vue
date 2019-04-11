@@ -1,9 +1,9 @@
 <template>
     <div style="height:auto">
         <div class="map-wrapper">
-            <h2 v-if="province" class="province-title">{{province.state}}</h2>
+            <h2 v-if="province" class="province-title">{{province.barrios}}</h2>
             <div v-if="currentProvince" class="province-info">
-            <h3 class="text-center">{{currentProvince.state}}</h3>
+            <h3 class="text-center">{{currentProvince.barrios}}</h3>
             <ul>
                 <li>cartodb_id: {{currentProvince.cartodb_id}}</li>
                 <li>slug: {{currentProvince.slug}}</li>
@@ -121,6 +121,7 @@ export default {
         function mouseover(d){
             // Highlight hovered province
             d3.select(this).style('fill', '#1483ce');
+            console.log(d);
             if(d) {
                 vue_ref.selectProvince(d.properties);
             }
@@ -143,7 +144,7 @@ export default {
 
         // Get province name
         function nameFn(d){
-            return d && d.properties ? d.properties.name : null;
+            return d && d.properties ? d.properties.barrios : null;
         }
 
         // Get province color
@@ -151,10 +152,10 @@ export default {
             return color(nameLength(d));
         }
     },
-    data: {
-        province: undefined,
-        currentProvince: undefined,
-    },
+    data: () => ({
+        province: this.province,
+        currentProvince: this.currentProvince,
+    }),
     methods: {
         selectProvince(province) {
             this.province = province;
