@@ -5,7 +5,7 @@ from bottle import jinja2_template as template
 # Import Bottle Extensions
 from bottle_sqlalchemy import SQLAlchemyPlugin
 # Import SQLAlchemy
-from sqlalchemy import create_engine, Column, Integer, String, Text
+from sqlalchemy import create_engine, Column, Integer, String, Text, Float
 from sqlalchemy.ext.declarative import declarative_base
 
 # Define dirs
@@ -28,11 +28,25 @@ app.install(SQLAlchemyPlugin(db_engine, keyword='sqlite_db'))
 
 
 # Articles Database class
-class ArticlesDB(Base):
-    __tablename__ = 'articles'
+class CensusDB(Base):
+    __tablename__ = 'CENSUS'
     id = Column(Integer, primary_key=True)
-    title = Column(String(255), nullable=False)
-    description = Column(Text())
+    commune = Column(Integer)
+    comp_percent = Column(Float)
+    comp_quantile = Column(Integer)
+    cell_percent = Column(Float)
+    cell_quantile = Column(Integer)
+    rent_percent = Column(Float)
+    rent_quantile = Column(Integer)
+    imm_percent = Column(Float)
+    imm_quantile = Column(Integer)
+    edu_percent = Column(Float)
+    edu_quantile = Column(Integer)
+    own_percent = Column(Float)
+    own_quantile = Column(Integer)
+    uinhab_percent = Column(Float)
+    uinhab_quantile = Column(Integer)
+    typ = Column(String(255))
 
 
 # API routes
@@ -40,7 +54,7 @@ class ArticlesDB(Base):
 def get_all_articles(sqlite_db):
     """Get all Articles from Database"""
     articles = []
-    articles_query = sqlite_db.query(ArticlesDB).all()
+    articles_query = sqlite_db.query(CensusDB).all()
 
     for i in articles_query:
         articles.append({
