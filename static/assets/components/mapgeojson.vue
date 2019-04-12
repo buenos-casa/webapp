@@ -9,7 +9,6 @@
                 <li>slug: {{currentProvince.slug}}</li>
             </ul>
             </div>
-            <svg></svg>
         </div>
     </div>
 </template>
@@ -29,7 +28,7 @@ export default {
         };
         const size = {
             height: 700,
-            width: d3.select('.map-wrapper').node().getBoundingClientRect().width,  
+            width: d3.select('.map-wrapper').node().getBoundingClientRect().width,
         };
 
         const color = d3.scale.linear()
@@ -45,9 +44,11 @@ export default {
         const path = d3.geo.path()
                             .projection(projection);
 
-        const svg = d3.select('svg')
-                        .attr('width', size.width)
-                        .attr('height', size.height);
+        const svg = d3.select(this.$el.children[0])
+            .append('svg')
+            .attr('width', size.width)
+            .attr('height', size.height);
+
 
         // Add background
         svg.append('rect')
