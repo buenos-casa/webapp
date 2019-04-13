@@ -53,7 +53,44 @@ WebFont.load({
 // Init Vue app
 const vue_app = new Vue({
   el: '#app',
+  delimiters: ['[[', ']]'],
   components: {
     Mapgeojson
+  },
+  data() {
+    return {
+      result: [],
+      census: []
+    }
+  },
+  methods: {
+    getCommunes() {
+      axios.get('/api/census/')
+           .then(response => {
+             console.log(response.data);
+             this.result = response.data;
+           })
+           .catch(error => {
+             console.log(error);
+           });
+    },
+    getCommuneCensus(commune) {
+      axios.get('/api/census/' + commune)
+           .then(response => {
+             console.log(response.data);
+             this.census = response.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    }
+  },
+  mounted: function() {
+    if (document.querySelectorAll('.communes').length > 0) {
+      this.getCommunes();
+    }
+    if (document.querySelectorAll('.communasData').length > 0) {
+      this.getCommuneCensus(1);
+    }
   }
 });

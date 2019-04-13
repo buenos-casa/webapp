@@ -13,6 +13,5 @@ venv/
 # Project
 static/css/
 static/js/
-*.db
 
 *.min.*
