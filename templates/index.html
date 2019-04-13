@@ -37,8 +37,14 @@
               <div class="column" v-for="commune in result">
                 <div class="card">
                   <div class="card-content">
-                    <h3>[[ commune._id ]]</h3>
                     <strong>[[ commune.commune ]]</strong>
+                    <div v-if="barrios">
+                      <li v-for="b_id in commune.barrios">
+                        <div v-if="b_id">
+                          <p>[[barrios[b_id].name]]</p>
+                        </div>
+                      </li>  
+                    </div>
                   </div>
                 </div>
               </div>

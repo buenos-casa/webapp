@@ -60,13 +60,14 @@ const vue_app = new Vue({
   data() {
     return {
       result: [],
+      communes: [],
+      barrios: [],
       census: []
     }
   },
   methods: {
     getCommunes() {
-      this.result = [];
-      axios.get('/api/census/')
+      axios.get('/api/commune/')
            .then(response => {
              console.log(response.data.data);
              this.result = response.data.data;
@@ -76,11 +77,30 @@ const vue_app = new Vue({
            });
     },
     getCommuneCensus(commune) {
-      this.result = [];
       axios.get('/api/census/' + commune)
            .then(response => {
              console.log(response.data.data);
              this.census = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
+    getBarrios() {
+      axios.get('/api/barrio/')
+           .then(response => {
+             console.log(response.data.data);
+             this.barrios = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
+    getAvgBarriosValUS() {
+      axios.get('/api/property/us_avg_all')
+           .then(response => {
+             console.log(response.data.data);
+             this.barrios_val = response.data.data;
            })
            .catch(error => {
              console.log(error);
@@ -90,6 +110,7 @@ const vue_app = new Vue({
   mounted: function() {
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
+      this.getBarrios();
     }
     if (document.querySelectorAll('.communasData').length > 0) {
       this.getCommuneCensus(1);
