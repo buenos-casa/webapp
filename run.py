@@ -18,7 +18,7 @@ bottle.debug(True)  # Don't forget switch this to `False` on production!
 
 # SQLite Database config
 Base = declarative_base()
-db_engine = create_engine('sqlite:///' + os.path.join(BASE_DIR, 'articles.db'))
+db_engine = create_engine('sqlite:///' + os.path.join(BASE_DIR, 'data.db'))
 
 # Starting App
 app = bottle.default_app()
@@ -27,43 +27,50 @@ app = bottle.default_app()
 app.install(SQLAlchemyPlugin(db_engine, keyword='sqlite_db'))
 
 
-# Articles Database class
+# Census Database class
 class CensusDB(Base):
     __tablename__ = 'CENSUS'
-    id = Column(Integer, primary_key=True)
-    commune = Column(Integer)
-    comp_percent = Column(Float)
-    comp_quantile = Column(Integer)
-    cell_percent = Column(Float)
-    cell_quantile = Column(Integer)
-    rent_percent = Column(Float)
-    rent_quantile = Column(Integer)
-    imm_percent = Column(Float)
-    imm_quantile = Column(Integer)
-    edu_percent = Column(Float)
-    edu_quantile = Column(Integer)
-    own_percent = Column(Float)
-    own_quantile = Column(Integer)
-    uinhab_percent = Column(Float)
-    uinhab_quantile = Column(Integer)
-    typ = Column(String(255))
-
+    id = Column("id", Integer, primary_key=True)
+    commune = Column("Commune", Integer)
+    comp_percent = Column("Computer Percent", Float)
+    comp_quantile = Column("Computer Quantile", Integer)
+    cell_percent = Column("Cellular Percent", Float)
+    cell_quantile = Column("Cellular Quantile", Integer)
+    rent_percent = Column("Rent Percent", Float)
+    rent_quantile = Column("Rent Quantile", Integer)
+    imm_percent = Column("Immigration Percent", Float)
+    imm_quantile = Column("Immigration Quantile", Integer)
+    edu_percent = Column("Education Percent", Float)
+    edu_quantile = Column("Education Quantile", Integer)
+    own_percent = Column("Owner Percent", Float)
+    own_quantile = Column("Owner Quantile", Integer)
+    reg_percent = Column("Regular Percent", Float)
+    reg_quantile = Column("Regular Quantile", Integer)
+    uinhab_percent = Column("Uninhabited Percent", Float)
+    uinhab_quantile = Column("Uninhabited Quantile", Integer)
 
 # API routes
-@app.get('/api/articles/')
-def get_all_articles(sqlite_db):
-    """Get all Articles from Database"""
-    articles = []
-    articles_query = sqlite_db.query(CensusDB).all()
-
-    for i in articles_query:
-        articles.append({
-            'title': i.title,
-            'description': i.description
+@app.get('/api/census/')
+def get_all_census_data(sqlite_db):
+    """Get all communes and their id's from Database"""
+    census = []
+    census_query = sqlite_db.query(CensusDB).group_by(CensusDB.commune).distinct()
+    for i in census_query:
+        print(i)
+        census.append({
+            'commune': i.commune
         })
 
     response.headers['Content-Type'] = 'application/json'
-    return json.dumps({'data': articles})
+    return json.dumps({'data': census})
+
+@app.get('/api/census/<commune>')
+def get_all_commune_data(sqlite_db, commune):
+    """Get all information for a particular commune"""
+    commune_query = sqlite_db.query(CensusDB).filter(CensusDB.commune == commune).all()
+
+    response.headers['Content-Type'] = 'application/json'
+    return json.dumps({'data': commune_query})
 
 
 # Index page route

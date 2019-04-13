@@ -50,7 +50,29 @@ WebFont.load({
 // Init Vue app
 const vue_app = new Vue({
   el: '#app',
+  delimiters: ['[[', ']]'],
   components: {
     Mapgeojson
+  },
+  data() {
+    return {
+      result: []
+    }
+  },
+  methods: {
+    getCommunes: function() {
+      axios.get('/api/census/')
+           .then(response => {
+             this.result = response.data
+           })
+           .catch(error => {
+             console.log(error)
+           });
+    }
+  },
+  mounted() {
+    if (document.querySelectorAll('.communes').length > 0) {
+      this.getCommunes()
+    }
   }
 });
