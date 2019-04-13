@@ -1,12 +1,11 @@
 <template>
     <div style="height:auto">
         <div class="map-wrapper">
-            <h2 v-if="province" class="province-title">{{province.barrios}}</h2>
+            <h2 v-if="province" class="province-title">{{province.barrio}}</h2>
             <div v-if="currentProvince" class="province-info">
             <h3 class="text-center">{{currentProvince.barrios}}</h3>
             <ul>
-                <li>cartodb_id: {{currentProvince.cartodb_id}}</li>
-                <li>slug: {{currentProvince.slug}}</li>
+                <li>commune: {{currentProvince.commune}}</li>
             </ul>
             </div>
         </div>
@@ -153,7 +152,7 @@ export default {
             return color(nameLength(d));
         }
     },
-    props: ['mapname'],
+    props: ['mapname', 'mapdata'],
     data: () => ({
         province: this.province,
         currentProvince: this.currentProvince,

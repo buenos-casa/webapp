@@ -62,12 +62,27 @@ class PropertyDB(Base):
     m2_val = Column("Value of m2 (US Dollars)", Float)
     m2 = Column(Float)
 
+class BarrioDB(Base):
+    __tablename__ = 'BARRIOS'
+    id = Column("index", Integer, primary_key=True)
+    barrio_name = Column("Barrio", String(255))
+
 
 def remove_inst_state(a_dict):
     a_dict.pop('_sa_instance_state', None)
     return a_dict
 
 # API routes
+@app.get('/api/barrio')
+def get_all_barrios(sqlite_db):
+    """Get name and ID of all barrios"""
+    query = sqlite_db.query(BarrioDB).all()
+    dat = [remove_inst_state(i.__dict__) for i in query]
+
+    response.headers['Content-Type'] = 'application/json'
+    return json.dumps({'data': dat})
+
+
 @app.get('/api/census/')
 def get_all_census_data(sqlite_db):
     """Get all communes and their id's from Database"""
