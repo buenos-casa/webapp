@@ -12,7 +12,7 @@
   "scripts": {
     "build": "webpack --config webpack.config.js --optimize-minimize --display-error-details --hide-modules --progress",
     "watch": "webpack --config webpack.config.js --watch --optimize-minimize --hide-modules --progress",
-    "heroku-postbuild": "webpack -p && python _devtools/install_init_database.py"
+    "heroku-postbuild": "webpack -p"
   },
   "dependencies": {
     "axios": "^0.18.0",
