@@ -56,23 +56,38 @@ const vue_app = new Vue({
   },
   data() {
     return {
-      result: []
+      result: [],
+      census: []
     }
   },
   methods: {
-    getCommunes: function() {
+    getCommunes() {
       axios.get('/api/census/')
            .then(response => {
-             this.result = response.data
+             console.log(response.data);
+             this.result = response.data;
            })
            .catch(error => {
-             console.log(error)
+             console.log(error);
            });
+    },
+    getCommuneCensus(commune) {
+      axios.get('/api/census/' + commune)
+           .then(response => {
+             console.log(response.data);
+             this.census = response.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
     }
   },
-  mounted() {
+  mounted: function() {
     if (document.querySelectorAll('.communes').length > 0) {
-      this.getCommunes()
+      this.getCommunes();
+    }
+    if (document.querySelectorAll('.communasData').length > 0) {
+      this.getCommuneCensus(1);
     }
   }
 });

@@ -31,7 +31,7 @@
     <div class="hero-body">
       <div class="container">
         <div v-if="result">
-          <h3 class="title">Hints from SQLite Database (Vue.js + Axios)</h3>
+          <!-- Only runs if this class is present -->
           <div class="communes">
             <div class="columns is-desktop">
               <div class="column" v-for="commune in result.data">
@@ -52,4 +52,63 @@
       </div>
     </div>
   </section>
+
+  <section class="hero is-warning is-medium is-bold has-text-centered">
+    <div class="hero-body">
+      <div class="container">
+        <!-- Dropdown menu -->
+        <div class="dropdown is-hoverable">
+          <div class="dropdown-trigger">
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+              <span>Dropdown button</span>
+              <span class="icon is-small">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu" role="menu">
+            <div class="dropdown-content">
+              <a href="#" class="dropdown-item">
+                Dropdown item
+              </a>
+              <a class="dropdown-item">
+                Other dropdown item
+              </a>
+              <a href="#" class="dropdown-item is-active">
+                Active dropdown item
+              </a>
+              <a href="#" class="dropdown-item">
+                Other dropdown item
+              </a>
+              <hr class="dropdown-divider">
+              <a href="#" class="dropdown-item">
+                With a divider
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Data show -->
+        <div v-if="census">
+          <!-- Only runs if this class is present -->
+          <div class="communasData">
+            <div class="columns is-desktop">
+              <div class="column" v-for="point in census.data">
+                <div class="card">
+                  <div class="card-content">
+                    <h3>[[ point.comp_percent ]]</h3>
+                    <strong>[[ point.comp_quantile ]]</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <h3 class="title">Oh.. I don't found any objects on Database!</h3>
+          <p>Please run <code>$ python install.py</code> from project dir.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
 {% endblock %}
