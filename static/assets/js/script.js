@@ -65,20 +65,22 @@ const vue_app = new Vue({
   },
   methods: {
     getCommunes() {
+      this.result = [];
       axios.get('/api/census/')
            .then(response => {
-             console.log(response.data);
-             this.result = response.data;
+             console.log(response.data.data);
+             this.result = response.data.data;
            })
            .catch(error => {
              console.log(error);
            });
     },
     getCommuneCensus(commune) {
+      this.result = [];
       axios.get('/api/census/' + commune)
            .then(response => {
-             console.log(response.data);
-             this.census = response.data;
+             console.log(response.data.data);
+             this.census = response.data.data;
            })
            .catch(error => {
              console.log(error);

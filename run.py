@@ -52,8 +52,9 @@ class CensusDB(Base):
 # Property Database
 class PropertyDB(Base):
     __tablename__ = 'PROPERTY'
-    id = Column("Unnamed: 0", Integer, primary_key=True)
+    id = Column("index", Integer, primary_key=True)
     commune = Column("Commune", Integer)
+    neighborhood = Column("Neighborhood", String(255))
     lon = Column("Longitude", Float)
     lat = Column("Latitude", Float)
     date = Column("Date", Date)
@@ -85,8 +86,6 @@ def get_all_commune_data(sqlite_db, commune):
     """Get all information for a particular commune"""
     commune_query = sqlite_db.query(CensusDB).filter(CensusDB.commune == commune).all()
     dat = [remove_inst_state(i.__dict__) for i in commune_query]
-
-    print(dat)
 
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'data': dat})
