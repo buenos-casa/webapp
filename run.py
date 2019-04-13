@@ -87,8 +87,6 @@ def get_all_commune_data(sqlite_db, commune):
     commune_query = sqlite_db.query(CensusDB).filter(CensusDB.commune == commune).all()
     dat = [remove_inst_state(i.__dict__) for i in commune_query]
 
-    print(dat)
-
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'data': dat})
 
