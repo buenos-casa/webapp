@@ -52,8 +52,9 @@ class CensusDB(Base):
 # Property Database
 class PropertyDB(Base):
     __tablename__ = 'PROPERTY'
-    id = Column("Unnamed: 0", Integer, primary_key=True)
+    id = Column("index", Integer, primary_key=True)
     commune = Column("Commune", Integer)
+    neighborhood = Column("Neighborhood", String(255))
     lon = Column("Longitude", Float)
     lat = Column("Latitude", Float)
     date = Column("Date", Date)
