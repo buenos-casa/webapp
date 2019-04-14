@@ -55,7 +55,7 @@ class PropertyDB(Base):
     __tablename__ = 'PROPERTY'
     id = Column("index", Integer, primary_key=True)
     commune = Column("Commune", Integer)
-    barrio = Column("b_id", Integer)
+    b_id = Column("b_id", Integer)
     lon = Column("Longitude", Float)
     lat = Column("Latitude", Float)
     date = Column("Date", Date)
@@ -85,8 +85,6 @@ def get_all_barrios(sqlite_db):
     """Get name and ID of all barrios"""
     query = sqlite_db.query(BarrioDB).all()
     dat = [remove_inst_state(i.__dict__) for i in query]
-
-    print(dat)
 
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'data': dat})
@@ -129,11 +127,13 @@ def get_all_commune_data(sqlite_db, commune):
 #     response.headers['Content-Type'] = 'application/json'
 #     return json.dumps({'data': dat})
 
-@app.get('/api/property/us_avg_all')
+@app.get('/api/property/us_val/avg/')
 def get_all_barrio_average_property_value(sqlite_db):
     """Get the average property value for each barrio in USD over all time"""
-    query = sqlite_db.query(func.avg(PropertyDB.us_val).label('average'), PropertyDB.b_id).groupby(PropertyDB.b_id).all()
-    dat = [remove_inst_state(i.__dict__) for i in query]
+    query = sqlite_db.query(PropertyDB.b_id, func.avg(PropertyDB.us_val).label('average')).group_by(PropertyDB.b_id).all()
+    dat = {}
+    for i in query:
+        dat[i[0]] = i[1]
 
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'data':dat})

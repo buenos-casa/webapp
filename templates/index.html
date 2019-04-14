@@ -4,25 +4,26 @@
 
 {% block content %}
 
-  <section class="hero is-light is-medium is-bold has-text-centered">
+  <section class="hero is-dark is-medium is-bold has-text-centered">
     <div class="hero-body">
       <div class="container">
-        <mapgeojson mapname='baires'></mapbaires>
+        <p class="title is-1">Buenos Aires</p>
+        <div class="columns">
+          <div class="column is-one-fifth">
+            Controls
+          </div>
+          <div class="column is-half">
+            <mapgeojson mapname='baires-communes'
+                        :mapdata="barrios_val">
+            </mapbaires>
+          </div>
+          <div class="column">
+            Circle thingies
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
-
-  <section class="hero is-light is-medium is-bold has-text-centered">
-    <div class="hero-body">
-      <div class="container">
-      </div>
-    </div>
-  </section>
-
-  <section class="hero is-light is-medium is-bold has-text-centered">
-    <div class="hero-body">
-      <div class="container">
-        <mapgeojson mapname='baires-communes'></mapbaires>
+      <div v-if="province">
+        <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
       </div>
     </div>
   </section>
@@ -40,9 +41,7 @@
                     <strong>[[ commune.commune ]]</strong>
                     <div v-if="barrios">
                       <li v-for="b_id in commune.barrios">
-                        <div v-if="b_id">
-                          <p>[[barrios[b_id].name]]</p>
-                        </div>
+                          <a v-on:click="getAvgBarrioValUS(b_id)">[[barrios[b_id].name]]</a>
                       </li>  
                     </div>
                   </div>
@@ -54,6 +53,16 @@
         <div v-else>
           <h3 class="title">Oh.. I don't found any objects on Database!</h3>
           <p>Please run <code>$ python install.py</code> from project dir.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero is-warning is-medium is-bold has-text-centered">
+    <div class="hero-body">
+      <div class="container">
+        <div v-if="bar_avg">
+          [[ bar_avg ]]
         </div>
       </div>
     </div>

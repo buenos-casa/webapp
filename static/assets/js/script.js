@@ -61,8 +61,11 @@ const vue_app = new Vue({
     return {
       result: [],
       communes: [],
-      barrios: [],
-      census: []
+      barrios: undefined,
+      census: [],
+      barrios_val: [],
+      bar_avg: null,
+      province: undefined
     }
   },
   methods: {
@@ -105,9 +108,33 @@ const vue_app = new Vue({
            .catch(error => {
              console.log(error);
            })
+    },
+    getAvgBarrioValUS(b_id) {
+      if (this.barrios_val.length <= 0) {
+        axios.get('/api/property/us_val/avg/')
+            .then(response => {
+              console.log(response.data.data);
+              this.barrios_val = response.data.data;
+              this.bar_avg = this.barrios_val[b_id];
+            })
+            .catch(error => {
+              console.log(error);
+            })
+          }
+      else {
+        this.bar_avg = this.barrios_val[b_id];
+      }
+    },
+    onProvinceChange: function(province) {
+      if(province) {
+        this.province = this.barrios[province.b_id];
+      } else {
+        this.province = undefined;
+      }
     }
   },
   mounted: function() {
+    this.$on('province-chosen', this.onProvinceChange);
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
       this.getBarrios();
