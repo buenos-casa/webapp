@@ -1,13 +1,6 @@
 <template>
     <div style="height:auto">
         <div class="map-wrapper">
-            <h2 v-if="province" class="province-title">{{province.barrio}}</h2>
-            <div v-if="currentProvince" class="province-info">
-            <h3 class="text-center">{{currentProvince.barrios}}</h3>
-            <ul>
-                <li>commune: {{currentProvince.commune}}</li>
-            </ul>
-            </div>
         </div>
     </div>
 </template>
@@ -121,7 +114,6 @@ export default {
         function mouseover(d){
             // Highlight hovered province
             d3.select(this).style('fill', '#1483ce');
-            console.log(d);
             if(d) {
                 vue_ref.selectProvince(d.properties);
             }
@@ -153,19 +145,20 @@ export default {
         }
     },
     props: ['mapname', 'mapdata'],
-    data: () => ({
-        province: this.province,
-        currentProvince: this.currentProvince,
-    }),
+    data() { 
+      return {
+      }
+    },
     methods: {
         selectProvince(province) {
-            this.province = province;
+            // this.province = province;
         },
         openInfo(province) {
-            this.currentProvince = province;
+            this.$parent.$emit('province-chosen', {'b_id': province.barrio, 'commune': province.commune});
+
         },
         closeInfo() {
-            this.currentProvince = undefined;
+            this.$parent.$emit('province-chosen', undefined);
         },
     }
 }
