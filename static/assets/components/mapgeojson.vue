@@ -1,15 +1,6 @@
 <template>
-    <div style="height:1000px">
+    <div style="height:auto">
         <div class="map-wrapper">
-            <h2 v-if="province" class="province-title">{{province.state}}</h2>
-            <div v-if="currentProvince" class="province-info">
-            <h3 class="text-center">{{currentProvince.state}}</h3>
-            <ul>
-                <li>cartodb_id: {{currentProvince.cartodb_id}}</li>
-                <li>slug: {{currentProvince.slug}}</li>
-            </ul>
-            </div>
-            <svg></svg>
         </div>
     </div>
 </template>
@@ -19,10 +10,8 @@
 <script>
 
 export default {
-    name: "mapbaires",
-    template: "<mapbaires\>",
     mounted: function() {
-        const vue_ref = this;
+        var vue_ref = this;
         // Set svg width & height
         let centered = undefined;
         const mapCenter = {
@@ -31,7 +20,7 @@ export default {
         };
         const size = {
             height: 700,
-            width: d3.select('.map-wrapper').node().getBoundingClientRect().width,  
+            width: d3.select('.map-wrapper').node().getBoundingClientRect().width,
         };
 
         const color = d3.scale.linear()
@@ -47,9 +36,11 @@ export default {
         const path = d3.geo.path()
                             .projection(projection);
 
-        const svg = d3.select('svg')
-                        .attr('width', size.width)
-                        .attr('height', size.height);
+        const svg = d3.select(this.$el.children[0])
+            .append('svg')
+            .attr('width', size.width)
+            .attr('height', size.height);
+
 
         // Add background
         svg.append('rect')
@@ -66,8 +57,10 @@ export default {
         const mapLayer = g.append('g')
                           .classed('map-layer', true);
         
+        console.log(this.mapname);
+
         // Load map data
-        const geoJsonUrl = '/static/geojson/baires.json';
+        const geoJsonUrl = '/static/geojson/' + this.mapname + '.json';
 
         d3.json(geoJsonUrl, function(error, mapData) {
             var features = mapData.features;
@@ -143,7 +136,7 @@ export default {
 
         // Get province name
         function nameFn(d){
-            return d && d.properties ? d.properties.name : null;
+            return d && d.properties ? d.properties.barrios : null;
         }
 
         // Get province color
@@ -151,19 +144,21 @@ export default {
             return color(nameLength(d));
         }
     },
-    data: {
-        province: undefined,
-        currentProvince: undefined,
+    props: ['mapname', 'mapdata'],
+    data() { 
+      return {
+      }
     },
     methods: {
         selectProvince(province) {
-            this.province = province;
+            // this.province = province;
         },
         openInfo(province) {
-            this.currentProvince = province;
+            this.$parent.$emit('province-chosen', {'b_id': province.barrio, 'commune': province.commune});
+
         },
         closeInfo() {
-            this.currentProvince = undefined;
+            this.$parent.$emit('province-chosen', undefined);
         },
     }
 }

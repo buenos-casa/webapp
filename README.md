@@ -1,146 +1,65 @@
-![bottle-vue-kickstart-main](https://cloud.githubusercontent.com/assets/11155743/24041455/9fbd99ec-0b1e-11e7-9ba0-a429a28591b0.jpg)
+##### Dependencies
 
-# Very basic Bottle kickstart kit with Vue.js and Webpack
-[![GitHub release](https://img.shields.io/badge/version-0.5.1-brightgreen.svg?style=flat-square)](https://github.com/koddr/bottle-vue-kickstart) [![licence](https://img.shields.io/badge/Python-2.7_or_3.4+-red.svg?style=flat-square)](https://www.python.org/downloads/) [![licence](https://img.shields.io/badge/licence-MIT-blue.svg?style=flat-square)](https://github.com/koddr/bottle-vue-kickstart/blob/master/LICENSE.md)
+If you haven't already, install `nodejs` on your machine.
 
-## What's included to kit?
+Once that is finished enter the webapp directory and run `npm install`. (This will take some time)
 
-* Bottle `0.12.13` (stable)
+While this is happening, install python 3 if not already installed.
 
-NPM packages:
+Again go to the webapp directory but this time run `pip install -r requirements.txt`
 
-* Axios `0.18+` (AJAX calls)
-* PostCSS/Autoprefixer `7.2+` (automate CSS prefixes)
-* Babel `7.1+` (turn ES6 code to vanilla)
-* Vue.js `2.5+` (the basis of reactive web applications)
-* Webpack `3.10+` with config (SCSS, ES6, Vue.js)
-* Web font loader `1.6+` (async load font from Google Fonts)
+###### Development environment:
 
-Example:
+To build the webapp, run `npm run build`. However you would need to do this every time you want to see changes. If you want live updates, run `npm run watch`.
 
-* Out the box application for test kit with latest [Bulma CSS framework](https://github.com/jgthms/bulma)
+To run the server, run the command `python run.py`.
 
-### What's Bottle?
+Use a browser to go to `localhost:8080` and see your changes.
 
-[Bottle](http://bottlepy.org/) – is lightweight WSGI micro web-framework for Python. A simple process of installing and deploying. Everything has already been done for you. Just enjoy writing your code!
+If just getting started with VueJS I suggest looking at the Single File Components already in the project and see how they are structured and how they are imported into the app proper in script.js.
 
-> Simplify development of reactive web applications — use this kickstart kit now!
+**Important!!**: To import your SFC the variable name must be the name of the file such that "buenosaires" is imported as Buenosaires. If you do not do it this way, the component will not be imported.
 
-## How to install and use kit?
+#### Color Theme:
 
-First, clone this GitHub repository:
+![color theme](images/buenos-aires-color-theme.png)
 
-```bash
-$ git clone git@github.com:koddr/bottle-vue-kickstart.git
+```
+/* Color Theme Swatches in Hex */
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-1-hex { color: #3B6D8C; }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-2-hex { color: #638CA6; }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-3-hex { color: #F2B705; }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-4-hex { color: #D9923B; }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-5-hex { color: #A67244; }
+
+/* Color Theme Swatches in RGBA */
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-1-rgba { color: rgba(58, 109, 140, 1); }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-2-rgba { color: rgba(99, 140, 165, 1); }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-3-rgba { color: rgba(242, 182, 4, 1); }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-4-rgba { color: rgba(216, 145, 58, 1); }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-5-rgba { color: rgba(165, 113, 67, 1); }
+
+/* Color Theme Swatches in HSLA */
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-1-hsla { color: hsla(202, 40, 39, 1); }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-2-hsla { color: hsla(202, 27, 52, 1); }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-3-hsla { color: hsla(45, 96, 48, 1); }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-4-hsla { color: hsla(33, 67, 53, 1); }
+.The-Obelisk-(El-Obelisco)-in-Buenos-Aires.-5-hsla { color: hsla(28, 41, 45, 1); }
 ```
 
-Second, install NPM dependencies and make build:
+### Fonts
 
-```bash
-$ cd bottle-vue-kickstart
-$ npm install
-$ npm run build # or `npm run watch` for hot-reload
+#### Alegreya
+
 ```
-
-Third, prepare your virtual environment:
-
-Since `0.4.2` we use [Pipenv](https://github.com/pypa/pipenv) project for manage virtual environments. 
-
-Install via `pip` to your system:
-
-```bash
-$ pip install pipenv
+font-family: 'Alegreya', serif;
+<link href="https://fonts.googleapis.com/css?family=Alegreya" rel="stylesheet">
 ```
-
-> More info about Pipenv here: [Managing dependencies, Python.org](https://packaging.python.org/tutorials/managing-dependencies/#managing-dependencies).
-
-And now, install Bottle with all extensions: 
-
-```bash
-$ pipenv install
+![alegreya](images/alegreya.png)
+#### Lato
 ```
-
-> Yes, virtual environment is automaticaly create. If you want to know system link, just use `pipenv --venv`.
-> Result is something like this: `/Users/username/.virtualenvs/bottle-vue-kickstart--XXXXXX`. Use it in PyCharm or else.
-
-Finally, run development server:
-
-```bash
-$ python3 run.py
-
-Bottle v0.12.13 server starting up (using AutoServer())...
-Listening on http://localhost:8080/
-Hit Ctrl-C to quit.
-...
+font-family: 'Lato', sans-serif;
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 ```
+![lato](images/lato.png)
 
-### If you did everything right...
-
-![Result without database](https://cloud.githubusercontent.com/assets/11155743/24055182/24a5a04c-0b50-11e7-89a6-8f5d85c98e08.png)
-
-(Optional) Install database with example objects:
-
-```bash
-$ python3 _devtools/install_init_database.py
-```
-
-Now, your yellow section on http://localhost:8080/ will look like this:
-
-![Result with database](https://cloud.githubusercontent.com/assets/11155743/24043867/cf79c344-0b29-11e7-8066-8ebd83e68acb.png)
-
-And we done!
-
-## Final app structure
-
-``` html
-├── _devtools
-│   └── install_init_database.py
-├── static
-│   ├── assets
-│   │   ├── js
-│   │   │   └── script.js
-│   │   └── scss
-│   │       └── style.scss
-│   ├── css
-│   │   └── style.min.css
-│   ├── images
-│   │   └── bottle-vue-kickstart-logo-horizontal.svg
-│   └── js
-│       └── script.min.js
-├── templates
-│   ├── index.html
-│   └── layout
-│       └── base.html
-├── .babelrc
-├── .editorconfig
-├── .gitignore
-├── articles.db
-├── package.json
-├── package-lock.json
-├── Pipfile
-├── Pipfile.lock
-├── postcss-config.js
-├── README.md
-├── run.py
-└── webpack.config.js
-```
-
-> What's next? Build something awesome and make web beautiful again!
-
-### Author & maintainers
-
-Development and maintenance engaged by [Vic Shóstak](https://github.com/koddr) (aka Koddr).
-If you want to say «thank you» and/or ask me about `Bottle Vue kickstart kit` — [create new issue](https://github.com/koddr/bottle-vue-kickstart/issues/new).
-
-___
-> ### Your assistance will help make project even better!
-> 
-> * [Donate with PayPal](https://www.paypal.me/koddr/9.99usd)
-> * [Donate with Credit/Bank card, Yandex.Money](https://money.yandex.ru/to/41001601525977/599)
-> 
-> #### Thanks for supporting!
-___
-
-### License
-
-[The MIT License (MIT)](https://github.com/koddr/bottle-vue-kickstart/blob/master/LICENSE.md)
