@@ -7,14 +7,16 @@
   <section class="hero is-dark is-medium is-bold has-text-centered">
     <div class="hero-body">
       <div class="container">
+        <!-- Page Title -->
         <p class="title is-1">Buenos Aires</p>
+        <!-- Map container -->
         <div class="columns">
           <div class="column is-one-fifth">
             Controls
           </div>
           <div class="column is-half">
             <mapgeojson mapname='baires-communes'
-                        :mapdata="barrios_val">
+                        v-bind:barrios_val="barrios_val">
             </mapbaires>
           </div>
           <div class="column">
@@ -22,8 +24,30 @@
           </div>
         </div>
       </div>
+      <!-- Barrio Name -->
       <div v-if="province">
         <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
+      </div>
+      <!-- Dropdown menu -->
+      <div class="dropdown is-hoverable">
+        <div class="dropdown-trigger">
+          <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+            <span>Dropdown button</span>
+            <span class="icon is-small">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+            </span>
+          </button>
+        </div>
+        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+          <div class="dropdown-content">
+            <a v-on:click="getBarriosRentAT_usavg()" class="dropdown-item">
+              Rent All Time
+            </a>
+            <a v-on:click="getAvgBarriosValUS()" class="dropdown-item">
+              Average property value
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
