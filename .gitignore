@@ -14,4 +14,9 @@ venv/
 static/css/
 static/js/
 
+<<<<<<< HEAD
+#VisualStudio Code
+.vscode/
+=======
 *.min.*
+>>>>>>> dev
