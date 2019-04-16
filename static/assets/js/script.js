@@ -1,5 +1,5 @@
 // Include libraries
-import Vue from 'vue'
+/*import Vue from 'vue'
 import axios from 'axios'
 import WebFont from 'webfontloader'
 import Mapgeojson from '../components/mapgeojson.vue'
@@ -44,9 +44,11 @@ console.log('It\'s running!');
 // Init Google Fonts
 WebFont.load({
   google: {
-    families: ['Open+Sans:300,400']
+    families: ['Alegreya:300,400']
   }
 })
+*/
+// Following this tutorial: https://travishorn.com/interactive-maps-with-vue-leaflet-5430527353c8
 
 // Following this tutorial: https://travishorn.com/interactive-maps-with-vue-leaflet-5430527353c8
 
@@ -72,7 +74,6 @@ const vue_app = new Vue({
     getCommunes() {
       axios.get('/api/commune/')
            .then(response => {
-             console.log(response.data.data);
              this.result = response.data.data;
            })
            .catch(error => {
@@ -82,7 +83,6 @@ const vue_app = new Vue({
     getCommuneCensus(commune) {
       axios.get('/api/census/' + commune)
            .then(response => {
-             console.log(response.data.data);
              this.census = response.data.data;
            })
            .catch(error => {
@@ -92,7 +92,6 @@ const vue_app = new Vue({
     getBarrios() {
       axios.get('/api/barrio/')
            .then(response => {
-             console.log(response.data.data);
              this.barrios = response.data.data;
            })
            .catch(error => {
@@ -100,9 +99,8 @@ const vue_app = new Vue({
            })
     },
     getAvgBarriosValUS() {
-      axios.get('/api/property/us_avg_all')
+      axios.get('/api/property/us_val/avg/')
            .then(response => {
-             console.log(response.data.data);
              this.barrios_val = response.data.data;
            })
            .catch(error => {
@@ -113,7 +111,6 @@ const vue_app = new Vue({
       if (this.barrios_val.length <= 0) {
         axios.get('/api/property/us_val/avg/')
             .then(response => {
-              console.log(response.data.data);
               this.barrios_val = response.data.data;
               this.bar_avg = this.barrios_val[b_id];
             })
@@ -125,6 +122,24 @@ const vue_app = new Vue({
         this.bar_avg = this.barrios_val[b_id];
       }
     },
+    getBarriosRentAT() {
+      axios.get('/api/rent/all/')
+           .then(response => {
+             this.barrios_val = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
+    getBarriosRentAT_usavg() {
+      axios.get('/api/rent/all/us_avg')
+           .then(response => {
+             this.barrios_val = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
     onProvinceChange: function(province) {
       if(province) {
         this.province = this.barrios[province.b_id];
@@ -135,6 +150,7 @@ const vue_app = new Vue({
   },
   mounted: function() {
     this.$on('province-chosen', this.onProvinceChange);
+    this.getAvgBarriosValUS()
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
       this.getBarrios();

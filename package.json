@@ -17,6 +17,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bulma": "^0.7.2",
+    "d3-transform": "^1.0.5",
+    "d3-transition": "^1.2.0",
     "d3-vs": "^0.8.0",
     "vue": "^2.5.17",
     "webfontloader": "^1.6.28"
