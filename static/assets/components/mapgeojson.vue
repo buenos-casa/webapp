@@ -24,9 +24,7 @@ export default {
             var max_val = Math.max(newVal);
             var min_val = Math.min(newVal);
 
-            var colours = ["#6363FF", "#6373FF", "#63A3FF", "#63E3FF", "#63FFFB", "#63FFCB",
-                        "#63FF9B", "#63FF6B", "#7BFF63", "#BBFF63", "#DBFF63", "#FBFF63", 
-                        "#FFD363", "#FFB363", "#FF8363", "#FF7363", "#FF6364"];
+            var colours = ["#3B6D8C", "#638CA6", "#F2B705", "#D9923B", "#A67244"];
 
             var heatmapColour = d3.scale.linear()
             .domain(d3.range(0, 1, 1.0 / (colours.length - 1)))
@@ -35,8 +33,8 @@ export default {
             var c = d3.scale.linear().domain(d3.extent(newVal)).range([0,1]);
 
             var map_layer = this.svg.selectAll("g.map-layer").selectAll("path");
-            map_layer.style('fill', function(d) {
-                console.log(heatmapColour(c(newVal[d.properties.barrio])));
+            map_layer.transition(100).style('fill', function(d) {
+                // console.log(heatmapColour(c(newVal[d.properties.barrio])));
                 return heatmapColour(c(newVal[d.properties.barrio]));
             });
         }
@@ -70,11 +68,6 @@ export default {
                 width: d3.select('.map-wrapper').node().getBoundingClientRect().width,
             };
 
-            const color = d3.scale.linear()
-                                    .domain([1, 20])
-                                    .clamp(true)
-                                    .range(['#08304b', '#08304b']);
-
             const projection = d3.geo.equirectangular()
                                     .scale(100000)
                                     .center([mapCenter.lng, mapCenter.lat])
@@ -104,7 +97,7 @@ export default {
             const mapLayer = g.append('g')
                             .classed('map-layer', true);
             
-            console.log(this.mapname);
+            // console.log(this.mapname);
 
             // Load map data
             const geoJsonUrl = '/static/geojson/' + this.mapname + '.json';
@@ -112,23 +105,15 @@ export default {
             d3.json(geoJsonUrl, function(error, mapData) {
                 vue_ref.j_features = mapData.features;
 
-                console.log(vue_ref.j_features);
-
                 var features = vue_ref.j_features;
-
-                // Update color scale domain based on data
-                color.domain([0, d3.max(features, nameLength)]);
 
                 // Draw each province as a path
                 mapLayer.selectAll('path')
                     .data(features)
                     .enter().append('path')
                     .attr('d', path)
-                    .attr('id', function(d){
-                        return '#b' + d.properties.barrio;
-                    })
                     .attr('vector-effect', 'non-scaling-stroke')
-                    .style('fill', fillFn)
+                    .style('fill', '#ffffff')
                     .on('mouseover', mouseover)
                     .on('mouseout', mouseout)
                     .on('click', clicked)
@@ -136,6 +121,10 @@ export default {
 
             function clicked(d) {
                 var x, y, k;
+
+                // d3.select(this).transition()
+                //                .duration(750)
+                //                .style("stroke-width: 5; stroke:black;")
 
                 // Compute centroid of the selected path
                 if (d && centered !== d) {
@@ -145,6 +134,7 @@ export default {
                     k = 4;
                     centered = d;
                     vue_ref.openInfo(d.properties);
+                    console.log(d);
                 } else {
                     x = size.width / 2;
                     y = size.height / 2;
@@ -153,49 +143,39 @@ export default {
                     vue_ref.closeInfo();
                 }
 
-                // Highlight the clicked province
-                mapLayer.selectAll('path')
-                    .style('fill', function(d){
-                    return centered && d===centered ? '#D5708B' : fillFn(d);
-            });
+                d3.select(this).transition()
+                               .duration(750)
+                               .attr('transform', 'scale(' + 1.0 + ')')
 
-            // Zoom
-            g.transition()
-                .duration(750)
-                .attr('transform', 'translate(' + size.width / 2 + ',' + size.height / 2 + ')scale(' + k + ')translate(' + -x + ',' + -y + ')');
+                // Zoom
+                g.transition()
+                    .duration(750)
+                    .attr('transform', 'translate(' + size.width / 2 + ',' + size.height / 2 + ')scale(' + k + ')translate(' + -x + ',' + -y + ')');
             }
 
             function mouseover(d){
-                // Highlight hovered province
-                d3.select(this).style('fill', '#1483ce');
-                if(d) {
-                    vue_ref.selectProvince(d.properties);
+                if(centered == d){
+                    return;
                 }
+                var scale = 1.05
+                // Highlight hovered province
+                var centroid = path.centroid(d);
+                var x = (1 - scale) * centroid[0];
+                var y = (1 - scale) * centroid[1];
+
+                d3.select(this).transition()
+                               .duration(750)
+                               .attr('transform', 'scale(' + scale + ')translate(' + x + ',' + y + ')');
             }
 
             function mouseout(d){
-                vue_ref.selectProvince(undefined);
-                // Reset province color
-                mapLayer.selectAll('path')
-                    .style('fill', (d) => {
-                    return centered && d===centered ? '#D5708B' : fillFn(d);
-                    });
-            }
-
-            // Get province name length
-            function nameLength(d){
-                const n = nameFn(d);
-                return n ? n.length : 0;
-            }
-
-            // Get province name
-            function nameFn(d){
-                return d && d.properties ? d.properties.barrios : null;
-            }
-
-            // Get province color
-            function fillFn(d){
-                return color(nameLength(d));
+                if (centered == d) {
+                    return;
+                }
+                // De-highlight province
+                d3.select(this).transition()
+                               .duration(750)
+                               .attr('transform', 'scale(' + 1.0 + ')');
             }
         }
     }
@@ -204,29 +184,22 @@ export default {
 </script>
 
 <style scoped>
-.map-wrapper {
-    .province-title {
-        position: absolute;
-        top: 50px;
-        left: 150px;
-        color: white;
+    .map-wrapper {
+        .background {
+            fill: #021019;
+            pointer-events: all;
+        }
+        
+        .map-layer {
+            fill: #08304b;
+            stroke: #021019;
+            stroke-width: 1px;
+        }
+
+        path.map-layer:hover {
+            transform: scale(2.0);
+            -ms-transform: scale(2.0);
+            -webkit-transform: scale(2.0);
+        }
     }
-    .province-info {
-        background: white;
-        position: absolute;
-        top: 150px;
-        right: 20px;
-        height: 400px;
-        width: 300px;
-    }
-    .background {
-        fill: #021019;
-        pointer-events: all;
-    }
-    .map-layer {
-        fill: #08304b;
-        stroke: #021019;
-        stroke-width: 1px;
-    }
-}
 </style>
