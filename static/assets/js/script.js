@@ -44,7 +44,7 @@ console.log('It\'s running!');
 // Init Google Fonts
 WebFont.load({
   google: {
-    families: ['Open+Sans:300,400']
+    families: ['Alegreya:300,400']
   }
 })
 
@@ -72,7 +72,6 @@ const vue_app = new Vue({
     getCommunes() {
       axios.get('/api/commune/')
            .then(response => {
-            //  console.log(response.data.data);
              this.result = response.data.data;
            })
            .catch(error => {
@@ -82,7 +81,6 @@ const vue_app = new Vue({
     getCommuneCensus(commune) {
       axios.get('/api/census/' + commune)
            .then(response => {
-            //  console.log(response.data.data);
              this.census = response.data.data;
            })
            .catch(error => {
@@ -92,7 +90,6 @@ const vue_app = new Vue({
     getBarrios() {
       axios.get('/api/barrio/')
            .then(response => {
-            //  console.log(response.data.data);
              this.barrios = response.data.data;
            })
            .catch(error => {
@@ -102,7 +99,6 @@ const vue_app = new Vue({
     getAvgBarriosValUS() {
       axios.get('/api/property/us_val/avg/')
            .then(response => {
-             console.log(response.data.data);
              this.barrios_val = response.data.data;
            })
            .catch(error => {
@@ -113,7 +109,6 @@ const vue_app = new Vue({
       if (this.barrios_val.length <= 0) {
         axios.get('/api/property/us_val/avg/')
             .then(response => {
-              // console.log(response.data.data);
               this.barrios_val = response.data.data;
               this.bar_avg = this.barrios_val[b_id];
             })
@@ -128,7 +123,6 @@ const vue_app = new Vue({
     getBarriosRentAT() {
       axios.get('/api/rent/all/')
            .then(response => {
-             console.log(response.data.data);
              this.barrios_val = response.data.data;
            })
            .catch(error => {
@@ -138,7 +132,6 @@ const vue_app = new Vue({
     getBarriosRentAT_usavg() {
       axios.get('/api/rent/all/us_avg')
            .then(response => {
-             console.log(response.data.data);
              this.barrios_val = response.data.data;
            })
            .catch(error => {
@@ -146,7 +139,6 @@ const vue_app = new Vue({
            })
     },
     onProvinceChange: function(province) {
-      console.log(this.barrios_val);
       if(province) {
         this.province = this.barrios[province.b_id];
       } else {
