@@ -1,51 +1,156 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}Map?{% endblock %}
+
+{% block title %}Buenos Casas{% endblock %}
+
 
 {% block content %}
-  <mapbaires></mapbaires>
-  <section class="hero is-light is-medium is-bold has-text-centered">
+
+  <section class="hero is-dark is-medium is-bold has-text-centered">
     <div class="hero-body">
       <div class="container">
-        <img src="/static/images/bottle-vue-kickstart-logo-horizontal.svg"
-             alt="Bottle Vue Kickstart logo"/>
-        <h1 class="title">Very basic Bottle kickstart kit with Vue.js and
-          Webpack</h1>
-        <h2 class="subtitle">Included Axios, Babel, Webpack config and demo app
-          with Bulma.</h2>
-        <a class="github-button"
-           href="https://github.com/koddr/bottle-vue-kickstart/archive/master.zip"
-           data-icon="octicon-cloud-download" data-size="large"
-           aria-label="Download koddr/bottle-vue-kickstart on GitHub">Download</a>
+        <!-- Page Title -->
+        <p class="title is-1">Buenos Aires</p>
+        <!-- Map container -->
+        <div class="columns">
+          <div class="column is-one-fifth">
+            Controls
+          </div>
+          <div class="column is-half">
+            <mapgeojson mapname='baires-communes'
+                        v-bind:barrios_val="barrios_val">
+            </mapbaires>
+          </div>
+          <div class="column">
+            Circle thingies
+          </div>
+        </div>
+      </div>
+      <!-- Barrio Name -->
+      <div v-if="province">
+        <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
+      </div>
+      <!-- Dropdown menu -->
+      <div class="dropdown is-hoverable">
+        <div class="dropdown-trigger">
+          <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+            <span>Dropdown button</span>
+            <span class="icon is-small">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+            </span>
+          </button>
+        </div>
+        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+          <div class="dropdown-content">
+            <a v-on:click="getBarriosRentAT_usavg()" class="dropdown-item">
+              Rent All Time
+            </a>
+            <a v-on:click="getAvgBarriosValUS()" class="dropdown-item">
+              Average property value
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
-  <footer class="footer has-text-centered">
-    <div class="container">
-      <div class="columns">
-        <div class="column">
-          <a cglass="github-button"
-             href="https://github.com/koddr/bottle-vue-kickstart"
-             data-icon="octicon-star"
-             data-size="large" data-show-count="true"
-             aria-label="Star koddr/bottle-vue-kickstart on GitHub">Star</a>
-          <a class="github-button"
-             href="https://github.com/koddr/bottle-vue-kickstart/subscription"
-             data-icon="octicon-eye" data-size="large" data-show-count="true"
-             aria-label="Watch koddr/bottle-vue-kickstart on GitHub">Watch</a>
-          <a class="github-button"
-             href="https://github.com/koddr/bottle-vue-kickstart/fork"
-             data-icon="octicon-repo-forked" data-size="large"
-             data-show-count="true"
-             aria-label="Fork koddr/bottle-vue-kickstart on GitHub">Fork</a>
+
+  <section class="hero is-warning is-medium is-bold has-text-centered">
+    <div class="hero-body">
+      <div class="container">
+        <div v-if="result">
+          <!-- Only runs if this class is present -->
+          <div class="communes">
+            <div class="columns is-desktop">
+              <div class="column" v-for="commune in result">
+                <div class="card">
+                  <div class="card-content">
+                    <strong>[[ commune.commune ]]</strong>
+                    <div v-if="barrios">
+                      <li v-for="b_id in commune.barrios">
+                          <a v-on:click="getAvgBarrioValUS(b_id)">[[barrios[b_id].name]]</a>
+                      </li>  
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="column">
-          <a href="https://webartisans.org" target="_blank">Made with &hearts;
-            in Russia, St. Petersburg</a>
+        <div v-else>
+          <h3 class="title">Oh.. I don't found any objects on Database!</h3>
+          <p>Please run <code>$ python install.py</code> from project dir.</p>
         </div>
       </div>
     </div>
-  </footer>
+  </section>
+
+  <section class="hero is-warning is-medium is-bold has-text-centered">
+    <div class="hero-body">
+      <div class="container">
+        <div v-if="bar_avg">
+          [[ bar_avg ]]
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero is-warning is-medium is-bold has-text-centered">
+    <div class="hero-body">
+      <div class="container">
+        <!-- Dropdown menu -->
+        <div class="dropdown is-hoverable">
+          <div class="dropdown-trigger">
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+              <span>Dropdown button</span>
+              <span class="icon is-small">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu" role="menu">
+            <div class="dropdown-content">
+              <a v-on:click="getCommuneCensus(1)" class="dropdown-item is-active">
+                Dropdown item
+              </a>
+              <a v-on:click="getCommuneCensus(2)" class="dropdown-item">
+                  Other dropdown item
+              </a>
+              <a v-on:click="getCommuneCensus(3)" class="dropdown-item">
+                  Active dropdown item
+              </a>
+              <a v-on:click="getCommuneCensus(4)" class="dropdown-item">
+                  Other dropdown item
+              </a>
+              <a v-on:click="getCommuneCensus(5)" class="dropdown-item">
+                  With a divider
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Data show -->
+        <div v-if="census">
+          <!-- Only runs if this class is present -->
+          <div class="communasData">
+            <div class="columns is-desktop">
+              <div class="column" v-for="point in census">
+                <div class="card">
+                  <div class="card-content">
+                    <h3>[[ point.comp_percent ]]</h3>
+                    <strong>[[ point.comp_quantile ]]</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <h3 class="title">Oh.. I don't found any objects on Database!</h3>
+          <p>Please run <code>$ python install.py</code> from project dir.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
 {% endblock %}
 
 

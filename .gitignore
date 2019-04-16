@@ -13,7 +13,6 @@ venv/
 # Project
 static/css/
 static/js/
-*.db
 
 <<<<<<< HEAD
 #VisualStudio Code

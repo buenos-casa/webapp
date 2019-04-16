@@ -2,7 +2,7 @@
 /*import Vue from 'vue'
 import axios from 'axios'
 import WebFont from 'webfontloader'
-import Mapbaires from '../components/mapbaires.vue'
+import Mapgeojson from '../components/mapgeojson.vue'
 import {
   // Flow Of transition
   d3SankeyCircular,
@@ -55,7 +55,116 @@ WebFont.load({
 // Init Vue app
 const vue_app = new Vue({
   el: '#app',
+  delimiters: ['[[', ']]'],
   components: {
-    Mapbaires
+    Mapgeojson
+  },
+  data() {
+    return {
+      result: [],
+      communes: [],
+      barrios: undefined,
+      census: [],
+      barrios_val: [],
+      bar_avg: null,
+      province: undefined
+    }
+  },
+  methods: {
+    getCommunes() {
+      axios.get('/api/commune/')
+           .then(response => {
+            //  console.log(response.data.data);
+             this.result = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           });
+    },
+    getCommuneCensus(commune) {
+      axios.get('/api/census/' + commune)
+           .then(response => {
+            //  console.log(response.data.data);
+             this.census = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
+    getBarrios() {
+      axios.get('/api/barrio/')
+           .then(response => {
+            //  console.log(response.data.data);
+             this.barrios = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
+    getAvgBarriosValUS() {
+      axios.get('/api/property/us_val/avg/')
+           .then(response => {
+             console.log(response.data.data);
+             this.barrios_val = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
+    getAvgBarrioValUS(b_id) {
+      if (this.barrios_val.length <= 0) {
+        axios.get('/api/property/us_val/avg/')
+            .then(response => {
+              // console.log(response.data.data);
+              this.barrios_val = response.data.data;
+              this.bar_avg = this.barrios_val[b_id];
+            })
+            .catch(error => {
+              console.log(error);
+            })
+          }
+      else {
+        this.bar_avg = this.barrios_val[b_id];
+      }
+    },
+    getBarriosRentAT() {
+      axios.get('/api/rent/all/')
+           .then(response => {
+             console.log(response.data.data);
+             this.barrios_val = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
+    getBarriosRentAT_usavg() {
+      axios.get('/api/rent/all/us_avg')
+           .then(response => {
+             console.log(response.data.data);
+             this.barrios_val = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
+    onProvinceChange: function(province) {
+      console.log(this.barrios_val);
+      if(province) {
+        this.province = this.barrios[province.b_id];
+      } else {
+        this.province = undefined;
+      }
+    }
+  },
+  mounted: function() {
+    this.$on('province-chosen', this.onProvinceChange);
+    this.getAvgBarriosValUS()
+    if (document.querySelectorAll('.communes').length > 0) {
+      this.getCommunes();
+      this.getBarrios();
+    }
+    if (document.querySelectorAll('.communasData').length > 0) {
+      this.getCommuneCensus(1);
+    }
   }
 });
