@@ -14,7 +14,36 @@
         <!-- Map container -->
         <div class="columns">
           <div class="column is-one-fifth">
-            Controls
+            <!-- Dropdown menu -->
+            <div class="dropdown is-hoverable">
+              <div class="dropdown-trigger">
+                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                  <span>Dropdown button</span>
+                  <span class="icon is-small">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                <div class="dropdown-content">
+                  <a v-on:click="getBarriosVal('/api/rent/all/us_avg')" class="dropdown-item">
+                    Rent All Time
+                  </a>
+                  <a v-on:click="getBarriosVal('/api/property/us_val/avg/')" class="dropdown-item">
+                    Average property value
+                  </a>
+                  <a v-on:click="getBarriosVal('/api/sports/all')" class="dropdown-item">
+                    Number of Sports Facilities
+                  </a>
+                  <a v-on:click="getBarriosVal('/api/health/hospital/count')" class="dropdown-item">
+                    Number of Hospitals
+                  </a>
+                  <a v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" class="dropdown-item">
+                    Elderly Care Centers
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="column is-half">
             <mapgeojson mapname='baires-communes'
@@ -22,7 +51,10 @@
             </mapgeojson>
           </div>
           <div class="column">
-            Circle thingies
+            <d3-circle
+              :data="0.5"
+              width="100%">
+            </d3-circle>
           </div>
         </div>
       </div>
@@ -30,29 +62,14 @@
       <div v-if="province">
         <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
       </div>
-      <!-- Dropdown menu -->
-      <div class="dropdown is-hoverable">
-        <div class="dropdown-trigger">
-          <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-            <span>Dropdown button</span>
-            <span class="icon is-small">
-              <i class="fas fa-angle-down" aria-hidden="true"></i>
-            </span>
-          </button>
-        </div>
-        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-          <div class="dropdown-content">
-            <a v-on:click="getBarriosRentAT_usavg()" class="dropdown-item">
-              Rent All Time
-            </a>
-            <a v-on:click="getAvgBarriosValUS()" class="dropdown-item">
-              Average property value
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
+
+  <d3-line
+    :data="[{'key':1, 'value':0.2}, {'key':2, 'value':0.5}, {'key':3, 'value':0.1}]"
+    width="100%"
+    height="300px">
+  </d3-line>
 
   <section class="hero is-warning is-medium is-bold has-text-centered">
     <div class="hero-body">
