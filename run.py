@@ -147,11 +147,7 @@ def get_rent_data_all_time(sqlite_db):
     query = sqlite_db.query(RentDB.id, RentDB.avg_price_us).all()
 
     dat = [0] * (max(query,key=itemgetter(1))[0] + 1)
-    print(query)
-
-    print(len(dat))
     for i in query:
-        print(i)
         dat[i[0]] = i[1]
 
     return package_data(dat)
