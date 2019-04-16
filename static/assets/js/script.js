@@ -1,5 +1,5 @@
 // Include libraries
-/*import Vue from 'vue'
+import Vue from 'vue'
 import axios from 'axios'
 import WebFont from 'webfontloader'
 import Mapgeojson from '../components/mapgeojson.vue'
@@ -47,8 +47,6 @@ WebFont.load({
     families: ['Alegreya:300,400']
   }
 })
-*/
-// Following this tutorial: https://travishorn.com/interactive-maps-with-vue-leaflet-5430527353c8
 
 // Following this tutorial: https://travishorn.com/interactive-maps-with-vue-leaflet-5430527353c8
 
