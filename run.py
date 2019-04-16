@@ -7,6 +7,9 @@ from bottle_sqlalchemy import SQLAlchemyPlugin
 # Import SQLAlchemy
 from sqlalchemy import create_engine, Column, Integer, String, Text, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import func
+
+from operator import itemgetter
 
 # Define dirs
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -54,7 +57,7 @@ class PropertyDB(Base):
     __tablename__ = 'PROPERTY'
     id = Column("index", Integer, primary_key=True)
     commune = Column("Commune", Integer)
-    neighborhood = Column("Neighborhood", String(255))
+    b_id = Column("b_id", Integer)
     lon = Column("Longitude", Float)
     lat = Column("Latitude", Float)
     date = Column("Date", Date)
@@ -62,24 +65,97 @@ class PropertyDB(Base):
     m2_val = Column("Value of m2 (US Dollars)", Float)
     m2 = Column(Float)
 
+# Rent Database
+class RentDB(Base):
+    __tablename__ = 'RENT'
+    id = Column("b_id_", Integer, primary_key=True)
+    max_price_lc = Column("price_aprox_local_currency_max", Float)
+    avg_price_lc = Column("price_aprox_local_currency_mean", Float)
+    std_price_lc = Column("price_aprox_local_currency_std", Float)
+    max_price_us = Column("price_aprox_usd_max", Float)
+    avg_price_us = Column("price_aprox_usd_mean", Float)
+    std_price_us = Column("price_aprox_usd_std", Float)
+
+class CommuneDB(Base):
+    __tablename__ = 'COMMUNES'
+    id = Column("index", Integer, primary_key=True)
+    commune = Column("Commune", Integer)
+    b_id = Column("b_id", Integer)
+
+class BarrioDB(Base):
+    __tablename__ = 'BARRIOS'
+    id = Column("id", Integer, primary_key=True)
+    name = Column("Barrio", String(255))
+
 
 def remove_inst_state(a_dict):
     a_dict.pop('_sa_instance_state', None)
     return a_dict
 
+def package_data(dat):
+    response.headers['Content-Type'] = 'application/json'
+    return json.dumps({'data': dat})
+
 # API routes
-@app.get('/api/census/')
-def get_all_census_data(sqlite_db):
-    """Get all communes and their id's from Database"""
-    census = []
-    census_query = sqlite_db.query(CensusDB).group_by(CensusDB.commune).distinct()
-    for i in census_query:
-        census.append({
-            'commune': i.commune
-        })
+@app.get('/api/barrio/')
+def get_all_barrios(sqlite_db):
+    """Get name and ID of all barrios"""
+    query = sqlite_db.query(BarrioDB).all()
+    dat = [remove_inst_state(i.__dict__) for i in query]
 
     response.headers['Content-Type'] = 'application/json'
-    return json.dumps({'data': census})
+    return json.dumps({'data': dat})
+
+
+@app.get('/api/commune/')
+def get_all_communes(sqlite_db):
+    """Get all communes, their id, and the barrios in them from Database"""
+    query = sqlite_db.query(CommuneDB).all()
+    dic_dat = {}
+
+    for i in query:
+        if i.commune in dic_dat:
+            dic_dat[i.commune].append(i.b_id)
+        else:
+            dic_dat[i.commune] = list()
+            dic_dat[i.commune].append(i.b_id)
+
+    dat = [{'commune':key,'barrios':value} for key,value in dic_dat.items()]
+
+    return package_data(dat)
+
+
+@app.get('/api/census/')
+def get_all_census_data(sqlite_db):
+    """Get all census data available"""
+    query = sqlite_db.query(CensusDB).all()
+    dat = [remove_inst_state(i.__dict__) for i in query]
+
+    return package_data(dat)
+
+@app.get('/api/rent/all/')
+def get_rent_data_all_time(sqlite_db):
+    """Get rent data over all time"""
+    query = sqlite_db.query(RentDB).all()
+    dat = [remove_inst_state(i.__dict__) for i in query]
+
+    return package_data(dat)
+
+@app.get('/api/rent/all/us_avg')
+def get_rent_data_all_time(sqlite_db):
+    """Get rent data over all time"""
+    query = sqlite_db.query(RentDB.id, RentDB.avg_price_us).all()
+
+    dat = [0] * (max(query,key=itemgetter(1))[0] + 1)
+    print(query)
+
+    print(len(dat))
+    for i in query:
+        print(i)
+        dat[i[0]] = i[1]
+
+    return package_data(dat)
+
 
 @app.get('/api/census/<commune>')
 def get_all_commune_data(sqlite_db, commune):
@@ -87,17 +163,28 @@ def get_all_commune_data(sqlite_db, commune):
     commune_query = sqlite_db.query(CensusDB).filter(CensusDB.commune == commune).all()
     dat = [remove_inst_state(i.__dict__) for i in commune_query]
 
-    response.headers['Content-Type'] = 'application/json'
-    return json.dumps({'data': dat})
+    return package_data(dat)
 
-@app.get('/api/property/<commune>')
-def get_commune_property_values(sqlite_db, commune):
-    """Get all properties of a particular commune"""
-    commune_query = sqlite_db.query(PropertyDB).filter(PropertyDB.commune == commune).all()
-    dat = [remove_inst_state(i.__dict__) for i in commune_query]
+# TODO
+# @app.get('/api/census/cell_aq')
+# def get_all_commune_data(sqlite_db, commune):
+#     """Get average cellular quantile for each commune"""
+#     query = sqlite_db.query(CensusDB).all()
+#     dat = [remove_inst_state(i.__dict__) for i in commune_query]
 
-    response.headers['Content-Type'] = 'application/json'
-    return json.dumps({'data':dat})
+#     response.headers['Content-Type'] = 'application/json'
+#     return json.dumps({'data': dat})
+
+@app.get('/api/property/us_val/avg/')
+def get_all_barrio_average_property_value(sqlite_db):
+    """Get the average property value for each barrio in USD over all time"""
+    query = sqlite_db.query(PropertyDB.b_id, func.avg(PropertyDB.us_val).label('average')).group_by(PropertyDB.b_id).all()
+    print(len(query))
+    dat = [0] * len(query)
+    for i in query:
+        dat[i[0]] = i[1]
+
+    return package_data(dat)
 
 # Index page route
 @app.get('/')
