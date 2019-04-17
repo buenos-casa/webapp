@@ -55,7 +55,9 @@ const vue_app = new Vue({
   el: '#app',
   delimiters: ['[[', ']]'],
   components: {
-    Mapgeojson
+    Mapgeojson,
+    d3Circle,
+    d3Line
   },
   data() {
     return {
@@ -96,15 +98,6 @@ const vue_app = new Vue({
              console.log(error);
            })
     },
-    getAvgBarriosValUS() {
-      axios.get('/api/property/us_val/avg/')
-           .then(response => {
-             this.barrios_val = response.data.data;
-           })
-           .catch(error => {
-             console.log(error);
-           })
-    },
     getAvgBarrioValUS(b_id) {
       if (this.barrios_val.length <= 0) {
         axios.get('/api/property/us_val/avg/')
@@ -120,19 +113,10 @@ const vue_app = new Vue({
         this.bar_avg = this.barrios_val[b_id];
       }
     },
-    getBarriosRentAT() {
-      axios.get('/api/rent/all/')
+    getBarriosVal(endpoint) {
+      axios.get(endpoint)
            .then(response => {
-             this.barrios_val = response.data.data;
-           })
-           .catch(error => {
-             console.log(error);
-           })
-    },
-    getBarriosRentAT_usavg() {
-      axios.get('/api/rent/all/us_avg')
-           .then(response => {
-             this.barrios_val = response.data.data;
+            this.barrios_val = response.data.data;
            })
            .catch(error => {
              console.log(error);
@@ -148,7 +132,7 @@ const vue_app = new Vue({
   },
   mounted: function() {
     this.$on('province-chosen', this.onProvinceChange);
-    this.getAvgBarriosValUS()
+    this.getBarriosVal('/api/property/us_val/avg/');
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
       this.getBarrios();

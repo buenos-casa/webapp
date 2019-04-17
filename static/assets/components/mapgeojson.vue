@@ -14,8 +14,23 @@ export default {
         this.drawMap();
     },
     props: {
-        mapname: String,
-        barrios_val: Array
+        mapname: {
+            type: String,
+            required: true
+        },
+        barrios_val: Array,
+        lat: {
+            type: Number,
+            required: true
+        },
+        lon: {
+            type: Number,
+            required: true
+        },
+        dims: {
+            type: Object,
+            default: {'x': 500, 'y': 500}
+        }
     },
     watch: {
         barrios_val: function(newVal, oldVal) {
@@ -57,20 +72,17 @@ export default {
         },
         drawMap() {
             var vue_ref = this;
+            console.log(vue_ref);
             // Set svg width & height
             let centered = undefined;
-            const mapCenter = {
-                lat: -34.6,
-                lng: -58.4
-            };
             const size = {
-                height: 500,
-                width: d3.select('.map-wrapper').node().getBoundingClientRect().width,
+                height: vue_ref.dims.y,
+                width: vue_ref.dims.x
             };
 
             const projection = d3.geo.equirectangular()
                                     .scale(100000)
-                                    .center([mapCenter.lng, mapCenter.lat])
+                                    .center([vue_ref.lon, vue_ref.lat])
                                     .translate([size.width / 2, size.height / 2]);
 
             const path = d3.geo.path()
