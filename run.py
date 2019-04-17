@@ -7,7 +7,7 @@ from bottle_sqlalchemy import SQLAlchemyPlugin
 # Import SQLAlchemy
 from sqlalchemy import create_engine, Column, Integer, String, Text, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 from operator import itemgetter
 
@@ -75,6 +75,42 @@ class RentDB(Base):
     max_price_us = Column("price_aprox_usd_max", Float)
     avg_price_us = Column("price_aprox_usd_mean", Float)
     std_price_us = Column("price_aprox_usd_std", Float)
+
+class SportsDB(Base):
+    __tablename__ = 'SPORT'
+    id = Column("index", Integer, primary_key=True)
+    name = Column("Name", String(255))
+    lon = Column("Longitude", Float)
+    lat = Column("Latitude", Float)
+    kind = Column("Type", String(255))
+    b_id = Column(Integer)
+
+class HealthDB(Base):
+    __tablename__ = 'HEALTH'
+    id = Column("index", Integer, primary_key=True)
+    name = Column("Name", String(255))
+    lon = Column("Longitude", Float)
+    lat = Column("Latitude", Float)
+    kind = Column("Type", String(255))
+    b_id = Column(Integer)
+
+class CultureDB(Base):
+    __tablename__ = 'CULTURE'
+    id = Column("index", Integer, primary_key=True)
+    name = Column("Name", String(255))
+    lon = Column("Longitude", Float)
+    lat = Column("Latitude", Float)
+    kind = Column("Type", String(255))
+    b_id = Column(Integer)
+
+class HumanityDB(Base):
+    __tablename__ = 'HUMANITY'
+    id = Column("index", Integer, primary_key=True)
+    name = Column("Name", String(255))
+    lon = Column("Longitude", Float)
+    lat = Column("Latitude", Float)
+    kind = Column("Type", String(255))
+    b_id = Column(Integer)
 
 class CommuneDB(Base):
     __tablename__ = 'COMMUNES'
@@ -152,7 +188,6 @@ def get_rent_data_all_time(sqlite_db):
 
     return package_data(dat)
 
-
 @app.get('/api/census/<commune>')
 def get_all_commune_data(sqlite_db, commune):
     """Get all information for a particular commune"""
@@ -161,22 +196,55 @@ def get_all_commune_data(sqlite_db, commune):
 
     return package_data(dat)
 
-# TODO
-# @app.get('/api/census/cell_aq')
-# def get_all_commune_data(sqlite_db, commune):
-#     """Get average cellular quantile for each commune"""
-#     query = sqlite_db.query(CensusDB).all()
-#     dat = [remove_inst_state(i.__dict__) for i in commune_query]
+@app.get('/api/sports/all')
+def get_all_sports_data(sqlite_db):
+    """"""
+    query = sqlite_db.query(SportsDB.b_id, func.count(SportsDB.id).label('per_barrio')).group_by(SportsDB.b_id).all()
+    dat = [0] * 49 #number of barrios
+    for i in query:
+        dat[i[0]] = i[1]
 
-#     response.headers['Content-Type'] = 'application/json'
-#     return json.dumps({'data': dat})
+    return package_data(dat)
+
+@app.get('/api/health/all')
+def get_all_health_data(sqlite_db):
+    """"""
+    query = sqlite_db.query(HealthDB.b_id, func.count(HealthDB.id).label('per_barrio')).group_by(HealthDB.b_id).all()
+    dat = [0] * 49 #number of barrios
+    for i in query:
+        dat[i[0]] = i[1]
+
+    return package_data(dat)
+
+@app.get('/api/health/hospital/count')
+def get_hospitals_per_barrio(sqlite_db):
+    """"""
+    query = sqlite_db.query(HealthDB.b_id, func.count(HealthDB.id).label('per_barrio'))\
+                     .filter(HealthDB.kind.contains('hospital'))\
+                     .group_by(HealthDB.b_id).all()
+    dat = [0] * 49 #number of barrios
+    for i in query:
+        dat[i[0]] = i[1]
+
+    return package_data(dat)
+
+@app.get('/api/humanity/elderly_care/count')
+def get_elderly_care_per_barrio(sqlite_db):
+    """"""
+    query = sqlite_db.query(HumanityDB.b_id, func.count(HumanityDB.id).label('per_barrio'))\
+                     .filter(or_(HumanityDB.kind.contains('retire'),HumanityDB.kind.contains('elder')))\
+                     .group_by(HumanityDB.b_id).all()
+    dat = [0] * 49 #number of barrios
+    for i in query:
+        dat[i[0]] = i[1]
+
+    return package_data(dat)
 
 @app.get('/api/property/us_val/avg/')
 def get_all_barrio_average_property_value(sqlite_db):
     """Get the average property value for each barrio in USD over all time"""
     query = sqlite_db.query(PropertyDB.b_id, func.avg(PropertyDB.us_val).label('average')).group_by(PropertyDB.b_id).all()
-    print(len(query))
-    dat = [0] * len(query)
+    dat = [0] * 49
     for i in query:
         dat[i[0]] = i[1]
 
