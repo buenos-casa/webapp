@@ -153,14 +153,6 @@ def get_rent_data_all_time(sqlite_db):
     return package_data(dat)
 
 
-@app.get('/api/census/<commune>')
-def get_all_commune_data(sqlite_db, commune):
-    """Get all information for a particular commune"""
-    commune_query = sqlite_db.query(CensusDB).filter(CensusDB.commune == commune).all()
-    dat = [remove_inst_state(i.__dict__) for i in commune_query]
-
-    return package_data(dat)
-
 # TODO
 # @app.get('/api/census/cell_aq')
 # def get_all_commune_data(sqlite_db, commune):
@@ -179,6 +171,14 @@ def get_all_barrio_average_property_value(sqlite_db):
     dat = [0] * len(query)
     for i in query:
         dat[i[0]] = i[1]
+
+    return package_data(dat)
+
+@app.get('/api/census/<commune>')
+def get_all_commune_data(sqlite_db, commune):
+    """Get all information for a particular commune"""
+    commune_query = sqlite_db.query(CensusDB).filter(CensusDB.commune == commune).all()
+    dat = [remove_inst_state(i.__dict__) for i in commune_query]
 
     return package_data(dat)
 
