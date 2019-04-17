@@ -58,12 +58,6 @@
     </div>
   </section>
 
-  <d3-line
-    :data="[{'key':1, 'value':0.2}, {'key':2, 'value':0.5}, {'key':3, 'value':0.1}]"
-    width="100%"
-    height="300px">
-  </d3-line>
-
   <section class="hero is-warning is-medium is-bold has-text-centered">
     <div class="hero-body">
       <div class="container">
@@ -97,6 +91,11 @@
   <section class="hero is-warning is-medium is-bold has-text-centered">
     <div class="hero-body">
       <div class="container">
+        <d3-line
+          :data="[{'key':1, 'value':0.2}, {'key':2, 'value':0.5}, {'key':3, 'value':0.1}]"
+          width="100%"
+          height="300px">
+        </d3-line>
         <div v-if="bar_avg">
           [[ bar_avg ]]
         </div>
