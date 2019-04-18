@@ -57,7 +57,8 @@ const vue_app = new Vue({
   components: {
     Mapgeojson,
     d3Circle,
-    d3Line
+    d3Line,
+    d3MultiLine
   },
   data() {
     return {
@@ -67,7 +68,8 @@ const vue_app = new Vue({
       census: [],
       barrios_val: [],
       bar_avg: null,
-      province: undefined
+      province: undefined,
+      month_rent: []
     }
   },
   methods: {
@@ -128,6 +130,17 @@ const vue_app = new Vue({
       } else {
         this.province = undefined;
       }
+    },
+    getBarriosMonthlyRent() {
+      axios.get('/api/monthly/rent')
+            .then(response => {
+              this.month_rent = response.data.data;
+            })
+            .catch(error => {
+              console.log(error);
+            })
+      console.log(month_rent)
+      console.log('This run!')
     }
   },
   mounted: function() {
@@ -136,6 +149,7 @@ const vue_app = new Vue({
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
       this.getBarrios();
+      this.getBarriosMonthlyRent();
     }
     if (document.querySelectorAll('.communasData').length > 0) {
       this.getCommuneCensus(1);

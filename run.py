@@ -123,6 +123,26 @@ class BarrioDB(Base):
     id = Column("id", Integer, primary_key=True)
     name = Column("Barrio", String(255))
 
+class RentMonthlyDB(Base):
+    __tablename__ = 'RENT_MO'
+    id = Column("b_id_", Integer, primary_key=True)
+    barrio = Column("barrio", String(255))
+    count = Column("created_on_count", Integer)
+    month = Column("month_", Integer)
+    year = Column("year_", Integer)
+    mean_price_usd = Column("price_aprox_usd_mean", Float)
+    mean_price_local = Column("price_aprox_local_currency_mean", Float)
+
+class SellMonthlyDB(Base):
+    __tablename__ = 'SELL_MO'
+    id = Column("b_id_", Integer, primary_key=True)
+    barrio = Column("barrio", String(255))
+    count = Column("created_on_count", Integer)
+    month = Column("month_", Integer)
+    year = Column("year_", Integer)
+    mean_price_usd = Column("price_aprox_usd_mean", Float)
+    mean_price_local = Column("price_aprox_local_currency_mean", Float)
+
 
 def remove_inst_state(a_dict):
     a_dict.pop('_sa_instance_state', None)
@@ -256,6 +276,31 @@ def get_all_commune_data(sqlite_db, commune):
     commune_query = sqlite_db.query(CensusDB).filter(CensusDB.commune == commune).all()
     dat = [remove_inst_state(i.__dict__) for i in commune_query]
 
+    return package_data(dat)
+
+#Get data for the multi-line
+@app.get('/api/monthly/rent')
+def get_all_monthly_rent(sqlite_db):
+    """Get the average property value for each barrio in USD over all time"""
+    query = sqlite_db.query(RentMonthlyDB.id, RentMonthlyDB.year,  RentMonthlyDB.month, RentMonthlyDB.mean_price_usd, RentMonthlyDB.mean_price_local).filter(RentMonthlyDB.year == '2017').all()
+    dat = []
+    for i in query:
+        dat.append({'group': str(i[0]), 'key': i[2], 'value': i[3]})
+    
+    dat = sorted(dat, key=itemgetter('key'))
+    print (dat)
+
+    return package_data(dat)
+
+@app.get('/api/monthly/sell')
+def get_all_monthly_sell(sqlite_db):
+    query = sqlite_db.query(SellMonthlyDB.id, SellMonthlyDB.year,  SellMonthlyDB.month, SellMonthlyDB.mean_price_usd, SellMonthlyDB.mean_price_local).all()
+    dat = []
+    for i in query:
+        dat.append({'group': str(i[0]), 'key': (str(i[2])), 'value': i[3]})
+    
+    print (dat)
+    
     return package_data(dat)
 
 # Index page route
