@@ -34,8 +34,6 @@ export default {
     },
     watch: {
         barrios_val: function(newVal, oldVal) {
-            console.log("changed");
-
             var max_val = Math.max(newVal);
             var min_val = Math.min(newVal);
 
@@ -48,8 +46,7 @@ export default {
             var c = d3.scale.linear().domain(d3.extent(newVal)).range([0,1]);
 
             var map_layer = this.svg.selectAll("g.map-layer").selectAll("path");
-            map_layer.transition(100).style('fill', function(d) {
-                // console.log(heatmapColour(c(newVal[d.properties.barrio])));
+            map_layer.transition(500).style('fill', function(d) {
                 return heatmapColour(c(newVal[d.properties.barrio]));
             });
         }
@@ -72,7 +69,6 @@ export default {
         },
         drawMap() {
             var vue_ref = this;
-            console.log(vue_ref);
             // Set svg width & height
             let centered = undefined;
             const size = {
@@ -125,7 +121,7 @@ export default {
                     .enter().append('path')
                     .attr('d', path)
                     .attr('vector-effect', 'non-scaling-stroke')
-                    .style('fill', '#ffffff')
+                    .style('fill', '#000000')
                     .on('mouseover', mouseover)
                     .on('mouseout', mouseout)
                     .on('click', clicked)
@@ -176,7 +172,7 @@ export default {
                 var y = (1 - scale) * centroid[1];
 
                 d3.select(this).transition()
-                               .duration(750)
+                               .duration(250)
                                .attr('transform', 'scale(' + scale + ')translate(' + x + ',' + y + ')');
             }
 
@@ -186,7 +182,7 @@ export default {
                 }
                 // De-highlight province
                 d3.select(this).transition()
-                               .duration(750)
+                               .duration(250)
                                .attr('transform', 'scale(' + 1.0 + ')');
             }
         }
@@ -195,23 +191,16 @@ export default {
 
 </script>
 
-<style scoped>
+<style>
     .map-wrapper {
         .background {
-            fill: #021019;
+            fill: none;
             pointer-events: all;
         }
-        
         .map-layer {
-            fill: #08304b;
+            fill: none;
             stroke: #021019;
             stroke-width: 1px;
-        }
-
-        path.map-layer:hover {
-            transform: scale(2.0);
-            -ms-transform: scale(2.0);
-            -webkit-transform: scale(2.0);
         }
     }
 </style>
