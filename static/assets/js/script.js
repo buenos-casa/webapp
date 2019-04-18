@@ -56,11 +56,13 @@ const vue_app = new Vue({
   delimiters: ['[[', ']]'],
   components: {
     Mapgeojson,
+    d3Pie,
     d3Circle,
     d3Line
   },
   data() {
     return {
+      vw: 'overview',
       result: [],
       communes: [],
       barrios: undefined,

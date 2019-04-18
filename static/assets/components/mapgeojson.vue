@@ -77,7 +77,7 @@ export default {
             };
 
             const projection = d3.geo.equirectangular()
-                                    .scale(100000)
+                                    .scale(125000)
                                     .center([vue_ref.lon, vue_ref.lat])
                                     .translate([size.width / 2, size.height / 2]);
 
@@ -93,6 +93,7 @@ export default {
             // Add background
             this.svg.append('rect')
                 .attr('class', 'background')
+                .style('fill', 'none')
                 .attr('width', size.width)
                 .attr('height', size.height)
                 .on('click', clicked);
@@ -155,6 +156,8 @@ export default {
                                .duration(750)
                                .attr('transform', 'scale(' + 1.0 + ')')
 
+                d3.select(this).style('opacity', '1.0');
+
                 // Zoom
                 g.transition()
                     .duration(750)
@@ -171,6 +174,8 @@ export default {
                 var x = (1 - scale) * centroid[0];
                 var y = (1 - scale) * centroid[1];
 
+                d3.select(this).style('opacity', '0.75');
+
                 d3.select(this).transition()
                                .duration(250)
                                .attr('transform', 'scale(' + scale + ')translate(' + x + ',' + y + ')');
@@ -181,9 +186,11 @@ export default {
                     return;
                 }
                 // De-highlight province
+                d3.select(this).style('opacity', '1.0');
                 d3.select(this).transition()
                                .duration(250)
                                .attr('transform', 'scale(' + 1.0 + ')');
+
             }
         }
     }
