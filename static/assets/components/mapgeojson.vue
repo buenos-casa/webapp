@@ -191,23 +191,16 @@ export default {
 
 </script>
 
-<style scoped>
+<style>
     .map-wrapper {
         .background {
-            fill: #021019;
+            fill: none;
             pointer-events: all;
         }
-        
         .map-layer {
-            fill: #08304b;
+            fill: none;
             stroke: #021019;
             stroke-width: 1px;
-        }
-
-        path.map-layer:hover {
-            transform: scale(2.0);
-            -ms-transform: scale(2.0);
-            -webkit-transform: scale(2.0);
         }
     }
 </style>
