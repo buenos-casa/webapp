@@ -112,11 +112,6 @@
     <section class="hero is-warning is-medium is-bold has-text-centered">
       <div class="hero-body">
         <div class="container">
-          <d3-line
-            :data="[{'key':1, 'value':0.2}, {'key':2, 'value':0.5}, {'key':3, 'value':0.1}]"
-            width="100%"
-            height="300px">
-          </d3-line>
           <div v-if="bar_avg">
             [[ bar_avg ]]
           </div>
@@ -129,55 +124,39 @@
     <section class="hero is-warning is-medium is-bold has-text-centered">
       <div class="hero-body">
         <div class="container">
-          <!-- Dropdown menu -->
-          <div class="dropdown is-hoverable">
-            <div class="dropdown-trigger">
-              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                <span>Dropdown button</span>
-                <span class="icon is-small">
-                  <i class="fas fa-angle-down" aria-hidden="true"></i>
-                </span>
-              </button>
+          <div class="columns">
+            <div class="column">
+              First Circle
+              <d3-circle
+                :data="0.5"
+                width="100%">
+              </d3-circle>
             </div>
-            <div class="dropdown-menu" id="dropdown-menu" role="menu">
-              <div class="dropdown-content">
-                <a v-on:click="getCommuneCensus(1)" class="dropdown-item is-active">
-                  Dropdown item
-                </a>
-                <a v-on:click="getCommuneCensus(2)" class="dropdown-item">
-                    Other dropdown item
-                </a>
-                <a v-on:click="getCommuneCensus(3)" class="dropdown-item">
-                    Active dropdown item
-                </a>
-                <a v-on:click="getCommuneCensus(4)" class="dropdown-item">
-                    Other dropdown item
-                </a>
-                <a v-on:click="getCommuneCensus(5)" class="dropdown-item">
-                    With a divider
-                </a>
-              </div>
+            <div class="column">
+                First Circle
+                <d3-circle
+                  :data="0.5"
+                  width="100%">
+                </d3-circle>
+            </div>
+            <div class="column">
+                First Circle
+                <d3-circle
+                  :data="0.5"
+                  width="100%">
+                </d3-circle>
             </div>
           </div>
-          <!-- Data show -->
-          <div v-if="census">
-            <!-- Only runs if this class is present -->
-            <div class="communasData">
-              <div class="columns is-desktop">
-                <div class="column" v-for="point in census">
-                  <div class="card">
-                    <div class="card-content">
-                      <h3>[[ point.comp_percent ]]</h3>
-                      <strong>[[ point.comp_quantile ]]</strong>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div v-else>
-            <p>Loading...</p>
-          </div>
+          <d3-line
+            :data="[{'key':1, 'value':0.2}, {'key':2, 'value':0.5}, {'key':3, 'value':0.1}]"
+            width="100%"
+            height="300px">
+          </d3-line>
+          <d3-pie
+            :data="[{'key':'dog', 'value':120}, {'key': 'cat', 'value': 80}]"
+            width="100%"
+            height="300px">
+          </d3-pie>
         </div>
       </div>
     </section>
