@@ -48,8 +48,6 @@ WebFont.load({
   }
 })
 
-// Following this tutorial: https://travishorn.com/interactive-maps-with-vue-leaflet-5430527353c8
-
 // Init Vue app
 const vue_app = new Vue({
   el: '#app',

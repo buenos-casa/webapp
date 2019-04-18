@@ -19,6 +19,10 @@ export default {
             required: true
         },
         barrios_val: Array,
+        heatmap_val: {
+            type: Array,
+            required:false
+        },
         lat: {
             type: Number,
             required: true
@@ -49,23 +53,39 @@ export default {
             map_layer.transition(500).style('fill', function(d) {
                 return heatmapColour(c(newVal[d.properties.barrio]));
             });
+        },
+        heatmap_val: function(newVal, oldVal) {
+            if(selected_province) {
+                this.drawHeatmap();
+            }
         }
     },
     data() { 
         return {
-
+            selected_province: undefined,
         }
     },
     methods: {
-        selectProvince(province) {
-            // this.province = province;
-        },
         openInfo(province) {
             this.$parent.$emit('province-chosen', {'b_id': province.barrio, 'commune': province.commune});
-
+            this.selected_province = province;
+            this.drawHeatmap();
         },
         closeInfo() {
             this.$parent.$emit('province-chosen', undefined);
+            this.selected_province = undefined;
+            // TODO delete heatmap points
+        },
+        drawHeatmap() {
+            if(this.heatmap_val) {
+                this.svg.selectAll("circle")
+                        .data(this.heatmap_val[this.selected_province])
+                        .append("circle")
+                        .attr("cx", 1)
+                        .attr("cy", 1)
+                        .attr("r", "8px")
+                        .attr("fill", "red")
+            }
         },
         drawMap() {
             var vue_ref = this;
@@ -76,13 +96,13 @@ export default {
                 width: vue_ref.dims.x
             };
 
-            const projection = d3.geo.equirectangular()
+            this.projection = d3.geo.equirectangular()
                                     .scale(125000)
                                     .center([vue_ref.lon, vue_ref.lat])
                                     .translate([size.width / 2, size.height / 2]);
 
             const path = d3.geo.path()
-                                .projection(projection);
+                                .projection(this.projection);
 
             this.svg = d3.select(this.$el.children[0])
                 .append('svg')
@@ -106,8 +126,6 @@ export default {
             const mapLayer = g.append('g')
                             .classed('map-layer', true);
             
-            // console.log(this.mapname);
-
             // Load map data
             const geoJsonUrl = '/static/geojson/' + this.mapname + '.json';
 
@@ -130,10 +148,6 @@ export default {
 
             function clicked(d) {
                 var x, y, k;
-
-                // d3.select(this).transition()
-                //                .duration(750)
-                //                .style("stroke-width: 5; stroke:black;")
 
                 // Compute centroid of the selected path
                 if (d && centered !== d) {
