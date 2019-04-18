@@ -58,107 +58,140 @@
     </div>
   </section>
 
-  <section class="hero is-warning is-medium is-bold has-text-centered">
-    <div class="hero-body">
-      <div class="container">
-        <div v-if="result">
-          <!-- Only runs if this class is present -->
-          <div class="communes">
-            <div class="columns is-desktop">
-              <div class="column" v-for="commune in result">
-                <div class="card">
-                  <div class="card-content">
-                    <strong>[[ commune.commune ]]</strong>
-                    <div v-if="barrios">
-                      <li v-for="b_id in commune.barrios">
-                          <a v-on:click="getAvgBarrioValUS(b_id)">[[barrios[b_id].name]]</a>
-                      </li>  
+  <!-- Tabular navigation -->
+  <div class="tabs is-boxed">
+    <ul>
+      <li :class="[ vw === 'overview' ? 'is-active' : '']">
+        <a @click="vw='overview'">
+          <span>Overview</span>
+        </a>
+      </li>
+      <li :class="[ vw === 'analysis' ? 'is-active' : '']">
+        <a @click="vw='analysis'">
+          <span>Analysis</span>
+        </a>
+      </li>
+      <li :class="[ vw === 'survey' ? 'is-active' : '']">
+        <a @click="vw='survey'">
+          <span>Survey</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div v-if="vw === 'overview'">
+    <section class="hero is-warning is-medium is-bold has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <div v-if="result">
+            <!-- Only runs if this class is present -->
+            <div class="communes">
+              <div class="columns is-desktop">
+                <div class="column" v-for="commune in result">
+                  <div class="card">
+                    <div class="card-content">
+                      <strong>[[ commune.commune ]]</strong>
+                      <div v-if="barrios">
+                        <li v-for="b_id in commune.barrios">
+                            <a v-on:click="getAvgBarrioValUS(b_id)">[[barrios[b_id].name]]</a>
+                        </li>  
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div v-else>
-          <h3 class="title">Oh.. I don't found any objects on Database!</h3>
-          <p>Please run <code>$ python install.py</code> from project dir.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="hero is-warning is-medium is-bold has-text-centered">
-    <div class="hero-body">
-      <div class="container">
-        <d3-line
-          :data="[{'key':1, 'value':0.2}, {'key':2, 'value':0.5}, {'key':3, 'value':0.1}]"
-          width="100%"
-          height="300px">
-        </d3-line>
-        <div v-if="bar_avg">
-          [[ bar_avg ]]
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="hero is-warning is-medium is-bold has-text-centered">
-    <div class="hero-body">
-      <div class="container">
-        <!-- Dropdown menu -->
-        <div class="dropdown is-hoverable">
-          <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-              <span>Dropdown button</span>
-              <span class="icon is-small">
-                <i class="fas fa-angle-down" aria-hidden="true"></i>
-              </span>
-            </button>
+          <div v-else>
+            <p>Loading...</p>
           </div>
-          <div class="dropdown-menu" id="dropdown-menu" role="menu">
-            <div class="dropdown-content">
-              <a v-on:click="getCommuneCensus(1)" class="dropdown-item is-active">
-                Dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(2)" class="dropdown-item">
-                  Other dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(3)" class="dropdown-item">
-                  Active dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(4)" class="dropdown-item">
-                  Other dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(5)" class="dropdown-item">
-                  With a divider
-              </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero is-warning is-medium is-bold has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <d3-line
+            :data="[{'key':1, 'value':0.2}, {'key':2, 'value':0.5}, {'key':3, 'value':0.1}]"
+            width="100%"
+            height="300px">
+          </d3-line>
+          <div v-if="bar_avg">
+            [[ bar_avg ]]
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div v-if="vw === 'analysis'">
+    <section class="hero is-warning is-medium is-bold has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <!-- Dropdown menu -->
+          <div class="dropdown is-hoverable">
+            <div class="dropdown-trigger">
+              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                <span>Dropdown button</span>
+                <span class="icon is-small">
+                  <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+              <div class="dropdown-content">
+                <a v-on:click="getCommuneCensus(1)" class="dropdown-item is-active">
+                  Dropdown item
+                </a>
+                <a v-on:click="getCommuneCensus(2)" class="dropdown-item">
+                    Other dropdown item
+                </a>
+                <a v-on:click="getCommuneCensus(3)" class="dropdown-item">
+                    Active dropdown item
+                </a>
+                <a v-on:click="getCommuneCensus(4)" class="dropdown-item">
+                    Other dropdown item
+                </a>
+                <a v-on:click="getCommuneCensus(5)" class="dropdown-item">
+                    With a divider
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- Data show -->
-        <div v-if="census">
-          <!-- Only runs if this class is present -->
-          <div class="communasData">
-            <div class="columns is-desktop">
-              <div class="column" v-for="point in census">
-                <div class="card">
-                  <div class="card-content">
-                    <h3>[[ point.comp_percent ]]</h3>
-                    <strong>[[ point.comp_quantile ]]</strong>
+          <!-- Data show -->
+          <div v-if="census">
+            <!-- Only runs if this class is present -->
+            <div class="communasData">
+              <div class="columns is-desktop">
+                <div class="column" v-for="point in census">
+                  <div class="card">
+                    <div class="card-content">
+                      <h3>[[ point.comp_percent ]]</h3>
+                      <strong>[[ point.comp_quantile ]]</strong>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div v-else>
-          <h3 class="title">Oh.. I don't found any objects on Database!</h3>
-          <p>Please run <code>$ python install.py</code> from project dir.</p>
+          <div v-else>
+            <p>Loading...</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
+
+  <div v-if="vw === 'survey'">
+    <section class="hero is-warning is-medium is-bold has-text-centered">
+        <div class="hero-body">
+          <div class="container">
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="398" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+          </div>
+        </div>
+    </section>
+  </div>
 
 {% endblock %}
 

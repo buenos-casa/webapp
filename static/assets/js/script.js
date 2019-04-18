@@ -61,6 +61,7 @@ const vue_app = new Vue({
   },
   data() {
     return {
+      vw: 'overview',
       result: [],
       communes: [],
       barrios: undefined,
