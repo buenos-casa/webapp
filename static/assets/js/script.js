@@ -61,6 +61,7 @@ const vue_app = new Vue({
   data() {
     return {
       vw: 'overview',
+      st: 'pv',
       result: [],
       communes: [],
       barrios: undefined,
@@ -126,12 +127,14 @@ const vue_app = new Vue({
       if(province) {
         this.province = this.barrios[province.b_id];
       } else {
-        this.province = "Barrio";
+        this.province = undefined;
       }
+      console.log(this.province);
     }
   },
   mounted: function() {
     this.$on('province-chosen', this.onProvinceChange);
+    // Initial map coloring
     this.getBarriosVal('/api/property/us_val/avg/');
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();

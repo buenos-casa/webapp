@@ -18,19 +18,19 @@
                   <p class="panel-heading">
                     Statistics
                   </p>
-                  <a v-on:click="getBarriosVal('/api/rent/all/us_avg')" class="panel-block">
+                  <a v-on:click="getBarriosVal('/api/rent/all/us_avg')" @click="st='rat'" :class="[ st === 'rat' ? 'is-active panel-block' : 'panel-block']">
                     Rent All Time
                   </a>
-                  <a v-on:click="getBarriosVal('/api/property/us_val/avg/')" class="panel-block">
+                  <a v-on:click="getBarriosVal('/api/property/us_val/avg/')" @click="st='pv'" :class="[ st === 'pv' ? 'is-active panel-block' : 'panel-block']">
                     Property Value
                   </a>
-                  <a v-on:click="getBarriosVal('/api/sports/all')" class="panel-block">
+                  <a v-on:click="getBarriosVal('/api/sports/all')" @click="st='sf'" :class="[ st === 'sf' ? 'is-active panel-block' : 'panel-block']">
                     Sports Facilities
                   </a>
-                  <a v-on:click="getBarriosVal('/api/health/hospital/count')" class="panel-block">
+                  <a v-on:click="getBarriosVal('/api/health/hospital/count')" @click="st='hos'" :class="[ st === 'hos' ? 'is-active panel-block' : 'panel-block']">
                     Hospitals
                   </a>
-                  <a v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" class="panel-block">
+                  <a v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" @click="st='ecc'" :class="[ st === 'ecc' ? 'is-active panel-block' : 'panel-block']">
                     Elder Care Center
                   </a>
               </nav>
