@@ -128,7 +128,7 @@ const vue_app = new Vue({
       if(province) {
         this.province = this.barrios[province.b_id];
       } else {
-        this.province = undefined;
+        this.province = "Barrio";
       }
     },
     getBarriosMonthlyRent() {
