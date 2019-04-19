@@ -11,7 +11,7 @@ from sqlalchemy import func, or_
 
 from operator import itemgetter
 
-import pprint
+import numpy
 
 # Define dirs
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -201,9 +201,12 @@ def get_all_commune_data(sqlite_db, commune):
 
 @app.get('/api/census/barrio/<barrio>')
 def get_all_barrio_data(sqlite_db, barrio):
-    """Get all information for a particular barrio"""
-    barrio_query = sqlite_db.query(CensusDB).filter(CensusDB.barrio == barrio).all()
-    dat = [remove_inst_state(i.__dict__) for i in barrio_query]
+    """Get percentage information for a particular barrio"""
+    if barrio != 'undefined':
+        barrio_query = sqlite_db.query(CensusDB.rent_percent, CensusDB.own_percent, CensusDB.uinhab_percent).filter(CensusDB.barrio == barrio).all()
+        dat = [{"own": i[1]/100, "rent": i[0]/100, "uinhab": i[2]/100} for i in barrio_query]
+    else:
+        dat = {"own": 0.57, "rent": 0.18, "uinhab": 0.25}
 
     return package_data(dat)
 

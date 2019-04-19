@@ -64,6 +64,7 @@ const vue_app = new Vue({
       result: [],
       communes: [],
       barrios: undefined,
+      barriocensus: [],
       census: [],
       barrios_val: [],
       bar_avg: null,
@@ -93,6 +94,7 @@ const vue_app = new Vue({
       axios.get('/api/census/barrio/' + barrio)
         .then(response => {
           this.barriocensus = response.data.data;
+          console.log(this.barriocensus);
         })
         .catch(error => {
           console.log(error);
@@ -137,6 +139,7 @@ const vue_app = new Vue({
       } else {
         this.province = "Barrio";
       }
+      this.getBarrioCensus(this.province.id);
     }
   },
   mounted: function() {
