@@ -146,7 +146,7 @@ const vue_app = new Vue({
     this.$on('province-chosen', this.onProvinceChange);
     // Initial map coloring
     this.getBarriosVal('/api/property/us_val/avg/');
-    // this.getHeatmapVal('/api/humanity/elderly_care');
+    this.getHeatmapVal('/api/humanity/elderly_care');
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
       this.getBarrios();
