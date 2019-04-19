@@ -79,7 +79,7 @@ export default {
             // TODO delete heatmap points
         },
         drawHeatmap() {
-            if(this.heatmap_val) {
+            if(this.heatmap_val.length > 0) {
                 const proj = this.projection;
                 this.mapLayer.selectAll("circle")
                         .data(this.heatmap_val[this.selected_province.barrio])
@@ -92,7 +92,7 @@ export default {
                         .attr("cy", function (d) {
                             return proj([d.lon, d.lat])[1];
                         })
-                        .attr("r", "8px")
+                        .attr("r", "1px")
                         .attr("fill", "red")
             }
         },
