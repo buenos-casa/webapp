@@ -56,7 +56,8 @@ const vue_app = new Vue({
     Mapgeojson,
     d3Pie,
     d3Circle,
-    d3Line
+    d3Line,
+    d3HorizontalBar
   },
   data() {
     return {
@@ -68,8 +69,9 @@ const vue_app = new Vue({
       census: [],
       barrios_val: [],
       heatmap_val: [],
+      importance_val: [],
       bar_avg: null,
-      province: "Barrio"
+      province: undefined,
     }
   },
   methods: {
@@ -133,9 +135,22 @@ const vue_app = new Vue({
              console.log(error);
            })
     },
+    getImportance(b_id, year) {
+      var endpoint = '/api/importance/' + year + '/' + b_id;
+      console.log(endpoint);
+      axios.get(endpoint)
+           .then(response => {
+             this.importance_val = response.data.data;
+             console.log(this.importance_val);
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
     onProvinceChange: function(province) {
       if(province) {
         this.province = this.barrios[province.b_id];
+        this.getImportance(this.province.id, 2016);
       } else {
         this.province = undefined;
       }
@@ -147,6 +162,7 @@ const vue_app = new Vue({
     // Initial map coloring
     this.getBarriosVal('/api/property/us_val/avg/');
     this.getHeatmapVal('/api/humanity/elderly_care');
+    this.getImportance(0, 2016);
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
       this.getBarrios();
