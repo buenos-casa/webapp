@@ -240,6 +240,21 @@ def get_elderly_care_per_barrio(sqlite_db):
 
     return package_data(dat)
 
+@app.get('/api/humanity/elderly_care')
+def get_elderly_care(sqlite_db):
+    """"""
+    query = sqlite_db.query(HumanityDB).filter(or_(HumanityDB.kind.contains('retire'),HumanityDB.kind.contains('elder')))\
+                     .all()
+    q_dat = [remove_inst_state(i.__dict__) for i in query]
+    dat = [None] * 49 #number of barrios
+    for i, row in enumerate(q_dat):
+        if(dat[row['b_id']] == None):
+            dat[row['b_id']] = list()
+        row['name'] = row['name'].title()
+        dat[row['b_id']].append(row)
+
+    return package_data(dat)
+
 @app.get('/api/property/us_val/avg/')
 def get_all_barrio_average_property_value(sqlite_db):
     """Get the average property value for each barrio in USD over all time"""

@@ -67,6 +67,7 @@ const vue_app = new Vue({
       barrios: undefined,
       census: [],
       barrios_val: [],
+      heatmap_val: [],
       bar_avg: null,
       province: "Barrio"
     }
@@ -123,6 +124,15 @@ const vue_app = new Vue({
              console.log(error);
            })
     },
+    getHeatmapVal(endpoint) {
+      axios.get(endpoint)
+           .then(response => {
+            this.heatmap_val = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
     onProvinceChange: function(province) {
       if(province) {
         this.province = this.barrios[province.b_id];
@@ -136,6 +146,7 @@ const vue_app = new Vue({
     this.$on('province-chosen', this.onProvinceChange);
     // Initial map coloring
     this.getBarriosVal('/api/property/us_val/avg/');
+    this.getHeatmapVal('/api/humanity/elderly_care');
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
       this.getBarrios();

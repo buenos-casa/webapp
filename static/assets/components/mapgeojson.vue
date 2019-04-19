@@ -55,7 +55,9 @@ export default {
             });
         },
         heatmap_val: function(newVal, oldVal) {
-            if(selected_province) {
+            console.log(oldVal);
+            console.log(newVal);
+            if(this.selected_province) {
                 this.drawHeatmap();
             }
         }
@@ -78,11 +80,18 @@ export default {
         },
         drawHeatmap() {
             if(this.heatmap_val) {
-                this.svg.selectAll("circle")
-                        .data(this.heatmap_val[this.selected_province])
+                const proj = this.projection;
+                this.mapLayer.selectAll("circle")
+                        .data(this.heatmap_val[this.selected_province.barrio])
+                        .enter()
                         .append("circle")
-                        .attr("cx", 1)
-                        .attr("cy", 1)
+                        .attr("cx", function(d) {
+                            console.log(proj([d.lon, d.lat]));
+                            return proj([d.lon, d.lat])[0];
+                        })
+                        .attr("cy", function (d) {
+                            return proj([d.lon, d.lat])[1];
+                        })
                         .attr("r", "8px")
                         .attr("fill", "red")
             }
@@ -125,6 +134,8 @@ export default {
             
             const mapLayer = g.append('g')
                             .classed('map-layer', true);
+
+            this.mapLayer = mapLayer;
             
             // Load map data
             const geoJsonUrl = '/static/geojson/' + this.mapname + '.json';
