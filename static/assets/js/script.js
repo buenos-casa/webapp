@@ -81,13 +81,22 @@ const vue_app = new Vue({
            });
     },
     getCommuneCensus(commune) {
-      axios.get('/api/census/' + commune)
+      axios.get('/api/census/commune/' + commune)
            .then(response => {
              this.census = response.data.data;
            })
            .catch(error => {
              console.log(error);
            })
+    },
+    getBarrioCensus(barrio) {
+      axios.get('/api/census/barrio/' + barrio)
+        .then(response => {
+          this.barriocensus = response.data.data;
+        })
+        .catch(error => {
+          console.log(error);
+        })
     },
     getBarrios() {
       axios.get('/api/barrio/')
