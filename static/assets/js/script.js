@@ -3,6 +3,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import WebFont from 'webfontloader'
 import Mapgeojson from '../components/mapgeojson.vue'
+import Multiline from '../components/multiline.vue'
 import {
   // Flow Of transition
   d3SankeyCircular,
@@ -58,7 +59,8 @@ const vue_app = new Vue({
     Mapgeojson,
     d3Circle,
     d3Line,
-    d3MultiLine
+    d3MultiLine,
+    Multiline
   },
   data() {
     return {
@@ -95,6 +97,7 @@ const vue_app = new Vue({
       axios.get('/api/barrio/')
            .then(response => {
              this.barrios = response.data.data;
+             console.log(barrios);
            })
            .catch(error => {
              console.log(error);
@@ -106,6 +109,7 @@ const vue_app = new Vue({
             .then(response => {
               this.barrios_val = response.data.data;
               this.bar_avg = this.barrios_val[b_id];
+              console.log(barrios_val);
             })
             .catch(error => {
               console.log(error);
@@ -131,15 +135,15 @@ const vue_app = new Vue({
         this.province = "Barrio";
       }
     },
-    getBarriosMonthlyRent() {
-      axios.get('/api/monthly/rent')
+    getBarriosMonthlyRent(province) {
+      axios.get('/api/monthly/rent/' + province)
             .then(response => {
               this.month_rent = response.data.data;
             })
             .catch(error => {
               console.log(error);
             })
-      console.log(month_rent)
+      console.log(this.month_rent)
       console.log('This run!')
     }
   },
@@ -149,7 +153,7 @@ const vue_app = new Vue({
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
       this.getBarrios();
-      this.getBarriosMonthlyRent();
+      this.getBarriosMonthlyRent(this.province.b_id);
     }
     if (document.querySelectorAll('.communasData').length > 0) {
       this.getCommuneCensus(1);

@@ -7,7 +7,7 @@ from bottle_sqlalchemy import SQLAlchemyPlugin
 # Import SQLAlchemy
 from sqlalchemy import create_engine, Column, Integer, String, Text, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import func, or_
+from sqlalchemy import func, or_, and_
 
 from operator import itemgetter
 
@@ -279,13 +279,13 @@ def get_all_commune_data(sqlite_db, commune):
     return package_data(dat)
 
 #Get data for the multi-line
-@app.get('/api/monthly/rent')
-def get_all_monthly_rent(sqlite_db):
+@app.get('/api/monthly/rent/<province>')
+def get_all_monthly_rent(sqlite_db, year='2017', province=1):
     """Get the average property value for each barrio in USD over all time"""
-    query = sqlite_db.query(RentMonthlyDB.id, RentMonthlyDB.year,  RentMonthlyDB.month, RentMonthlyDB.mean_price_usd, RentMonthlyDB.mean_price_local).filter(RentMonthlyDB.year == '2017').all()
+    query = sqlite_db.query(RentMonthlyDB.id, BarrioDB.name, RentMonthlyDB.year,  RentMonthlyDB.month, RentMonthlyDB.mean_price_usd, RentMonthlyDB.mean_price_local).filter(and_(RentMonthlyDB.year == year,RentMonthlyDB.id == province)).join(BarrioDB, BarrioDB.id == RentMonthlyDB.id).all()
     dat = []
     for i in query:
-        dat.append({'group': str(i[0]), 'key': i[2], 'value': i[3]})
+        dat.append({'date': (str(i[3]) + ' ' + str(i[2])), 'price': i[4]})
     
     dat = sorted(dat, key=itemgetter('key'))
     print (dat)

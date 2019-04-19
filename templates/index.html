@@ -58,13 +58,19 @@
     </div>
   </section>
 
+  
 
-  <d3-multi-line
+<div class="container">
+  <multiline v-bind:year_val="month_rent"></multiline>
+  <d3-line
     :data="month_rent"
+    :options="{'crossColor': 'blue', 'strokeWidth': 0.5}"
     @range-updated="(dateTimeStart, dateTimeEnd) => fetchDataWithCurrentInterval(dateTimeStart, dateTimeEnd)"
     width="100%"
     height="300px">
-  </d3-multi-line>
+  </d3-line>
+
+</div>
 
   <section class="hero is-warning is-medium is-bold has-text-centered">
     <div class="hero-body">
