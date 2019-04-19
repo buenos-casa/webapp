@@ -55,8 +55,6 @@ export default {
             });
         },
         heatmap_val: function(newVal, oldVal) {
-            console.log(oldVal);
-            console.log(newVal);
             if(this.selected_province) {
                 this.drawHeatmap();
             }
@@ -76,17 +74,18 @@ export default {
         closeInfo() {
             this.$parent.$emit('province-chosen', undefined);
             this.selected_province = undefined;
-            // TODO delete heatmap points
+            this.mapLayer.selectAll("circle").remove();
         },
         drawHeatmap() {
-            if(this.heatmap_val.length > 0) {
+            this.mapLayer.selectAll("circle").remove();
+            if(this.heatmap_val.length > 0 && this.heatmap_val[this.selected_province.barrio]) {
                 const proj = this.projection;
                 this.mapLayer.selectAll("circle")
                         .data(this.heatmap_val[this.selected_province.barrio])
                         .enter()
                         .append("circle")
                         .attr("cx", function(d) {
-                            console.log(proj([d.lon, d.lat]));
+                            // console.log(proj([d.lon, d.lat]));
                             return proj([d.lon, d.lat])[0];
                         })
                         .attr("cy", function (d) {
