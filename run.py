@@ -7,7 +7,7 @@ from bottle_sqlalchemy import SQLAlchemyPlugin
 # Import SQLAlchemy
 from sqlalchemy import create_engine, Column, Integer, String, Text, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import func, or_
+from sqlalchemy import func, or_, and_
 
 from operator import itemgetter
 
@@ -123,6 +123,13 @@ class BarrioDB(Base):
     id = Column("id", Integer, primary_key=True)
     name = Column("Barrio", String(255))
 
+class ImportanceDB(Base):
+    __tablename__ = 'IMPORTANCE'
+    id = Column("id", Integer, primary_key=True)
+    feature = Column(String(255))
+    score = Column(Float)
+    year = Column(Integer)
+    b_id = Column(Integer)
 
 def remove_inst_state(a_dict):
     a_dict.pop('_sa_instance_state', None)
@@ -264,6 +271,20 @@ def get_all_barrio_average_property_value(sqlite_db):
         dat[i[0]] = i[1]
 
     return package_data(dat)
+
+# Importance table route
+@app.get('/api/importance/<year>/<barrio>')
+def get_importance(sqlite_db, year, barrio):
+    """Get feature importance in order of importance for a barrio or all if 'all' passed in"""
+    dat = []
+    if barrio == 'all':
+        pass
+    else:
+        query = sqlite_db.query(ImportanceDB).filter(and_(ImportanceDB.year == year, ImportanceDB.b_id == barrio)).all()
+        dat = [{'key': i.feature, 'value': i.score} for i in query]
+    
+    return package_data(dat)
+
 
 # Index page route
 @app.get('/')
