@@ -13,6 +13,10 @@ export default {
         year_val: {
             type: Array,
             default: []
+        },
+         dims: {
+            type: Object,
+            default: {'x': 500, 'y': 500}
         }
     },
     data:function (){   
@@ -33,11 +37,18 @@ export default {
         //Remove the existing graph, if it exists
          d3.select("#wrapper").select("svg").remove();
 
+         var vue_ref = this;
+            // Set svg width & height
+            const size = {
+                height: vue_ref.dims.y,
+                width: vue_ref.dims.x
+            };
+
         
             // Set the dimensions of the canvas / graph
         var margin = {top: 30, right: 20, bottom: 30, left: 50},
-            width = 600 - margin.left - margin.right,
-            height = 300 - margin.top - margin.bottom;
+            width = size.width - margin.left - margin.right,
+            height = size.height - margin.top - margin.bottom;
         
         // Get the data
             var data = this.year_val;
@@ -79,39 +90,38 @@ export default {
         
             
         this.line = this.svg.append("g")
-                    .attr("transform", 
-                    "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", 
+                "translate(" + margin.left + "," + margin.top + ")");
 
-           
+        
 
-            // Scale the range of the data
-            x.domain(d3.extent(data, function(d) { return d.date; }));
-            y.domain([0, d3.max(data, function(d) { return d.price; })]); 
+        // Scale the range of the data
+        x.domain(d3.extent(data, function(d) { return d.date; }));
+        y.domain([0, d3.max(data, function(d) { return d.price; })]); 
 
-            // Nest the entries by symbol
-            /*var dataNest = d3.nest()
-                .key(function(d) {return d.date;})
-                .entries(data);*/
+        // Nest the entries by symbol
+        var dataNest = d3.nest()
+            .key(function(d) {return d.date;})
+            .entries(data);
 
-            // Loop through each symbol / key
-            //dataNest.forEach(function(d) {
+        // Loop through each symbol / key
+        dataNest.forEach(function(d) {
+        this.line.append("path")
+                .attr("class", "line")
+                .attr("d", priceline(data)); 
 
-            this.line.append("path")
-                    .attr("class", "line")
-                    .attr("d", priceline(data)); 
+        });
 
-            //});
+        // Add the X Axis
+        this.line.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
 
-            // Add the X Axis
-            this.line.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
-
-            // Add the Y Axis
-            this.line.append("g")
-                .attr("class", "y axis")
-                .call(yAxis);
+        // Add the Y Axis
+        this.line.append("g")
+            .attr("class", "y axis")
+            .call(yAxis);
 
         }
         }

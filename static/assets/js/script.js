@@ -157,7 +157,6 @@ const vue_app = new Vue({
     onProvinceChange: function(province) {
       if(province) {
         this.province = this.barrios[province.b_id];
-        this.getBarriosMonthlySell(this.province.id);
         this.getImportance(this.province.id, 2016);
       } else {
         this.province = undefined;
@@ -178,7 +177,7 @@ const vue_app = new Vue({
       axios.get('/api/monthly/sell')
             .then(response => {
               this.sell_data = response.data.data;
-              console.log('Sell Data: ' + this.sell_data)
+              console.log('Sell Data: ' + JSON.stringify(this.sell_data));
             })
             .catch(error => {
               console.log(error);
@@ -191,6 +190,7 @@ const vue_app = new Vue({
     this.getBarriosVal('/api/property/us_val/avg/');
     this.getHeatmapVal('/api/humanity/elderly_care');
     this.getImportance(0, 2016);
+    this.getBarriosSell();
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
       this.getBarrios();

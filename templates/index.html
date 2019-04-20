@@ -6,7 +6,7 @@
 
 {% block content %}
 
-  <section class="hero is-dark is-medium is-bold has-text-centered">
+  <section class="hero is-light is-medium is-bold has-text-centered">
     <div class="hero-body">
       <div class="container">
         <!-- Page Title -->
@@ -83,20 +83,14 @@
     </ul>
   </div>
 
-  <section class="hero is-warning is-medium is-bold has-text-centered">
-      <div class="hero-body">
-        <div class="container">
-          <multiline v-bind:year_val="month_sell"></multiline>  
-     </div>
+  <section class="hero is-light is-medium is-bold has-text-centered">
+    <div class="container">
+        <multiline :year_val="sell_data"
+                  :dims="{'x':1000,'y':1200}"></multiline> 
     </div>
   </section>
 
   <div v-if="vw === 'overview'">
-      
-    <section class="hero is-warning is-medium is-bold has-text-centered">
-      <div class="hero-body">
-        <div class="container">
- 
           <div v-if="result">
             <!-- Only runs if this class is present -->
             <div class="communes">
@@ -123,7 +117,7 @@
       </div>
     </section>
 
-    <section class="hero is-warning is-medium is-bold has-text-centered">
+    <section class="hero is-light is-medium is-bold has-text-centered">
       <div class="hero-body">
         <div class="container">
           <div v-if="bar_avg">
@@ -135,7 +129,7 @@
   </div>
 
   <div v-if="vw === 'analysis'">
-    <section class="hero is-warning is-medium is-bold has-text-centered">
+    <section class="hero is-light is-medium is-bold has-text-centered">
       <div class="hero-body">
         <div class="container">
           <div class="columns">
@@ -184,7 +178,7 @@
   </div>
 
   <div v-if="vw === 'survey'">
-    <section class="hero is-warning is-medium is-bold has-text-centered">
+    <section class="hero is-light is-medium is-bold has-text-centered">
         <div class="hero-body">
           <div class="container">
             <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="398" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
