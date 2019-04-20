@@ -10,22 +10,25 @@
 export default {
     name: 'multiline',
     props: {
-        year_val: Array,
+        year_val: {
+            type: Array,
+            default: []
+        }
     },
     data:function (){   
     },
     watch: {
         year_val: function(newVal, oldVal){
             this.year_val = newVal;
-            console.log('Watch data:' + JSON.stringify(newVal[1]));
-            console.log(this.svg);
+            console.log('Watch data:' + JSON.stringify(newVal[0]));
             this.drawMultiLine();
         }
     },
     methods:
-    {
+    { 
+        // Draw the multi line graph 
         drawMultiLine(){
-
+        //Remove the existing graph, if it exists
          d3.select("#wrapper").select("g").remove();
 
         
@@ -36,13 +39,15 @@ export default {
         
         // Get the data
             var data = this.year_val;
-            console.log('Data: ' + data);
+            console.log('Data: ' + JSON.stringify(data[0]));
         // Parse the date / time
         var parseDate = d3.time.format("%m %Y").parse; 
 
         // change the format of the date variables
         data.forEach(function (d) {
-            d.date = parseDate(d.date);
+            if (!(d.date instanceof Date)) {
+                d.date = parseDate(d.date);
+            }       
             d.price = +d.price;
         });
 

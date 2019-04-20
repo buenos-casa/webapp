@@ -158,7 +158,6 @@ const vue_app = new Vue({
       if(province) {
         this.province = this.barrios[province.b_id];
         this.getBarriosMonthlySell(this.province.id);
-        console.log('Province change: ' + JSON.stringify(this.month_rent[0]));
         this.getImportance(this.province.id, 2016);
       } else {
         this.province = undefined;
@@ -168,17 +167,18 @@ const vue_app = new Vue({
       axios.get('/api/monthly/sell/' + province)
             .then(response => {
               this.month_sell = response.data.data;
+              console.log('Month sell: ' + JSON.stringify(this.month_sell));
             })
             .catch(error => {
               console.log(error);
             })
-      console.log('Calling after getBarriosMonthlyRent: ' + this.month_rent)
       console.log('This run!')
     },
     getBarriosSell() {
       axios.get('/api/monthly/sell')
             .then(response => {
               this.sell_data = response.data.data;
+              console.log('Sell Data: ' + this.sell_data)
             })
             .catch(error => {
               console.log(error);

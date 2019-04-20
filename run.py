@@ -341,6 +341,7 @@ def get_all_monthly_sell(sqlite_db):
     dat = []
     for i in query:
         dat.append({'barrio': i[1], 'date': (str(i[3]) + ' ' + str(i[2])), 'price': i[4]})
+    print (dat)
        
     return package_data(dat)
 # Importance table route

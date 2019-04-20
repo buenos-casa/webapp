@@ -59,11 +59,7 @@
     </div>
   </section>
 
-  <div class="container">
-    <multiline v-bind:year_val="sell_data"></multiline>
-  
-  
-  </div>
+ 
 
   <!-- Tabular navigation -->
   <div class="tabs is-boxed">
@@ -71,6 +67,7 @@
       <li :class="[ vw === 'overview' ? 'is-active' : '']">
         <a @click="vw='overview'">
           <span>Overview</span>
+
         </a>
       </li>
       <li :class="[ vw === 'analysis' ? 'is-active' : '']">
@@ -86,10 +83,20 @@
     </ul>
   </div>
 
+  <section class="hero is-warning is-medium is-bold has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <multiline v-bind:year_val="month_sell"></multiline>  
+     </div>
+    </div>
+  </section>
+
   <div v-if="vw === 'overview'">
+      
     <section class="hero is-warning is-medium is-bold has-text-centered">
       <div class="hero-body">
         <div class="container">
+ 
           <div v-if="result">
             <!-- Only runs if this class is present -->
             <div class="communes">
