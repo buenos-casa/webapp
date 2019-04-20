@@ -64,7 +64,7 @@ const vue_app = new Vue({
       result: [],
       communes: [],
       barrios: undefined,
-      barriocensus: [],
+      barriocensus: {"own": 0.57, "rent": 0.18, "uinhab": 0.25},
       census: [],
       barrios_val: [],
       bar_avg: null,
