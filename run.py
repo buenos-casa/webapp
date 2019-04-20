@@ -280,27 +280,46 @@ def get_all_commune_data(sqlite_db, commune):
 
 #Get data for the multi-line
 @app.get('/api/monthly/rent/<province>')
-def get_all_monthly_rent(sqlite_db, year='2017', province=1):
+def get_all_monthly_rent(sqlite_db, province=1):
     """Get the average property value for each barrio in USD over all time"""
-    query = sqlite_db.query(RentMonthlyDB.id, BarrioDB.name, RentMonthlyDB.year,  RentMonthlyDB.month, RentMonthlyDB.mean_price_usd, RentMonthlyDB.mean_price_local).filter(and_(RentMonthlyDB.year == year,RentMonthlyDB.id == province)).join(BarrioDB, BarrioDB.id == RentMonthlyDB.id).all()
+    query = sqlite_db.query(RentMonthlyDB.id, BarrioDB.name, RentMonthlyDB.year,  RentMonthlyDB.month, RentMonthlyDB.mean_price_usd, RentMonthlyDB.mean_price_local).filter(RentMonthlyDB.id == province).join(BarrioDB, BarrioDB.id == RentMonthlyDB.id).all()
     dat = []
     for i in query:
         dat.append({'date': (str(i[3]) + ' ' + str(i[2])), 'price': i[4]})
     
-    dat = sorted(dat, key=itemgetter('key'))
+    #dat = sorted(dat, key=itemgetter('key'))
     print (dat)
 
     return package_data(dat)
 
-@app.get('/api/monthly/sell')
-def get_all_monthly_sell(sqlite_db):
-    query = sqlite_db.query(SellMonthlyDB.id, SellMonthlyDB.year,  SellMonthlyDB.month, SellMonthlyDB.mean_price_usd, SellMonthlyDB.mean_price_local).all()
+# Get property sales data per month for all of the years per province
+@app.get('/api/monthly/sell/<province>')
+def get_all_monthly_sell_by_province(sqlite_db, province=1):
+    query = sqlite_db.query(SellMonthlyDB.id, BarrioDB.name, SellMonthlyDB.year,  SellMonthlyDB.month, SellMonthlyDB.mean_price_usd, SellMonthlyDB.mean_price_local).filter(SellMonthlyDB.id == province).join(BarrioDB, BarrioDB.id == SellMonthlyDB.id).all()
     dat = []
     for i in query:
-        dat.append({'group': str(i[0]), 'key': (str(i[2])), 'value': i[3]})
+        dat.append({'date': (str(i[3]) + ' ' + str(i[2])), 'price': i[4]})
     
     print (dat)
     
+    return package_data(dat)
+
+# Get property sales data per month for all of the years for all barrios
+@app.get('/api/monthly/sell')
+def get_all_monthly_sell(sqlite_db):
+    '''
+    Return Object:
+
+    b_id: Barrio ID
+    barrio: Barrio Name
+    Month: Month and year in the format mm/yyyy
+    Mean Price for the Month
+    '''
+    query = sqlite_db.query(SellMonthlyDB.id, BarrioDB.name, SellMonthlyDB.year,  SellMonthlyDB.month, SellMonthlyDB.mean_price_usd, SellMonthlyDB.mean_price_local).join(BarrioDB, BarrioDB.id == SellMonthlyDB.id).all()
+    dat = []
+    for i in query:
+        dat.append({'barrio': i[1], 'date': (str(i[3]) + ' ' + str(i[2])), 'price': i[4]})
+       
     return package_data(dat)
 
 # Index page route

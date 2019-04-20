@@ -1,6 +1,6 @@
 <template>
     <div style="height:auto">
-        <div class="multi-line-wrapper">
+        <div id = "wrapper" class="multi-line-wrapper">
         </div>
     </div>
 </template>
@@ -8,25 +8,45 @@
 <script>
 
 export default {
-    mounted: function(){
-        this.drawMultiLine();
-    },
+    name: 'multiline',
     props: {
         year_val: Array,
     },
-    data(){
-        return
+    data:function (){   
+    },
+    watch: {
+        year_val: function(newVal, oldVal){
+            this.year_val = newVal;
+            console.log('Watch data:' + JSON.stringify(newVal[1]));
+            console.log(this.svg);
+            this.drawMultiLine();
+        }
     },
     methods:
     {
         drawMultiLine(){
+
+         d3.select("#wrapper").select("g").remove();
+
+        
             // Set the dimensions of the canvas / graph
         var margin = {top: 30, right: 20, bottom: 30, left: 50},
             width = 600 - margin.left - margin.right,
             height = 300 - margin.top - margin.bottom;
-
+        
+        // Get the data
+            var data = this.year_val;
+            console.log('Data: ' + data);
         // Parse the date / time
         var parseDate = d3.time.format("%m %Y").parse; 
+
+        // change the format of the date variables
+        data.forEach(function (d) {
+            d.date = parseDate(d.date);
+            d.price = +d.price;
+        });
+
+        data.sort((a, b) => (a.date > b.date) ? 1 : -1);
 
         // Set the ranges
         var x = d3.time.scale().range([0, width]);
@@ -45,43 +65,44 @@ export default {
             .y(function(d) { return y(d.price); });
             
         // Adds the svg canvas
-        this.svg = d3.select(this.$el.children[1])
+        this.svg = d3.select('#wrapper')
             .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-                .attr("transform", 
+        
+            
+        this.line = this.svg.append("g")
+                    .attr("transform", 
                     "translate(" + margin.left + "," + margin.top + ")");
 
-            // Get the data
-            var data = this.year_val;
+           
 
             // Scale the range of the data
             x.domain(d3.extent(data, function(d) { return d.date; }));
             y.domain([0, d3.max(data, function(d) { return d.price; })]); 
 
             // Nest the entries by symbol
-            var dataNest = d3.nest()
-                .key(function(d) {return d.symbol;})
-                .entries(data);
+            /*var dataNest = d3.nest()
+                .key(function(d) {return d.date;})
+                .entries(data);*/
 
             // Loop through each symbol / key
-            dataNest.forEach(function(d) {
+            //dataNest.forEach(function(d) {
 
-                svg.append("path")
+            this.line.append("path")
                     .attr("class", "line")
-                    .attr("d", priceline(d.values)); 
+                    .attr("d", priceline(data)); 
 
-            });
+            //});
 
             // Add the X Axis
-            this.svg.append("g")
+            this.line.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis);
 
             // Add the Y Axis
-            this.svg.append("g")
+            this.line.append("g")
                 .attr("class", "y axis")
                 .call(yAxis);
 
@@ -90,3 +111,29 @@ export default {
     
 }
 </script>
+
+<style> /* set the CSS */
+
+body { font: 12px Arial;}
+
+#wrapper path { 
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+#wrapper .axis path,
+#wrapper .axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+#wrapper .legend {
+    font-size: 16px;
+    font-weight: bold;
+    text-anchor: middle;
+}
+
+</style>

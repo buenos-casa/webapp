@@ -61,14 +61,8 @@
   
 
 <div class="container">
-  <multiline v-bind:year_val="month_rent"></multiline>
-  <d3-line
-    :data="month_rent"
-    :options="{'crossColor': 'blue', 'strokeWidth': 0.5}"
-    @range-updated="(dateTimeStart, dateTimeEnd) => fetchDataWithCurrentInterval(dateTimeStart, dateTimeEnd)"
-    width="100%"
-    height="300px">
-  </d3-line>
+  <multiline v-bind:year_val="sell_data"></multiline>
+
 
 </div>
 

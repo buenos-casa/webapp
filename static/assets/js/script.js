@@ -71,7 +71,8 @@ const vue_app = new Vue({
       barrios_val: [],
       bar_avg: null,
       province: undefined,
-      month_rent: []
+      month_sell: [],
+      sell_data: []
     }
   },
   methods: {
@@ -131,20 +132,31 @@ const vue_app = new Vue({
     onProvinceChange: function(province) {
       if(province) {
         this.province = this.barrios[province.b_id];
+        this.getBarriosMonthlySell(this.province.id);
+        console.log('Province change: ' + JSON.stringify(this.month_rent[0]));
       } else {
         this.province = "Barrio";
       }
     },
-    getBarriosMonthlyRent(province) {
-      axios.get('/api/monthly/rent/' + province)
+    getBarriosMonthlySell(province) {
+      axios.get('/api/monthly/sell/' + province)
             .then(response => {
-              this.month_rent = response.data.data;
+              this.month_sell = response.data.data;
             })
             .catch(error => {
               console.log(error);
             })
-      console.log(this.month_rent)
+      console.log('Calling after getBarriosMonthlyRent: ' + this.month_rent)
       console.log('This run!')
+    },
+    getBarriosSell() {
+      axios.get('/api/monthly/sell')
+            .then(response => {
+              this.sell_data = response.data.data;
+            })
+            .catch(error => {
+              console.log(error);
+            })
     }
   },
   mounted: function() {
@@ -153,10 +165,10 @@ const vue_app = new Vue({
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
       this.getBarrios();
-      this.getBarriosMonthlyRent(this.province.b_id);
     }
     if (document.querySelectorAll('.communasData').length > 0) {
       this.getCommuneCensus(1);
     }
   }
+  
 });
