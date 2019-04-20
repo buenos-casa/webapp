@@ -55,174 +55,11 @@ class CensusDB(Base):
     uinhab_percent = Column("Uninhabited Percent", Float)
     uinhab_quantile = Column("Uninhabited Quantile", Integer)
 
-# Property Database
-class PropertyDB(Base):
-    __tablename__ = 'PROPERTY'
-    id = Column("index", Integer, primary_key=True)
-    commune = Column("Commune", Integer)
-    b_id = Column("b_id", Integer)
-    lon = Column("Longitude", Float)
-    lat = Column("Latitude", Float)
-    date = Column("Date", Date)
-    us_val = Column("Value in US Dollars", Float)
-    m2_val = Column("Value of m2 (US Dollars)", Float)
-    m2 = Column(Float)
-
-# Rent Database
-class RentDB(Base):
-    __tablename__ = 'RENT'
-    id = Column("b_id_", Integer, primary_key=True)
-    max_price_lc = Column("price_aprox_local_currency_max", Float)
-    avg_price_lc = Column("price_aprox_local_currency_mean", Float)
-    std_price_lc = Column("price_aprox_local_currency_std", Float)
-    max_price_us = Column("price_aprox_usd_max", Float)
-    avg_price_us = Column("price_aprox_usd_mean", Float)
-    std_price_us = Column("price_aprox_usd_std", Float)
-
-class SellDB(Base):
-    __tablename__ = 'SELL'
-    id = Column("b_id_", Integer, primary_key=True)
-    max_price_lc = Column("price_aprox_local_currency_max", Float)
-    avg_price_lc = Column("price_aprox_local_currency_mean", Float)
-    std_price_lc = Column("price_aprox_local_currency_std", Float)
-    max_price_us = Column("price_aprox_usd_max", Float)
-    avg_price_us = Column("price_aprox_usd_mean", Float)
-    std_price_us = Column("price_aprox_usd_std", Float)
-
-# Rent monthly
-class RentMODB(Base):
-    __tablename__ = 'RENT_MO'
-    id = Column("index", Integer, primary_key=True)
-    b_id = Column("b_id_", Integer)
-    month = Column("month_", Integer)
-    price = Column("price_aprox_local_currency_mean", Float)
-    year = Column("year_", Integer)
-
-# Selling monthly
-class SellMODB(Base):
-    __tablename__ = 'SELL_MO'
-    id = Column("index", Integer, primary_key=True)
-    b_id = Column("b_id_", Integer)
-    month = Column("month_", Integer)
-    price = Column("price_aprox_local_currency_mean", Float)
-    year = Column("year_", Integer)
-
-class SportsDB(Base):
-    __tablename__ = 'SPORT'
-    id = Column("index", Integer, primary_key=True)
-    name = Column("Name", String(255))
-    lon = Column("Longitude", Float)
-    lat = Column("Latitude", Float)
-    kind = Column("Type", String(255))
-    b_id = Column(Integer)
-
-class HealthDB(Base):
-    __tablename__ = 'HEALTH'
-    id = Column("index", Integer, primary_key=True)
-    name = Column("Name", String(255))
-    lon = Column("Longitude", Float)
-    lat = Column("Latitude", Float)
-    kind = Column("Type", String(255))
-    b_id = Column(Integer)
-
-class CultureDB(Base):
-    __tablename__ = 'CULTURE'
-    id = Column("index", Integer, primary_key=True)
-    name = Column("Name", String(255))
-    lon = Column("Longitude", Float)
-    lat = Column("Latitude", Float)
-    kind = Column("Type", String(255))
-    b_id = Column(Integer)
-
-class HumanityDB(Base):
-    __tablename__ = 'HUMANITY'
-    id = Column("index", Integer, primary_key=True)
-    name = Column("Name", String(255))
-    lon = Column("Longitude", Float)
-    lat = Column("Latitude", Float)
-    kind = Column("Type", String(255))
-    b_id = Column(Integer)
-
-class CommuneDB(Base):
-    __tablename__ = 'COMMUNES'
-    id = Column("index", Integer, primary_key=True)
-    commune = Column("Commune", Integer)
-    b_id = Column("b_id", Integer)
-
-class BarrioDB(Base):
-    __tablename__ = 'BARRIOS'
-    id = Column("id", Integer, primary_key=True)
-    name = Column("Barrio", String(255))
-
-class ImportanceDB(Base):
-    __tablename__ = 'IMPORTANCE'
-    id = Column("id", Integer, primary_key=True)
-    feature = Column(String(255))
-    score = Column(Float)
-    year = Column(Integer)
-    b_id = Column(Integer)
-
-def remove_inst_state(a_dict):
-    a_dict.pop('_sa_instance_state', None)
-    return a_dict
-
-def package_data(dat):
-    response.headers['Content-Type'] = 'application/json'
-    return json.dumps({'data': dat})
-
-# API routes
-@app.get('/api/barrio/')
-def get_all_barrios(sqlite_db):
-    """Get name and ID of all barrios"""
-    query = sqlite_db.query(BarrioDB).all()
-    dat = [remove_inst_state(i.__dict__) for i in query]
-
-    response.headers['Content-Type'] = 'application/json'
-    return json.dumps({'data': dat})
-
-
-@app.get('/api/commune/')
-def get_all_communes(sqlite_db):
-    """Get all communes, their id, and the barrios in them from Database"""
-    query = sqlite_db.query(CommuneDB).all()
-    dic_dat = {}
-
-    for i in query:
-        if i.commune in dic_dat:
-            dic_dat[i.commune].append(i.b_id)
-        else:
-            dic_dat[i.commune] = list()
-            dic_dat[i.commune].append(i.b_id)
-
-    dat = [{'commune':key,'barrios':value} for key,value in dic_dat.items()]
-
-    return package_data(dat)
-
-
 @app.get('/api/census/')
 def get_all_census_data(sqlite_db):
     """Get all census data available"""
     query = sqlite_db.query(CensusDB).all()
     dat = [remove_inst_state(i.__dict__) for i in query]
-
-    return package_data(dat)
-
-@app.get('/api/rent/all/')
-def get_rent_data_all_time(sqlite_db):
-    """Get rent data over all time"""
-    query = sqlite_db.query(RentDB).all()
-    dat = [remove_inst_state(i.__dict__) for i in query]
-
-    return package_data(dat)
-
-@app.get('/api/rent/all/us_avg')
-def get_rent_data_all_time(sqlite_db):
-    """Get rent data over all time"""
-    query = sqlite_db.query(RentDB.id, RentDB.avg_price_us).all()
-
-    dat = [0] * (max(query,key=itemgetter(1))[0] + 1)
-    for i in query:
-        dat[i[0]] = i[1]
 
     return package_data(dat)
 
@@ -248,6 +85,150 @@ def get_all_barrio_data(sqlite_db, barrio):
 
     return package_data(dat)
 
+# Property Database
+class PropertyDB(Base):
+    __tablename__ = 'PROPERTY'
+    id = Column("index", Integer, primary_key=True)
+    commune = Column("Commune", Integer)
+    b_id = Column("b_id", Integer)
+    lon = Column("Longitude", Float)
+    lat = Column("Latitude", Float)
+    date = Column("Date", Date)
+    us_val = Column("Value in US Dollars", Float)
+    m2_val = Column("Value of m2 (US Dollars)", Float)
+    m2 = Column(Float)
+
+@app.get('/api/property/us_val/avg/')
+def get_all_barrio_average_property_value(sqlite_db):
+    """Get the average property value for each barrio in USD over all time"""
+    query = sqlite_db.query(PropertyDB.b_id, func.avg(PropertyDB.us_val).label('average')).group_by(PropertyDB.b_id).all()
+    dat = [0] * 49
+    for i in query:
+        dat[i[0]] = i[1]
+
+    return package_data(dat)
+
+# Rent Database
+class RentDB(Base):
+    __tablename__ = 'RENT'
+    id = Column("b_id_", Integer, primary_key=True)
+    max_price_lc = Column("price_aprox_local_currency_max", Float)
+    avg_price_lc = Column("price_aprox_local_currency_mean", Float)
+    std_price_lc = Column("price_aprox_local_currency_std", Float)
+    max_price_us = Column("price_aprox_usd_max", Float)
+    avg_price_us = Column("price_aprox_usd_mean", Float)
+    std_price_us = Column("price_aprox_usd_std", Float)
+
+@app.get('/api/rent/all/')
+def get_rent_data_all_time(sqlite_db):
+    """Get rent data over all time"""
+    query = sqlite_db.query(RentDB).all()
+    dat = [remove_inst_state(i.__dict__) for i in query]
+
+    return package_data(dat)
+
+@app.get('/api/rent/<barrio>')
+def get_barrio_summary_stats(sqlite_db, barrio):
+    query = sqlite_db.query(RentDB.max_price_lc,
+                            RentDB.avg_price_lc,
+                            RentDB.std_price_lc)\
+                                .filter(and_(RentDB.id == barrio)).first()
+    dat = {'max': query[0], 'avg': query[1], 'std': query[2]}
+
+    return package_data(dat)
+
+@app.get('/api/rent/all/us_avg')
+def get_rent_data_all_time(sqlite_db):
+    """Get rent data over all time"""
+    query = sqlite_db.query(RentDB.id, RentDB.avg_price_us).all()
+
+    dat = [0] * (max(query,key=itemgetter(1))[0] + 1)
+    for i in query:
+        dat[i[0]] = i[1]
+
+    return package_data(dat)
+
+class PurchaseDB(Base):
+    __tablename__ = 'SELL'
+    id = Column("b_id_", Integer, primary_key=True)
+    max_price_lc = Column("price_aprox_local_currency_max", Float)
+    avg_price_lc = Column("price_aprox_local_currency_mean", Float)
+    std_price_lc = Column("price_aprox_local_currency_std", Float)
+    max_price_us = Column("price_aprox_usd_max", Float)
+    avg_price_us = Column("price_aprox_usd_mean", Float)
+    std_price_us = Column("price_aprox_usd_std", Float)
+
+@app.get('/api/purchase/<barrio>')
+def get_barrio_summary_stats(sqlite_db, barrio):
+    query = sqlite_db.query(PurchaseDB.max_price_lc,
+                            PurchaseDB.avg_price_lc,
+                            PurchaseDB.std_price_lc)\
+                                .filter(and_(PurchaseDB.id == barrio)).first()
+    dat = {'max': query[0], 'avg': query[1], 'std': query[2]}
+
+    return package_data(dat)
+
+# Rent monthly
+class RentMODB(Base):
+    __tablename__ = 'RENT_MO'
+    id = Column("index", Integer, primary_key=True)
+    b_id = Column("b_id_", Integer)
+    month = Column("month_", Integer)
+    local_price = Column("price_aprox_local_currency_mean", Float)
+    usd_price = Column("price_aprox_usd_mean", Float)
+    year = Column("year_", Integer)
+
+# Barrio rental price average monthly
+@app.get('/api/rent/monthly/<barrio>')
+def get_monthly_rent(sqlite_db, barrio):
+    query = sqlite_db.query(RentMODB.b_id, BarrioDB.name, RentMODB.year,  RentMODB.month, RentMODB.usd_price, RentMODB.local_price).filter(RentMODB.b_id == barrio).join(BarrioDB, BarrioDB.id == RentMODB.b_id).all()
+    dat = [{'date': str(i.month) + " " + str(i.year), 'price': i.usd_price} for i in query]
+
+    return package_data(dat)
+
+# Selling monthly
+class SellMODB(Base):
+    __tablename__ = 'SELL_MO'
+    id = Column("index", Integer, primary_key=True)
+    b_id = Column("b_id_", Integer)
+    month = Column("month_", Integer)
+    local_price = Column("price_aprox_local_currency_mean", Float)
+    usd_price = Column("price_aprox_usd_mean", Float)
+    year = Column("year_", Integer)
+
+# Barrio rental price average monthly
+@app.get('/api/purchase/monthly/<barrio>')
+def get_monthly_purchase(sqlite_db, barrio):
+    query = sqlite_db.query(SellMODB).filter(and_(SellMODB.b_id == barrio)).all()
+    dat = [{'date': str(i.month) + " " + str(i.year), 'price': i.usd_price} for i in query]
+
+    return package_data(dat)
+
+# Get property sales data per month for all of the years for all barrios
+@app.get('/api/purchase/monthly/all')
+def get_all_monthly_sell(sqlite_db):
+    '''
+    Return Object:
+
+    b_id: Barrio ID
+    barrio: Barrio Name
+    Month: Month and year in the format mm/yyyy
+    Mean Price for the Month
+    '''
+    query = sqlite_db.query(SellMODB.id, BarrioDB.name, SellMODB.year,  SellMODB.month, SellMODB.usd_price, SellMODB.local_price).join(BarrioDB, BarrioDB.id == SellMODB.b_id).all()
+    dat = [{'barrio': i.name, 'date': str(i.month) + ' ' + str(i.year), 'price': i.usd_price} for i in query]
+       
+    return package_data(dat)
+
+class SportsDB(Base):
+    __tablename__ = 'SPORT'
+    id = Column("index", Integer, primary_key=True)
+    name = Column("Name", String(255))
+    lon = Column("Longitude", Float)
+    lat = Column("Latitude", Float)
+    kind = Column("Type", String(255))
+    b_id = Column(Integer)
+
 @app.get('/api/sports/all')
 def get_all_sports_data(sqlite_db):
     """"""
@@ -257,6 +238,15 @@ def get_all_sports_data(sqlite_db):
         dat[i[0]] = i[1]
 
     return package_data(dat)
+
+class HealthDB(Base):
+    __tablename__ = 'HEALTH'
+    id = Column("index", Integer, primary_key=True)
+    name = Column("Name", String(255))
+    lon = Column("Longitude", Float)
+    lat = Column("Latitude", Float)
+    kind = Column("Type", String(255))
+    b_id = Column(Integer)
 
 @app.get('/api/health/all')
 def get_all_health_data(sqlite_db):
@@ -279,6 +269,24 @@ def get_hospitals_per_barrio(sqlite_db):
         dat[i[0]] = i[1]
 
     return package_data(dat)
+
+class CultureDB(Base):
+    __tablename__ = 'CULTURE'
+    id = Column("index", Integer, primary_key=True)
+    name = Column("Name", String(255))
+    lon = Column("Longitude", Float)
+    lat = Column("Latitude", Float)
+    kind = Column("Type", String(255))
+    b_id = Column(Integer)
+
+class HumanityDB(Base):
+    __tablename__ = 'HUMANITY'
+    id = Column("index", Integer, primary_key=True)
+    name = Column("Name", String(255))
+    lon = Column("Longitude", Float)
+    lat = Column("Latitude", Float)
+    kind = Column("Type", String(255))
+    b_id = Column(Integer)
 
 @app.get('/api/humanity/elderly_care/count')
 def get_elderly_care_per_barrio(sqlite_db):
@@ -307,17 +315,51 @@ def get_elderly_care(sqlite_db):
 
     return package_data(dat)
 
-@app.get('/api/property/us_val/avg/')
-def get_all_barrio_average_property_value(sqlite_db):
-    """Get the average property value for each barrio in USD over all time"""
-    query = sqlite_db.query(PropertyDB.b_id, func.avg(PropertyDB.us_val).label('average')).group_by(PropertyDB.b_id).all()
-    dat = [0] * 49
+class CommuneDB(Base):
+    __tablename__ = 'COMMUNES'
+    id = Column("index", Integer, primary_key=True)
+    commune = Column("Commune", Integer)
+    b_id = Column("b_id", Integer)
+
+@app.get('/api/commune/')
+def get_all_communes(sqlite_db):
+    """Get all communes, their id, and the barrios in them from Database"""
+    query = sqlite_db.query(CommuneDB).all()
+    dic_dat = {}
+
     for i in query:
-        dat[i[0]] = i[1]
+        if i.commune in dic_dat:
+            dic_dat[i.commune].append(i.b_id)
+        else:
+            dic_dat[i.commune] = list()
+            dic_dat[i.commune].append(i.b_id)
+
+    dat = [{'commune':key,'barrios':value} for key,value in dic_dat.items()]
 
     return package_data(dat)
 
-# Importance table route
+class BarrioDB(Base):
+    __tablename__ = 'BARRIOS'
+    id = Column("id", Integer, primary_key=True)
+    name = Column("Barrio", String(255))
+
+@app.get('/api/barrio/')
+def get_all_barrios(sqlite_db):
+    """Get name and ID of all barrios"""
+    query = sqlite_db.query(BarrioDB).all()
+    dat = [remove_inst_state(i.__dict__) for i in query]
+
+    response.headers['Content-Type'] = 'application/json'
+    return json.dumps({'data': dat})
+
+class ImportanceDB(Base):
+    __tablename__ = 'IMPORTANCE'
+    id = Column("id", Integer, primary_key=True)
+    feature = Column(String(255))
+    score = Column(Float)
+    year = Column(Integer)
+    b_id = Column(Integer)
+
 @app.get('/api/importance/<year>/<barrio>')
 def get_importance(sqlite_db, year, barrio):
     """Get feature importance in order of importance for a barrio or all if 'all' passed in"""
@@ -331,42 +373,24 @@ def get_importance(sqlite_db, year, barrio):
 
     return package_data(dat)
 
-# Barrio rental price average monthly
-@app.get('/api/purchase/monthly/<barrio>')
-def get_monthly_purchase(sqlite_db, barrio):
-    query = sqlite_db.query(SellMODB).filter(and_(SellMODB.b_id == barrio)).all()
-    dat = [{'group': i.year, 'key': i.month, 'value': i.price} for i in query]
 
-    return package_data(dat)
+###################################
+# Packaging Functions##############
+###################################git 
 
-@app.get('/api/purchase/<barrio>')
-def get_barrio_summary_stats(sqlite_db, barrio):
-    query = sqlite_db.query(SellDB.max_price_lc,
-                            SellDB.avg_price_lc,
-                            SellDB.std_price_lc)\
-                                .filter(and_(SellDB.id == barrio)).first()
-    dat = {'max': query[0], 'avg': query[1], 'std': query[2]}
+def remove_inst_state(a_dict):
+    a_dict.pop('_sa_instance_state', None)
+    return a_dict
 
-    return package_data(dat)
+def package_data(dat):
+    response.headers['Content-Type'] = 'application/json'
+    return json.dumps({'data': dat})
 
-@app.get('/api/rent/<barrio>')
-def get_barrio_summary_stats(sqlite_db, barrio):
-    query = sqlite_db.query(RentDB.max_price_lc,
-                            RentDB.avg_price_lc,
-                            RentDB.std_price_lc)\
-                                .filter(and_(RentDB.id == barrio)).first()
-    dat = {'max': query[0], 'avg': query[1], 'std': query[2]}
 
-    return package_data(dat)
 
-# Barrio rental price average monthly
-@app.get('/api/rent/monthly/<barrio>')
-def get_monthly_rent(sqlite_db, barrio):
-    query = sqlite_db.query(RentMODB).filter(and_(RentMODB.b_id == barrio)).all()
-    dat = [{'group': i.year, 'key': i.month, 'value': i.price} for i in query]
-
-    return package_data(dat)
-
+###################################
+# Normal Routes (DO NOT CHANGE)####
+###################################
 # Index page route
 @app.get('/')
 def show_index():

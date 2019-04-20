@@ -3,6 +3,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import WebFont from 'webfontloader'
 import Mapgeojson from '../components/mapgeojson.vue'
+import Multiline from '../components/multiline.vue'
 import {
   // Basic
   d3Pie,
@@ -31,13 +32,12 @@ const vue_app = new Vue({
   delimiters: ['[[', ']]'],
   components: {
     Mapgeojson,
+    Multiline,
     d3Pie,
     d3Circle,
     d3Line,
-    d3HorizontalBar,
     d3MultiLine,
-    d3HorizontalSlider,
-    d3VerticalSlider
+    d3HorizontalBar
   },
   data() {
     return {
@@ -53,6 +53,8 @@ const vue_app = new Vue({
       multiline_mo_val: [],
       housing_summary: undefined,
       province: undefined,
+      month_sell: [],
+      sell_data: []
     }
   },
   methods: {
@@ -60,6 +62,7 @@ const vue_app = new Vue({
       axios.get('/api/barrio/')
            .then(response => {
              this.barrios = response.data.data;
+             console.log(this.barrios);
            })
            .catch(error => {
              console.log(error);
@@ -121,7 +124,7 @@ const vue_app = new Vue({
       }
       axios.get(endpoint)
            .then(response => {
-              this.multiline_mo_val = response.data.data;
+              this.month_sell = response.data.data;
            })
            .catch(error => {
              console.log(error);
@@ -137,7 +140,12 @@ const vue_app = new Vue({
     },
     onProvinceChange: function(province) {
       if(province) {
+        // Get object from barrios list
         this.province = this.barrios[province.b_id];
+
+        // Update the montly sell data
+        this.getMonthly('purchase');
+        // Update importance graph
         this.getImportance(this.province.id, 2016);
 
         this.vw = 'overview';
@@ -158,4 +166,5 @@ const vue_app = new Vue({
     this.getBarriosVal('/api/property/us_val/avg/');
     this.getHeatmapVal('/api/humanity/elderly_care');
   }
+  
 });

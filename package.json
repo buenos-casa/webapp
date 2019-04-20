@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "browser-sync": "^2.26.3",
     "bulma": "^0.7.2",
     "d3-transform": "^1.0.5",
     "d3-transition": "^1.2.0",
@@ -28,6 +29,7 @@
     "@babel/preset-env": "^7.1.0",
     "autoprefixer": "^7.2.6",
     "babel-loader": "^8.0.4",
+    "browser-sync-webpack-plugin": "^2.2.2",
     "css-loader": "^0.28.11",
     "extract-text-webpack-plugin": "^3.0.2",
     "node-sass": "^4.11.0",
