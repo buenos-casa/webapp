@@ -19,9 +19,11 @@ export default {
     },
     watch: {
         year_val: function(newVal, oldVal){
+            if (newVal != oldVal) {
             this.year_val = newVal;
             console.log('Watch data:' + JSON.stringify(newVal[0]));
             this.drawMultiLine();
+            }
         }
     },
     methods:
@@ -29,7 +31,7 @@ export default {
         // Draw the multi line graph 
         drawMultiLine(){
         //Remove the existing graph, if it exists
-         d3.select("#wrapper").select("g").remove();
+         d3.select("#wrapper").select("svg").remove();
 
         
             // Set the dimensions of the canvas / graph
