@@ -19,12 +19,7 @@ import {
 } from 'd3-vs';
 
 console.log('It\'s running!');
-// Init Google Fonts
-WebFont.load({
-  google: {
-    families: ['Alegreya:300,400']
-  }
-})
+
 
 // Init Vue app
 const vue_app = new Vue({

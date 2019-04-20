@@ -12,89 +12,88 @@
         <!-- Page Title -->
         <p class="title is-1">Buenos Aires</p>
         <!-- Map container -->
-        <div class="columns">
-          <div class="column is-one-fifth">
-              <nav class="panel">
-                  <p class="panel-heading">
-                    Statistics
-                  </p>
-                  <a v-on:click="getBarriosVal('/api/rent/all/us_avg')" @click="st='rat'" :class="[ st === 'rat' ? 'is-active panel-block' : 'panel-block']">
+        <div class="buttons has-addons is-centered">
+                  <span class="button" v-on:click="getBarriosVal('/api/rent/all/us_avg')" @click="st='rat'" :class="[ st === 'rat' ? 'is-active panel-block' : 'panel-block']">
                     Rent All Time
-                  </a>
-                  <a v-on:click="getBarriosVal('/api/property/us_val/avg/')" @click="st='pv'" :class="[ st === 'pv' ? 'is-active panel-block' : 'panel-block']">
+                  </span>
+                  <span class="button"  v-on:click="getBarriosVal('/api/property/us_val/avg/')" @click="st='pv'" :class="[ st === 'pv' ? 'is-active panel-block' : 'panel-block']">
                     Property Value
-                  </a>
-                  <a v-on:click="getBarriosVal('/api/sports/all')" @click="st='sf'" :class="[ st === 'sf' ? 'is-active panel-block' : 'panel-block']">
+                  </span>
+                  <span class="button"  v-on:click="getBarriosVal('/api/sports/all')" @click="st='sf'" :class="[ st === 'sf' ? 'is-active panel-block' : 'panel-block']">
                     Sports Facilities
-                  </a>
-                  <a v-on:click="getBarriosVal('/api/health/hospital/count')" @click="st='hos'" :class="[ st === 'hos' ? 'is-active panel-block' : 'panel-block']">
+                  </span>
+                  <span class="button"  v-on:click="getBarriosVal('/api/health/hospital/count')" @click="st='hos'" :class="[ st === 'hos' ? 'is-active panel-block' : 'panel-block']">
                     Hospitals
-                  </a>
-                  <a v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" @click="st='ecc'" :class="[ st === 'ecc' ? 'is-active panel-block' : 'panel-block']">
+                  </span>
+                  <span class="button"  v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" @click="st='ecc'" :class="[ st === 'ecc' ? 'is-active panel-block' : 'panel-block']">
                     Elder Care Center
-                  </a>
-              </nav>
+                  </span>
           </div>
-          <div class="column is-half">
-            <mapgeojson mapname='baires-communes'
-                        v-bind:barrios_val="barrios_val"
-                        v-bind:heatmap_val="heatmap_val"
-                        :lat="-34.6"
-                        :lon="-58.45"
-                        :dims="{'x':500,'y':500}">
-            </mapgeojson>
-          </div>
-          <div class="column">
-            <div class="columns is-vcentered">
-              <div class="column">
+          <div class="tile is-ancestor">
+            <div class="tile is-parent is-vertical is-8">
+              <div class="tile is-child">
+                    <mapgeojson mapname='baires-communes'
+                    v-bind:barrios_val="barrios_val"
+                    v-bind:heatmap_val="heatmap_val"
+                    :lat="-34.6"
+                    :lon="-58.45"
+                    :dims="{'x':800,'y':500}">
+                </mapgeojson>
+              </div>
+              <div class="tile is-child">
+                  <!-- Barrio Name -->
+                <div v-if="province">
+                    <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p>
+                </div>
+              </div>
+            </div>
+     
+           
+
+          <div class="tile">
+              <div class="tile is-child">
+                <div class="column">
                 <d3-circle
                   :data="barriocensus['own']"
-                  :options="{'precision': '0', 'labelFontSize': '30'}"
+                  :options="{'precision': '0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
                   :margin="{top: 10, right: 10, bottom: 10, left: 10}"
                   height="150px"
                   width="100%">
                 </d3-circle>
+                <p class="subtitle is-5 is-family-sans-serif">Percent<br>Owned</p>
               </div>
-              <div class="column">
-                <p class="subtitle is-5">Percent<br>Owned</p>
-              </div>
-            </div>
-            <div class="columns is-vcentered">
+            
+            <div class="tile is-child">
               <div class="column">
                 <d3-circle
                   :data="barriocensus['rent']"
-                  :options="{'precision': '0', 'labelFontSize': '30'}"
+                  :options="{'precision': '0', 'labelFontSize': '30', 'circleForeground': '#F2B705'}"
                   :margin="{top: 10, right: 10, bottom: 10, left: 10}"
                   height="150px"
                   width="100%">
                 </d3-circle>
-              </div>
-              <div class="column">
-                <p class="subtitle is-5">Percent<br>Rented</p>
+                <p class="subtitle is-5 is-family-sans-serif">Percent<br>Rented</p>
               </div>
             </div>
-            <div class="columns is-vcentered">
+
+            <div class="tile is-child">
               <div class="column">
                 <d3-circle
                   :data="barriocensus['uinhab']"
-                  :options="{'precision': '0', 'labelFontSize': '30'}"
+                  :options="{'precision': '0', 'labelFontSize': '30','circleForeground': '#A67244'}"
                   :margin="{top: 10, right: 10, bottom: 10, left: 10}"
                   height="150px"
                   width="100%">
                 </d3-circle>
-              </div>
-              <div class="column">
-                <p class="subtitle is-5">Percent<br>Uninhabited</p>
+                <p class="subtitle is-5 is-family-sans-serif">Percent<br>Uninhabited</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- Barrio Name -->
-      <div v-if="province">
-        <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
-      </div>
-    </div>
+  
+      
   </section>
 
  
@@ -215,11 +214,6 @@
                 </d3-circle>
             </div>
           </div>
-          <d3-line
-            :data="[{'key':1, 'value':0.2}, {'key':2, 'value':0.5}, {'key':3, 'value':0.1}]"
-            width="100%"
-            height="300px">
-          </d3-line>
 
           <d3-horizontal-bar
             :data="importance_val"
