@@ -45,7 +45,7 @@ const vue_app = new Vue({
       st: 'pv',
       h_kind: 'purchase',
       barrios: undefined,
-      barriocensus: {"own": 0.57, "rent": 0.18, "uinhab": 0.25},
+      barriocensus: {"own": 0.57, "rent": 0.18, "uinhab": 0.08},
       census: [],
       barrios_val: [],
       heatmap_val: [],
