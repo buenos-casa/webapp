@@ -206,8 +206,9 @@ def get_all_barrio_data(sqlite_db, barrio):
     if barrio != 'undefined':
         barrio_query = sqlite_db.query(CensusDB.own_percent, CensusDB.rent_percent, CensusDB.uinhab_percent).filter(CensusDB.barrio == barrio).all()
         dat = [{"own": i[0]/100, "rent": i[1]/100, "uinhab": i[2]/100} for i in barrio_query]
-        dat = numpy.array(dat)
-        dat = numpy.mean(dat, axis=0)
+        dat = pandas.DataFrame(dat)
+        dat = dat.mean(0)
+        dat = {"own": dat.loc['own'], "rent": dat.loc['rent'], "uinhab": dat.loc['uinhab']}
     else:
         dat = {"own": 0.57, "rent": 0.18, "uinhab": 0.25}
 
