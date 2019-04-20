@@ -98,11 +98,10 @@ const vue_app = new Vue({
     },
     getBarrioCensus(barrio) {
       // If the barrio has been set
-      if(barrio) {
+      if(barrio !== undefined) {
         axios.get('/api/census/barrio/' + barrio)
           .then(response => {
             this.barriocensus = response.data.data;
-            console.log(this.barriocensus);
           })
           .catch(error => {
             console.log(error);
