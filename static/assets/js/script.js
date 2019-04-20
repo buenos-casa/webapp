@@ -109,7 +109,7 @@ const vue_app = new Vue({
           })
       } else {
         // Overall buenos aires stats
-        this.barriocensus = {"own": 0.57, "rent": 0.18, "uinhab": 0.25};
+        this.barriocensus = {"own": 0.57, "rent": 0.18, "uinhab": 0.08};
       }
     },
     getMonthly(kind) {
