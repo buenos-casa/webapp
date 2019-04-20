@@ -123,6 +123,7 @@ class BarrioDB(Base):
     id = Column("id", Integer, primary_key=True)
     name = Column("Barrio", String(255))
 
+<<<<<<< HEAD
 class RentMonthlyDB(Base):
     __tablename__ = 'RENT_MO'
     id = Column("b_id_", Integer, primary_key=True)
@@ -143,6 +144,15 @@ class SellMonthlyDB(Base):
     mean_price_usd = Column("price_aprox_usd_mean", Float)
     mean_price_local = Column("price_aprox_local_currency_mean", Float)
 
+=======
+class ImportanceDB(Base):
+    __tablename__ = 'IMPORTANCE'
+    id = Column("id", Integer, primary_key=True)
+    feature = Column(String(255))
+    score = Column(Float)
+    year = Column(Integer)
+    b_id = Column(Integer)
+>>>>>>> dev
 
 def remove_inst_state(a_dict):
     a_dict.pop('_sa_instance_state', None)
@@ -260,6 +270,21 @@ def get_elderly_care_per_barrio(sqlite_db):
 
     return package_data(dat)
 
+@app.get('/api/humanity/elderly_care')
+def get_elderly_care(sqlite_db):
+    """"""
+    query = sqlite_db.query(HumanityDB).filter(or_(HumanityDB.kind.contains('retire'),HumanityDB.kind.contains('elder')))\
+                     .all()
+    q_dat = [remove_inst_state(i.__dict__) for i in query]
+    dat = [None] * 49 #number of barrios
+    for i, row in enumerate(q_dat):
+        if(dat[row['b_id']] == None):
+            dat[row['b_id']] = list()
+        row['name'] = row['name'].title()
+        dat[row['b_id']].append(row)
+
+    return package_data(dat)
+
 @app.get('/api/property/us_val/avg/')
 def get_all_barrio_average_property_value(sqlite_db):
     """Get the average property value for each barrio in USD over all time"""
@@ -321,6 +346,19 @@ def get_all_monthly_sell(sqlite_db):
         dat.append({'barrio': i[1], 'date': (str(i[3]) + ' ' + str(i[2])), 'price': i[4]})
        
     return package_data(dat)
+# Importance table route
+@app.get('/api/importance/<year>/<barrio>')
+def get_importance(sqlite_db, year, barrio):
+    """Get feature importance in order of importance for a barrio or all if 'all' passed in"""
+    dat = []
+    if barrio == 'all':
+        pass
+    else:
+        query = sqlite_db.query(ImportanceDB).filter(and_(ImportanceDB.year == year, ImportanceDB.b_id == barrio)).all()
+        dat = [{'key': i.feature, 'value': i.score} for i in query]
+    
+    return package_data(dat)
+
 
 # Index page route
 @app.get('/')

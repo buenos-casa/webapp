@@ -49,30 +49,40 @@ WebFont.load({
   }
 })
 
-// Following this tutorial: https://travishorn.com/interactive-maps-with-vue-leaflet-5430527353c8
-
 // Init Vue app
 const vue_app = new Vue({
   el: '#app',
   delimiters: ['[[', ']]'],
   components: {
     Mapgeojson,
+    d3Pie,
     d3Circle,
     d3Line,
+<<<<<<< HEAD
     d3MultiLine,
     Multiline
+=======
+    d3HorizontalBar
+>>>>>>> dev
   },
   data() {
     return {
+      vw: 'overview',
+      st: 'pv',
       result: [],
       communes: [],
       barrios: undefined,
       census: [],
       barrios_val: [],
+      heatmap_val: [],
+      importance_val: [],
       bar_avg: null,
       province: undefined,
+<<<<<<< HEAD
       month_sell: [],
       sell_data: []
+=======
+>>>>>>> dev
     }
   },
   methods: {
@@ -129,13 +139,35 @@ const vue_app = new Vue({
              console.log(error);
            })
     },
+    getHeatmapVal(endpoint) {
+      axios.get(endpoint)
+           .then(response => {
+            this.heatmap_val = response.data.data;
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
+    getImportance(b_id, year) {
+      var endpoint = '/api/importance/' + year + '/' + b_id;
+      console.log(endpoint);
+      axios.get(endpoint)
+           .then(response => {
+             this.importance_val = response.data.data;
+             console.log(this.importance_val);
+           })
+           .catch(error => {
+             console.log(error);
+           })
+    },
     onProvinceChange: function(province) {
       if(province) {
         this.province = this.barrios[province.b_id];
         this.getBarriosMonthlySell(this.province.id);
         console.log('Province change: ' + JSON.stringify(this.month_rent[0]));
+        this.getImportance(this.province.id, 2016);
       } else {
-        this.province = "Barrio";
+        this.province = undefined;
       }
     },
     getBarriosMonthlySell(province) {
@@ -161,7 +193,10 @@ const vue_app = new Vue({
   },
   mounted: function() {
     this.$on('province-chosen', this.onProvinceChange);
+    // Initial map coloring
     this.getBarriosVal('/api/property/us_val/avg/');
+    this.getHeatmapVal('/api/humanity/elderly_care');
+    this.getImportance(0, 2016);
     if (document.querySelectorAll('.communes').length > 0) {
       this.getCommunes();
       this.getBarrios();

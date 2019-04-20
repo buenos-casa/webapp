@@ -18,19 +18,19 @@
                   <p class="panel-heading">
                     Statistics
                   </p>
-                  <a v-on:click="getBarriosVal('/api/rent/all/us_avg')" class="panel-block">
+                  <a v-on:click="getBarriosVal('/api/rent/all/us_avg')" @click="st='rat'" :class="[ st === 'rat' ? 'is-active panel-block' : 'panel-block']">
                     Rent All Time
                   </a>
-                  <a v-on:click="getBarriosVal('/api/property/us_val/avg/')" class="panel-block">
+                  <a v-on:click="getBarriosVal('/api/property/us_val/avg/')" @click="st='pv'" :class="[ st === 'pv' ? 'is-active panel-block' : 'panel-block']">
                     Property Value
                   </a>
-                  <a v-on:click="getBarriosVal('/api/sports/all')" class="panel-block">
+                  <a v-on:click="getBarriosVal('/api/sports/all')" @click="st='sf'" :class="[ st === 'sf' ? 'is-active panel-block' : 'panel-block']">
                     Sports Facilities
                   </a>
-                  <a v-on:click="getBarriosVal('/api/health/hospital/count')" class="panel-block">
+                  <a v-on:click="getBarriosVal('/api/health/hospital/count')" @click="st='hos'" :class="[ st === 'hos' ? 'is-active panel-block' : 'panel-block']">
                     Hospitals
                   </a>
-                  <a v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" class="panel-block">
+                  <a v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" @click="st='ecc'" :class="[ st === 'ecc' ? 'is-active panel-block' : 'panel-block']">
                     Elder Care Center
                   </a>
               </nav>
@@ -38,6 +38,7 @@
           <div class="column is-half">
             <mapgeojson mapname='baires-communes'
                         v-bind:barrios_val="barrios_val"
+                        v-bind:heatmap_val="heatmap_val"
                         :lat="-34.6"
                         :lon="-58.45"
                         :dims="{'x':500,'y':500}">
@@ -58,115 +59,132 @@
     </div>
   </section>
 
+  <div class="container">
+    <multiline v-bind:year_val="sell_data"></multiline>
   
+  
+  </div>
 
-<div class="container">
-  <multiline v-bind:year_val="sell_data"></multiline>
+  <!-- Tabular navigation -->
+  <div class="tabs is-boxed">
+    <ul>
+      <li :class="[ vw === 'overview' ? 'is-active' : '']">
+        <a @click="vw='overview'">
+          <span>Overview</span>
+        </a>
+      </li>
+      <li :class="[ vw === 'analysis' ? 'is-active' : '']">
+        <a @click="vw='analysis'">
+          <span>Analysis</span>
+        </a>
+      </li>
+      <li :class="[ vw === 'survey' ? 'is-active' : '']">
+        <a @click="vw='survey'">
+          <span>Survey</span>
+        </a>
+      </li>
+    </ul>
+  </div>
 
-
-</div>
-
-  <section class="hero is-warning is-medium is-bold has-text-centered">
-    <div class="hero-body">
-      <div class="container">
-        <div v-if="result">
-          <!-- Only runs if this class is present -->
-          <div class="communes">
-            <div class="columns is-desktop">
-              <div class="column" v-for="commune in result">
-                <div class="card">
-                  <div class="card-content">
-                    <strong>[[ commune.commune ]]</strong>
-                    <div v-if="barrios">
-                      <li v-for="b_id in commune.barrios">
-                          <a v-on:click="getAvgBarrioValUS(b_id)">[[barrios[b_id].name]]</a>
-                      </li>  
+  <div v-if="vw === 'overview'">
+    <section class="hero is-warning is-medium is-bold has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <div v-if="result">
+            <!-- Only runs if this class is present -->
+            <div class="communes">
+              <div class="columns is-desktop">
+                <div class="column" v-for="commune in result">
+                  <div class="card">
+                    <div class="card-content">
+                      <strong>[[ commune.commune ]]</strong>
+                      <div v-if="barrios">
+                        <li v-for="b_id in commune.barrios">
+                            <a v-on:click="getAvgBarrioValUS(b_id)">[[barrios[b_id].name]]</a>
+                        </li>  
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div v-else>
-          <h3 class="title">Oh.. I don't found any objects on Database!</h3>
-          <p>Please run <code>$ python install.py</code> from project dir.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="hero is-warning is-medium is-bold has-text-centered">
-    <div class="hero-body">
-      <div class="container">
-        <d3-line
-          :data="[{'key':1, 'value':0.2}, {'key':2, 'value':0.5}, {'key':3, 'value':0.1}]"
-          width="100%"
-          height="300px">
-        </d3-line>
-        <div v-if="bar_avg">
-          [[ bar_avg ]]
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="hero is-warning is-medium is-bold has-text-centered">
-    <div class="hero-body">
-      <div class="container">
-        <!-- Dropdown menu -->
-        <div class="dropdown is-hoverable">
-          <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-              <span>Dropdown button</span>
-              <span class="icon is-small">
-                <i class="fas fa-angle-down" aria-hidden="true"></i>
-              </span>
-            </button>
+          <div v-else>
+            <p>Loading...</p>
           </div>
-          <div class="dropdown-menu" id="dropdown-menu" role="menu">
-            <div class="dropdown-content">
-              <a v-on:click="getCommuneCensus(1)" class="dropdown-item is-active">
-                Dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(2)" class="dropdown-item">
-                  Other dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(3)" class="dropdown-item">
-                  Active dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(4)" class="dropdown-item">
-                  Other dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(5)" class="dropdown-item">
-                  With a divider
-              </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero is-warning is-medium is-bold has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <div v-if="bar_avg">
+            [[ bar_avg ]]
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div v-if="vw === 'analysis'">
+    <section class="hero is-warning is-medium is-bold has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <div class="columns">
+            <div class="column">
+              First Circle
+              <d3-circle
+                :data="0.5"
+                width="100%">
+              </d3-circle>
+            </div>
+            <div class="column">
+                First Circle
+                <d3-circle
+                  :data="0.5"
+                  width="100%">
+                </d3-circle>
+            </div>
+            <div class="column">
+                First Circle
+                <d3-circle
+                  :data="0.5"
+                  width="100%">
+                </d3-circle>
             </div>
           </div>
-        </div>
-        <!-- Data show -->
-        <div v-if="census">
-          <!-- Only runs if this class is present -->
-          <div class="communasData">
-            <div class="columns is-desktop">
-              <div class="column" v-for="point in census">
-                <div class="card">
-                  <div class="card-content">
-                    <h3>[[ point.comp_percent ]]</h3>
-                    <strong>[[ point.comp_quantile ]]</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-else>
-          <h3 class="title">Oh.. I don't found any objects on Database!</h3>
-          <p>Please run <code>$ python install.py</code> from project dir.</p>
+          <d3-line
+            :data="[{'key':1, 'value':0.2}, {'key':2, 'value':0.5}, {'key':3, 'value':0.1}]"
+            width="100%"
+            height="300px">
+          </d3-line>
+
+          <d3-horizontal-bar
+            :data="importance_val"
+            width="100%"
+            height="300px">
+          </d3-horizontal-bar>
+
+          <d3-pie
+            :data="importance_val"
+            width="100%"
+            height="300px">
+          </d3-pie>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
+
+  <div v-if="vw === 'survey'">
+    <section class="hero is-warning is-medium is-bold has-text-centered">
+        <div class="hero-body">
+          <div class="container">
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="398" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+          </div>
+        </div>
+    </section>
+  </div>
 
 {% endblock %}
 
