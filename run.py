@@ -11,7 +11,6 @@ from sqlalchemy import func, or_
 
 from operator import itemgetter
 
-import numpy
 import pandas
 
 # Define dirs
