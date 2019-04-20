@@ -45,6 +45,7 @@ const vue_app = new Vue({
       st: 'pv',
       h_kind: 'purchase',
       barrios: undefined,
+      barriocensus: {"own": 0.57, "rent": 0.18, "uinhab": 0.25},
       census: [],
       barrios_val: [],
       heatmap_val: [],
@@ -92,6 +93,22 @@ const vue_app = new Vue({
              console.log(error);
            })
     },
+    getBarrioCensus(barrio) {
+      // If the barrio has been set
+      if(barrio) {
+        axios.get('/api/census/barrio/' + barrio)
+          .then(response => {
+            this.barriocensus = response.data.data;
+            console.log(this.barriocensus);
+          })
+          .catch(error => {
+            console.log(error);
+          })
+      } else {
+        // Overall buenos aires stats
+        this.barriocensus = {"own": 0.57, "rent": 0.18, "uinhab": 0.25};
+      }
+    },
     getMonthly(kind) {
       var endpoint = undefined;
       var endpoint_a = undefined;
@@ -126,8 +143,10 @@ const vue_app = new Vue({
         this.vw = 'overview';
         this.h_kind = 'purchase';
         this.getMonthly(this.h_kind);
+        this.getBarrioCensus(this.province.id);
       } else {
         this.province = undefined;
+        this.getBarrioCensus(undefined);
       }
     }
   },
@@ -135,6 +154,7 @@ const vue_app = new Vue({
     this.$on('province-chosen', this.onProvinceChange);
     // Initial map coloring
     this.getBarrios();
+    this.getBarrioCensus(undefined);
     this.getBarriosVal('/api/property/us_val/avg/');
     this.getHeatmapVal('/api/humanity/elderly_care');
   }
