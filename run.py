@@ -160,11 +160,14 @@ class PurchaseDB(Base):
 
 @app.get('/api/purchase/<barrio>')
 def get_barrio_summary_stats(sqlite_db, barrio):
-    query = sqlite_db.query(PurchaseDB.max_price_lc,
-                            PurchaseDB.avg_price_lc,
-                            PurchaseDB.std_price_lc)\
-                                .filter(and_(PurchaseDB.id == barrio)).first()
-    dat = {'max': query[0], 'avg': query[1], 'std': query[2]}
+    if(barrio != 'all'):
+        query = sqlite_db.query(PurchaseDB.max_price_lc,
+                                PurchaseDB.avg_price_lc,
+                                PurchaseDB.std_price_lc)\
+                                    .filter(and_(PurchaseDB.id == barrio)).first()
+        dat = {'max': query[0], 'avg': query[1], 'std': query[2]}
+    else:
+        dat = {'max': 0, 'avg': 0, 'std': 0}
 
     return package_data(dat)
 

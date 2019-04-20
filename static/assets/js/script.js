@@ -119,8 +119,8 @@ const vue_app = new Vue({
         endpoint = '/api/' + kind + '/monthly/' + this.province.id;
         endpoint_a = '/api/' + kind + '/' + this.province.id;
       } else {
-        endpoint = '/api/' + kind + '/monthly/0';
-        endpoint_a = '/api/' + kind + '/0';
+        endpoint = '/api/' + kind + '/monthly/all';
+        endpoint_a = '/api/' + kind + '/all';
       }
       axios.get(endpoint)
            .then(response => {
