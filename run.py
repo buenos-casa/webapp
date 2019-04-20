@@ -123,7 +123,6 @@ class BarrioDB(Base):
     id = Column("id", Integer, primary_key=True)
     name = Column("Barrio", String(255))
 
-<<<<<<< HEAD
 class RentMonthlyDB(Base):
     __tablename__ = 'RENT_MO'
     id = Column("b_id_", Integer, primary_key=True)
@@ -144,7 +143,6 @@ class SellMonthlyDB(Base):
     mean_price_usd = Column("price_aprox_usd_mean", Float)
     mean_price_local = Column("price_aprox_local_currency_mean", Float)
 
-=======
 class ImportanceDB(Base):
     __tablename__ = 'IMPORTANCE'
     id = Column("id", Integer, primary_key=True)
@@ -152,7 +150,6 @@ class ImportanceDB(Base):
     score = Column(Float)
     year = Column(Integer)
     b_id = Column(Integer)
->>>>>>> dev
 
 def remove_inst_state(a_dict):
     a_dict.pop('_sa_instance_state', None)

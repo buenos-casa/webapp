@@ -55,15 +55,12 @@ const vue_app = new Vue({
   delimiters: ['[[', ']]'],
   components: {
     Mapgeojson,
+    Multiline,
     d3Pie,
     d3Circle,
     d3Line,
-<<<<<<< HEAD
     d3MultiLine,
-    Multiline
-=======
     d3HorizontalBar
->>>>>>> dev
   },
   data() {
     return {
@@ -78,11 +75,8 @@ const vue_app = new Vue({
       importance_val: [],
       bar_avg: null,
       province: undefined,
-<<<<<<< HEAD
       month_sell: [],
       sell_data: []
-=======
->>>>>>> dev
     }
   },
   methods: {
