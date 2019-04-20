@@ -45,10 +45,48 @@
             </mapgeojson>
           </div>
           <div class="column">
-            <d3-circle
-              :data="0.5"
-              width="100%">
-            </d3-circle>
+            <div class="columns is-vcentered">
+              <div class="column">
+                <d3-circle
+                  :data="barriocensus['own']"
+                  :options="{'precision': '0', 'labelFontSize': '30'}"
+                  :margin="{top: 10, right: 10, bottom: 10, left: 10}"
+                  height="150px"
+                  width="100%">
+                </d3-circle>
+              </div>
+              <div class="column">
+                <p class="subtitle is-5">Percent<br>Owned</p>
+              </div>
+            </div>
+            <div class="columns is-vcentered">
+              <div class="column">
+                <d3-circle
+                  :data="barriocensus['rent']"
+                  :options="{'precision': '0', 'labelFontSize': '30'}"
+                  :margin="{top: 10, right: 10, bottom: 10, left: 10}"
+                  height="150px"
+                  width="100%">
+                </d3-circle>
+              </div>
+              <div class="column">
+                <p class="subtitle is-5">Percent<br>Rented</p>
+              </div>
+            </div>
+            <div class="columns is-vcentered">
+              <div class="column">
+                <d3-circle
+                  :data="barriocensus['uinhab']"
+                  :options="{'precision': '0', 'labelFontSize': '30'}"
+                  :margin="{top: 10, right: 10, bottom: 10, left: 10}"
+                  height="150px"
+                  width="100%">
+                </d3-circle>
+              </div>
+              <div class="column">
+                <p class="subtitle is-5">Percent<br>Uninhabited</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -92,46 +130,74 @@
   </section>
 
   <div v-if="vw === 'overview'">
-      
-    <section class="hero is-warning is-medium is-bold has-text-centered">
+    <section class="hero is-warning is-small is-bold">
       <div class="hero-body">
-        <div class="container">
- 
-          <div v-if="result">
-            <!-- Only runs if this class is present -->
-            <div class="communes">
-              <div class="columns is-desktop">
-                <div class="column" v-for="commune in result">
-                  <div class="card">
-                    <div class="card-content">
-                      <strong>[[ commune.commune ]]</strong>
-                      <div v-if="barrios">
-                        <li v-for="b_id in commune.barrios">
-                            <a v-on:click="getAvgBarrioValUS(b_id)">[[barrios[b_id].name]]</a>
-                        </li>  
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <div v-if="housing_summary" class="container">
+          <p class="title is-3 is-spaced">Housing</p>
+          <p class="subtitle is-4">Monthly Trends</p>
+          <div>
+            <div class="tags">
+                <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'tag is-primary' : 'tag']">
+                  Purchase
+                </a>
+                <a v-on:click="getMonthly('rent')" @click="h_kind='rent'" :class="[ h_kind == 'rent' ? 'tag is-primary' : 'tag']">
+                  Rent
+                </a>
             </div>
+            <d3-multi-line
+              :data="multiline_mo_val"
+              width="100%"
+              height="300px">
+            </d3-multi-line>
           </div>
-          <div v-else>
-            <p>Loading...</p>
+          <p class="subtitle is-5">Summary Statistics</p>
+          <div class="columns">
+            <div class="column">
+              <p>Maximum Price: [[ housing_summary["max"] ]]</p>
+            </div>
+            <div class="column">
+                <p>Standard Deviation in Price: [[ housing_summary["std"] ]]</p>
+            </div>
+            <div class="column">
+                <p>Average Price: [[ housing_summary["avg"] ]]</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="hero is-warning is-medium is-bold has-text-centered">
+    <section class="hero is-warning is-small is-bold">
       <div class="hero-body">
         <div class="container">
-          <div v-if="bar_avg">
-            [[ bar_avg ]]
-          </div>
+          <p class="title is-3">Cultural Landmarks</p>
         </div>
       </div>
     </section>
+
+    <section class="hero is-warning is-small is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <p class="title is-3">Health Providers</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero is-warning is-small is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <p class="title is-3">Humanity</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero is-warning is-small is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <p class="title is-3">Sports Amenities</p>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <div v-if="vw === 'analysis'">
@@ -169,15 +235,10 @@
 
           <d3-horizontal-bar
             :data="importance_val"
+            :options="{'axisXLabel': 'Mutual Information Gain'}"
             width="100%"
-            height="300px">
+            height="500px">
           </d3-horizontal-bar>
-
-          <d3-pie
-            :data="importance_val"
-            width="100%"
-            height="300px">
-          </d3-pie>
         </div>
       </div>
     </section>
