@@ -12,10 +12,6 @@ import {
   d3HorizontalBar,
   d3VerticalBar,
   d3Circle,
-
-  // Functional
-  d3HorizontalSlider,
-  d3VerticalSlider,
 } from 'd3-vs';
 
 console.log('It\'s running!');
@@ -125,6 +121,10 @@ const vue_app = new Vue({
       axios.get(endpoint)
            .then(response => {
               this.month_sell = response.data.data;
+
+              for(let i = 0; i < this.month_sell.length; i++){
+                this.month_sell[i].key = new Date(this.month_sell[i].key);
+              }
            })
            .catch(error => {
              console.log(error);

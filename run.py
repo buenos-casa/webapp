@@ -11,7 +11,9 @@ from sqlalchemy import func, or_, and_
 
 from operator import itemgetter
 
-import pandas
+from dateutil import parser as dtp
+
+import pandas as pd
 
 # Define dirs
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -77,7 +79,7 @@ def get_all_barrio_data(sqlite_db, barrio):
     if barrio != 'undefined':
         barrio_query = sqlite_db.query(CensusDB.own_percent, CensusDB.rent_percent, CensusDB.uinhab_percent).filter(CensusDB.barrio == barrio).all()
         dat = [{"own": i[0]/100, "rent": i[1]/100, "uinhab": i[2]/100} for i in barrio_query]
-        dat = pandas.DataFrame(dat)
+        dat = pd.DataFrame(dat)
         dat = dat.mean(0)
         dat = {"own": dat.loc['own'], "rent": dat.loc['rent'], "uinhab": dat.loc['uinhab']}
     else:
@@ -185,7 +187,7 @@ class RentMODB(Base):
 @app.get('/api/rent/monthly/<barrio>')
 def get_monthly_rent(sqlite_db, barrio):
     query = sqlite_db.query(RentMODB.b_id, BarrioDB.name, RentMODB.year,  RentMODB.month, RentMODB.usd_price, RentMODB.local_price).filter(RentMODB.b_id == barrio).join(BarrioDB, BarrioDB.id == RentMODB.b_id).all()
-    dat = [{'date': str(i.month) + " " + str(i.year), 'price': i.usd_price} for i in query]
+    dat = [{'group': i.name, 'key': datetime_encoding(i.month, i.year), 'value': i.usd_price} for i in query]
 
     return package_data(dat)
 
@@ -202,8 +204,8 @@ class SellMODB(Base):
 # Barrio rental price average monthly
 @app.get('/api/purchase/monthly/<barrio>')
 def get_monthly_purchase(sqlite_db, barrio):
-    query = sqlite_db.query(SellMODB).filter(and_(SellMODB.b_id == barrio)).all()
-    dat = [{'date': str(i.month) + " " + str(i.year), 'price': i.usd_price} for i in query]
+    query = sqlite_db.query(SellMODB.id, BarrioDB.name, SellMODB.year, SellMODB.month, SellMODB.usd_price).join(BarrioDB, BarrioDB.id == SellMODB.b_id).filter(and_(SellMODB.b_id == barrio)).all()
+    dat = [{'group': i.name, 'key': dtp.parse(str(i.month) + "/" + str(i.year)).isoformat(), 'value': i.usd_price} for i in query]
 
     return package_data(dat)
 
@@ -219,7 +221,7 @@ def get_all_monthly_sell(sqlite_db):
     Mean Price for the Month
     '''
     query = sqlite_db.query(SellMODB.id, BarrioDB.name, SellMODB.year,  SellMODB.month, SellMODB.usd_price, SellMODB.local_price).join(BarrioDB, BarrioDB.id == SellMODB.b_id).all()
-    dat = [{'barrio': i.name, 'date': str(i.month) + ' ' + str(i.year), 'price': i.usd_price} for i in query]
+    dat = [{'group': i.name, 'key': str(i.year) + ' ' + str(i.month), 'value': i.usd_price} for i in query]
        
     return package_data(dat)
 
@@ -389,6 +391,8 @@ def package_data(dat):
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'data': dat})
 
+def datetime_encoding(month, year, day=1):
+    return dtp.parse(str(i.month) + "/" + str(day) + "/" + str(i.year)).isoformat()
 
 
 ###################################
