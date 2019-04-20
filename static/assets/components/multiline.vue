@@ -16,7 +16,9 @@ export default {
         },
          dims: {
             type: Object,
-            default: {'x': 500, 'y': 500}
+            default: function() {
+                return  {'x': 500, 'y': 500}
+            }
         }
     },
     data() {
