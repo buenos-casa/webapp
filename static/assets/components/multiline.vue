@@ -19,7 +19,10 @@ export default {
             default: {'x': 500, 'y': 500}
         }
     },
-    data:function (){   
+    data() {
+        return {
+
+        }
     },
     watch: {
         year_val: function(newVal, oldVal){
@@ -82,12 +85,43 @@ export default {
             .x(function(d) { return x(d.date); })
             .y(function(d) { return y(d.price); });
             
-        // Adds the svg canvas
-        this.svg = d3.select('#wrapper')
-            .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-        
+            // Get the data
+                var data = this.year_val;
+                console.log('Data: ' + JSON.stringify(data[0]));
+            // Parse the date / time
+            var parseDate = d3.time.format("%m %Y").parse; 
+
+            // change the format of the date variables
+            data.forEach(function (d) {
+                if (!(d.date instanceof Date)) {
+                    d.date = parseDate(d.date);
+                }       
+                d.price = +d.price;
+            });
+
+            data.sort((a, b) => (a.date > b.date) ? 1 : -1);
+
+            // Set the ranges
+            var x = d3.time.scale().range([0, width]);
+            var y = d3.scale.linear().range([height, 0]);
+
+            // Define the axes
+            var xAxis = d3.svg.axis().scale(x)
+                .orient("bottom").ticks(5);
+
+            var yAxis = d3.svg.axis().scale(y)
+                .orient("left").ticks(5);
+
+            // Define the line
+            var priceline = d3.svg.line()
+                .x(function(d) { return x(d.date); })
+                .y(function(d) { return y(d.price); });
+                
+            // Adds the svg canvas
+            this.svg = d3.select('#wrapper')
+                .append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
             
         this.line = this.svg.append("g")
                 .attr("transform", 
@@ -99,18 +133,11 @@ export default {
         x.domain(d3.extent(data, function(d) { return d.date; }));
         y.domain([0, d3.max(data, function(d) { return d.price; })]); 
 
-        // Nest the entries by symbol
-        var dataNest = d3.nest()
-            .key(function(d) {return d.date;})
-            .entries(data);
 
-        // Loop through each symbol / key
-        dataNest.forEach(function(d) {
         this.line.append("path")
                 .attr("class", "line")
                 .attr("d", priceline(data)); 
 
-        });
 
         // Add the X Axis
         this.line.append("g")
@@ -123,7 +150,7 @@ export default {
             .attr("class", "y axis")
             .call(yAxis);
 
-        }
+            }
         }
     
 }
