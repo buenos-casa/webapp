@@ -45,27 +45,48 @@
             </mapgeojson>
           </div>
           <div class="column">
-            <d3-circle
-              :data="barriocensus['own']"
-              :options="{'precision': '0', 'labelFontSize': '30'}"
-              :margin="{top: 10, right: 10, bottom: 10, left: 10}"
-              height="150px"
-              width="100%">
-            </d3-circle>
-            <d3-circle
-              :data="barriocensus['rent']"
-              :options="{'precision': '0', 'labelFontSize': '30'}"
-              :margin="{top: 10, right: 10, bottom: 10, left: 10}"
-              height="150px"
-              width="100%">
-            </d3-circle>
-            <d3-circle
-              :data="barriocensus['uinhab']"
-              :options="{'precision': '0', 'labelFontSize': '30'}"
-              :margin="{top: 10, right: 10, bottom: 10, left: 10}"
-              height="150px"
-              width="100%">
-            </d3-circle>
+            <div class="columns is-vcentered">
+              <div class="column">
+                <d3-circle
+                  :data="barriocensus['own']"
+                  :options="{'precision': '0', 'labelFontSize': '30'}"
+                  :margin="{top: 10, right: 10, bottom: 10, left: 10}"
+                  height="150px"
+                  width="100%">
+                </d3-circle>
+              </div>
+              <div class="column">
+                <p class="subtitle is-5">Percent<br>Owned</p>
+              </div>
+            </div>
+            <div class="columns is-vcentered">
+              <div class="column">
+                <d3-circle
+                  :data="barriocensus['rent']"
+                  :options="{'precision': '0', 'labelFontSize': '30'}"
+                  :margin="{top: 10, right: 10, bottom: 10, left: 10}"
+                  height="150px"
+                  width="100%">
+                </d3-circle>
+              </div>
+              <div class="column">
+                <p class="subtitle is-5">Percent<br>Rented</p>
+              </div>
+            </div>
+            <div class="columns is-vcentered">
+              <div class="column">
+                <d3-circle
+                  :data="barriocensus['uinhab']"
+                  :options="{'precision': '0', 'labelFontSize': '30'}"
+                  :margin="{top: 10, right: 10, bottom: 10, left: 10}"
+                  height="150px"
+                  width="100%">
+                </d3-circle>
+              </div>
+              <div class="column">
+                <p class="subtitle is-5">Percent<br>Uninhabited</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
