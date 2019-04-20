@@ -121,14 +121,6 @@
     </ul>
   </div>
 
-  <section class="hero is-warning is-medium is-bold has-text-centered">
-      <div class="hero-body">
-        <div class="container">
-          <multiline v-bind:year_val="month_sell"></multiline>  
-     </div>
-    </div>
-  </section>
-
   <div v-if="vw === 'overview'">
     <section class="hero is-warning is-small is-bold">
       <div class="hero-body">
@@ -144,11 +136,7 @@
                   Rent
                 </a>
             </div>
-            <d3-multi-line
-              :data="multiline_mo_val"
-              width="100%"
-              height="300px">
-            </d3-multi-line>
+            <multiline v-bind:year_val="month_sell"></multiline>
           </div>
           <p class="subtitle is-5">Summary Statistics</p>
           <div class="columns">

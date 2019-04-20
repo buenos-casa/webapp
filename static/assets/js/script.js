@@ -62,7 +62,7 @@ const vue_app = new Vue({
       axios.get('/api/barrio/')
            .then(response => {
              this.barrios = response.data.data;
-             console.log(barrios);
+             console.log(this.barrios);
            })
            .catch(error => {
              console.log(error);
@@ -124,7 +124,7 @@ const vue_app = new Vue({
       }
       axios.get(endpoint)
            .then(response => {
-              this.multiline_mo_val = response.data.data;
+              this.month_sell = response.data.data;
            })
            .catch(error => {
              console.log(error);
@@ -140,8 +140,12 @@ const vue_app = new Vue({
     },
     onProvinceChange: function(province) {
       if(province) {
+        // Get object from barrios list
         this.province = this.barrios[province.b_id];
-        this.getBarriosMonthlySell(this.province.id);
+
+        // Update the montly sell data
+        this.getMonthly('purchase');
+        // Update importance graph
         this.getImportance(this.province.id, 2016);
 
         this.vw = 'overview';
@@ -152,27 +156,6 @@ const vue_app = new Vue({
         this.province = undefined;
         this.getBarrioCensus(undefined);
       }
-    },
-    getBarriosMonthlySell(province) {
-      axios.get('/api/monthly/sell/' + province)
-            .then(response => {
-              this.month_sell = response.data.data;
-              console.log('Month sell: ' + JSON.stringify(this.month_sell));
-            })
-            .catch(error => {
-              console.log(error);
-            })
-      console.log('This run!')
-    },
-    getBarriosSell() {
-      axios.get('/api/monthly/sell')
-            .then(response => {
-              this.sell_data = response.data.data;
-              console.log('Sell Data: ' + this.sell_data)
-            })
-            .catch(error => {
-              console.log(error);
-            })
     }
   },
   mounted: function() {

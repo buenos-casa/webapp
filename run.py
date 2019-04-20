@@ -174,14 +174,15 @@ class RentMODB(Base):
     id = Column("index", Integer, primary_key=True)
     b_id = Column("b_id_", Integer)
     month = Column("month_", Integer)
-    price = Column("price_aprox_local_currency_mean", Float)
+    local_price = Column("price_aprox_local_currency_mean", Float)
+    usd_price = Column("price_aprox_usd_mean", Float)
     year = Column("year_", Integer)
 
 # Barrio rental price average monthly
 @app.get('/api/rent/monthly/<barrio>')
 def get_monthly_rent(sqlite_db, barrio):
-    query = sqlite_db.query(RentMODB).filter(and_(RentMODB.b_id == barrio)).all()
-    dat = [{'group': i.year, 'key': i.month, 'value': i.price} for i in query]
+    query = sqlite_db.query(RentMODB.b_id, BarrioDB.name, RentMODB.year,  RentMODB.month, RentMODB.usd_price, RentMODB.local_price).filter(RentMODB.b_id == barrio).join(BarrioDB, BarrioDB.id == RentMODB.b_id).all()
+    dat = [{'date': str(i.month) + " " + str(i.year), 'price': i.usd_price} for i in query]
 
     return package_data(dat)
 
@@ -191,15 +192,32 @@ class SellMODB(Base):
     id = Column("index", Integer, primary_key=True)
     b_id = Column("b_id_", Integer)
     month = Column("month_", Integer)
-    price = Column("price_aprox_local_currency_mean", Float)
+    local_price = Column("price_aprox_local_currency_mean", Float)
+    usd_price = Column("price_aprox_usd_mean", Float)
     year = Column("year_", Integer)
 
 # Barrio rental price average monthly
 @app.get('/api/purchase/monthly/<barrio>')
 def get_monthly_purchase(sqlite_db, barrio):
     query = sqlite_db.query(SellMODB).filter(and_(SellMODB.b_id == barrio)).all()
-    dat = [{'group': i.year, 'key': i.month, 'value': i.price} for i in query]
+    dat = [{'date': str(i.month) + " " + str(i.year), 'price': i.usd_price} for i in query]
 
+    return package_data(dat)
+
+# Get property sales data per month for all of the years for all barrios
+@app.get('/api/purchase/monthly/all')
+def get_all_monthly_sell(sqlite_db):
+    '''
+    Return Object:
+
+    b_id: Barrio ID
+    barrio: Barrio Name
+    Month: Month and year in the format mm/yyyy
+    Mean Price for the Month
+    '''
+    query = sqlite_db.query(SellMODB.id, BarrioDB.name, SellMODB.year,  SellMODB.month, SellMODB.usd_price, SellMODB.local_price).join(BarrioDB, BarrioDB.id == SellMODB.b_id).all()
+    dat = [{'barrio': i.name, 'date': str(i.month) + ' ' + str(i.year), 'price': i.usd_price} for i in query]
+       
     return package_data(dat)
 
 class SportsDB(Base):
@@ -333,71 +351,6 @@ def get_all_barrios(sqlite_db):
 
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'data': dat})
-
-class RentMonthlyDB(Base):
-    __tablename__ = 'RENT_MO'
-    id = Column("b_id_", Integer, primary_key=True)
-    barrio = Column("barrio", String(255))
-    count = Column("created_on_count", Integer)
-    month = Column("month_", Integer)
-    year = Column("year_", Integer)
-    mean_price_usd = Column("price_aprox_usd_mean", Float)
-    mean_price_local = Column("price_aprox_local_currency_mean", Float)
-
-#Get data for the multi-line
-@app.get('/api/monthly/rent/<province>')
-def get_all_monthly_rent(sqlite_db, province=1):
-    """Get the average property value for each barrio in USD over all time"""
-    query = sqlite_db.query(RentMonthlyDB.id, BarrioDB.name, RentMonthlyDB.year,  RentMonthlyDB.month, RentMonthlyDB.mean_price_usd, RentMonthlyDB.mean_price_local).filter(RentMonthlyDB.id == province).join(BarrioDB, BarrioDB.id == RentMonthlyDB.id).all()
-    dat = []
-    for i in query:
-        dat.append({'date': (str(i[3]) + ' ' + str(i[2])), 'price': i[4]})
-    
-    #dat = sorted(dat, key=itemgetter('key'))
-    print (dat)
-
-    return package_data(dat)
-
-class SellMonthlyDB(Base):
-    __tablename__ = 'SELL_MO'
-    id = Column("b_id_", Integer, primary_key=True)
-    barrio = Column("barrio", String(255))
-    count = Column("created_on_count", Integer)
-    month = Column("month_", Integer)
-    year = Column("year_", Integer)
-    mean_price_usd = Column("price_aprox_usd_mean", Float)
-    mean_price_local = Column("price_aprox_local_currency_mean", Float)
-
-# Get property sales data per month for all of the years per province
-@app.get('/api/monthly/sell/<province>')
-def get_all_monthly_sell_by_province(sqlite_db, province=1):
-    query = sqlite_db.query(SellMonthlyDB.id, BarrioDB.name, SellMonthlyDB.year,  SellMonthlyDB.month, SellMonthlyDB.mean_price_usd, SellMonthlyDB.mean_price_local).filter(SellMonthlyDB.id == province).join(BarrioDB, BarrioDB.id == SellMonthlyDB.id).all()
-    dat = []
-    for i in query:
-        dat.append({'date': (str(i[3]) + ' ' + str(i[2])), 'price': i[4]})
-    
-    print (dat)
-    
-    return package_data(dat)
-
-# Get property sales data per month for all of the years for all barrios
-@app.get('/api/monthly/sell')
-def get_all_monthly_sell(sqlite_db):
-    '''
-    Return Object:
-
-    b_id: Barrio ID
-    barrio: Barrio Name
-    Month: Month and year in the format mm/yyyy
-    Mean Price for the Month
-    '''
-    query = sqlite_db.query(SellMonthlyDB.id, BarrioDB.name, SellMonthlyDB.year,  SellMonthlyDB.month, SellMonthlyDB.mean_price_usd, SellMonthlyDB.mean_price_local).join(BarrioDB, BarrioDB.id == SellMonthlyDB.id).all()
-    dat = []
-    for i in query:
-        dat.append({'barrio': i[1], 'date': (str(i[3]) + ' ' + str(i[2])), 'price': i[4]})
-    print (dat)
-       
-    return package_data(dat)
 
 class ImportanceDB(Base):
     __tablename__ = 'IMPORTANCE'
