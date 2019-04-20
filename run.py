@@ -7,7 +7,7 @@ from bottle_sqlalchemy import SQLAlchemyPlugin
 # Import SQLAlchemy
 from sqlalchemy import create_engine, Column, Integer, String, Text, Float, Date
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import func, or_
+from sqlalchemy import func, or_, and_
 
 from operator import itemgetter
 
@@ -79,6 +79,34 @@ class RentDB(Base):
     avg_price_us = Column("price_aprox_usd_mean", Float)
     std_price_us = Column("price_aprox_usd_std", Float)
 
+class SellDB(Base):
+    __tablename__ = 'SELL'
+    id = Column("b_id_", Integer, primary_key=True)
+    max_price_lc = Column("price_aprox_local_currency_max", Float)
+    avg_price_lc = Column("price_aprox_local_currency_mean", Float)
+    std_price_lc = Column("price_aprox_local_currency_std", Float)
+    max_price_us = Column("price_aprox_usd_max", Float)
+    avg_price_us = Column("price_aprox_usd_mean", Float)
+    std_price_us = Column("price_aprox_usd_std", Float)
+
+# Rent monthly
+class RentMODB(Base):
+    __tablename__ = 'RENT_MO'
+    id = Column("index", Integer, primary_key=True)
+    b_id = Column("b_id_", Integer)
+    month = Column("month_", Integer)
+    price = Column("price_aprox_local_currency_mean", Float)
+    year = Column("year_", Integer)
+
+# Selling monthly
+class SellMODB(Base):
+    __tablename__ = 'SELL_MO'
+    id = Column("index", Integer, primary_key=True)
+    b_id = Column("b_id_", Integer)
+    month = Column("month_", Integer)
+    price = Column("price_aprox_local_currency_mean", Float)
+    year = Column("year_", Integer)
+
 class SportsDB(Base):
     __tablename__ = 'SPORT'
     id = Column("index", Integer, primary_key=True)
@@ -126,6 +154,13 @@ class BarrioDB(Base):
     id = Column("id", Integer, primary_key=True)
     name = Column("Barrio", String(255))
 
+class ImportanceDB(Base):
+    __tablename__ = 'IMPORTANCE'
+    id = Column("id", Integer, primary_key=True)
+    feature = Column(String(255))
+    score = Column(Float)
+    year = Column(Integer)
+    b_id = Column(Integer)
 
 def remove_inst_state(a_dict):
     a_dict.pop('_sa_instance_state', None)
@@ -257,6 +292,21 @@ def get_elderly_care_per_barrio(sqlite_db):
 
     return package_data(dat)
 
+@app.get('/api/humanity/elderly_care')
+def get_elderly_care(sqlite_db):
+    """"""
+    query = sqlite_db.query(HumanityDB).filter(or_(HumanityDB.kind.contains('retire'),HumanityDB.kind.contains('elder')))\
+                     .all()
+    q_dat = [remove_inst_state(i.__dict__) for i in query]
+    dat = [None] * 49 #number of barrios
+    for i, row in enumerate(q_dat):
+        if(dat[row['b_id']] == None):
+            dat[row['b_id']] = list()
+        row['name'] = row['name'].title()
+        dat[row['b_id']].append(row)
+
+    return package_data(dat)
+
 @app.get('/api/property/us_val/avg/')
 def get_all_barrio_average_property_value(sqlite_db):
     """Get the average property value for each barrio in USD over all time"""
@@ -264,6 +314,56 @@ def get_all_barrio_average_property_value(sqlite_db):
     dat = [0] * 49
     for i in query:
         dat[i[0]] = i[1]
+
+    return package_data(dat)
+
+# Importance table route
+@app.get('/api/importance/<year>/<barrio>')
+def get_importance(sqlite_db, year, barrio):
+    """Get feature importance in order of importance for a barrio or all if 'all' passed in"""
+    dat = []
+    if barrio == 'all':
+        pass
+    else:
+        query = sqlite_db.query(ImportanceDB).filter(and_(ImportanceDB.year == year, ImportanceDB.b_id == barrio)).all()
+        dat = [{'key': i.feature, 'value': i.score} for i in query]
+        dat = sorted(dat, key=lambda k: k['key'])
+
+    return package_data(dat)
+
+# Barrio rental price average monthly
+@app.get('/api/purchase/monthly/<barrio>')
+def get_monthly_purchase(sqlite_db, barrio):
+    query = sqlite_db.query(SellMODB).filter(and_(SellMODB.b_id == barrio)).all()
+    dat = [{'group': i.year, 'key': i.month, 'value': i.price} for i in query]
+
+    return package_data(dat)
+
+@app.get('/api/purchase/<barrio>')
+def get_barrio_summary_stats(sqlite_db, barrio):
+    query = sqlite_db.query(SellDB.max_price_lc,
+                            SellDB.avg_price_lc,
+                            SellDB.std_price_lc)\
+                                .filter(and_(SellDB.id == barrio)).first()
+    dat = {'max': query[0], 'avg': query[1], 'std': query[2]}
+
+    return package_data(dat)
+
+@app.get('/api/rent/<barrio>')
+def get_barrio_summary_stats(sqlite_db, barrio):
+    query = sqlite_db.query(RentDB.max_price_lc,
+                            RentDB.avg_price_lc,
+                            RentDB.std_price_lc)\
+                                .filter(and_(RentDB.id == barrio)).first()
+    dat = {'max': query[0], 'avg': query[1], 'std': query[2]}
+
+    return package_data(dat)
+
+# Barrio rental price average monthly
+@app.get('/api/rent/monthly/<barrio>')
+def get_monthly_rent(sqlite_db, barrio):
+    query = sqlite_db.query(RentMODB).filter(and_(RentMODB.b_id == barrio)).all()
+    dat = [{'group': i.year, 'key': i.month, 'value': i.price} for i in query]
 
     return package_data(dat)
 
