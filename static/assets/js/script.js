@@ -19,12 +19,7 @@ import {
 } from 'd3-vs';
 
 console.log('It\'s running!');
-// Init Google Fonts
-WebFont.load({
-  google: {
-    families: ['Alegreya:300,400']
-  }
-})
+
 
 // Init Vue app
 const vue_app = new Vue({
@@ -141,7 +136,6 @@ const vue_app = new Vue({
       if(province) {
         // Get object from barrios list
         this.province = this.barrios[province.b_id];
-
         // Update the montly sell data
         this.getMonthly('purchase');
         // Update importance graph
@@ -165,5 +159,4 @@ const vue_app = new Vue({
     this.getBarriosVal('/api/property/us_val/avg/');
     this.getHeatmapVal('/api/humanity/elderly_care');
   }
-  
 });

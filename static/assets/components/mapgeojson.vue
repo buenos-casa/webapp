@@ -41,7 +41,8 @@ export default {
             var max_val = Math.max(newVal);
             var min_val = Math.min(newVal);
 
-            var colours = ["#3B6D8C", "#638CA6", "#F2B705", "#D9923B", "#A67244"];
+            //var colours = ["#3B6D8C", "#638CA6", "#F2B705", "#D9923B", "#A67244"];
+            var colours = ['#3b6d8c', '#00859c', '#009b92', '#1aad70', '#7fb940', '#a3b42b', '#c4ad1f', '#e3a326', '#d69531', '#c7893a', '#b77d40', '#a67244'];
 
             var heatmapColour = d3.scale.linear()
             .domain(d3.range(0, 1, 1.0 / (colours.length - 1)))
@@ -229,9 +230,14 @@ export default {
             pointer-events: all;
         }
         .map-layer {
-            fill: none;
+            fill: whitesmoke;
             stroke: #021019;
             stroke-width: 1px;
+        }
+         path { 
+        stroke: black;
+        stroke-width: 2;
+        fill: nonee;
         }
     }
 </style>
