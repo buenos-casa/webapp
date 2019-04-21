@@ -148,7 +148,7 @@ const vue_app = new Vue({
         // Update importance graph
         this.getImportance(this.province.id, 2016);
 
-        this.vw = 'overview';
+        //this.vw = 'overview';
         this.h_kind = 'purchase';
         this.getMonthly(this.h_kind);
         this.getBarrioCensus(this.province.id);

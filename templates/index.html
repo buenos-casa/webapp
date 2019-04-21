@@ -125,9 +125,8 @@
     <section class="hero is-light is-small is-bold">
         <div v-if="housing_summary" class="container">
         <div class="tile is-ancestor">
-          <div class="tile is-8 ">
+          <div class="tile is-8 is-vertical box">
                 <p class="title is-3 is-spaced">Housing</p>      
-              <div class="card-content">
                   <p class="subtitle is-4">Monthly Trends</p>
                   <div class="buttons .has-addons">
                       <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'button is-selected' : 'button']">
@@ -139,35 +138,46 @@
                   </div>
                   <d3-multi-line
                   :data="month_sell"
+                  :margin="{top: 20, right: 10, bottom: 10, left: 10}"
                   width="100%"
                   height="300px">
                 </d3-multi-line>
-                </div>
+            
           </div>
           <div class="tile is-4 is-parent is-vertical">
               <p class="subtitle is-5">Summary Statistics</p>
-              <div class="is-child">
-                <p class="is-family-sans-serif">Maximum Price </p>
-                <d3-metric :data='housing_summary["max"]'
-                width="50%"
-                height="150px" ></d3-metric>
-              </div>
               <div class="tile is-child">
-                  <p class="is-family-sans-serif">Standard Deviation in Price: </p>
+                <p class="subtitle is-family-sans-serif has-text-centered">Maximum Price </p>
+                    <d3-metric :data='housing_summary["max"]'
+                    :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
+                    :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                    width="100%"
+                    height="150px" ></d3-metric>
+              </div>
+
+              <div class="tile is-child">
+                  <p class="subtitle is-family-sans-serif has-text-centered">Average Price </p> 
+                  <d3-metric :data = 'housing_summary["avg"]'
+                  :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                  :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#A67244', 'metricLabelFontOpacity': '1'}"
+                  width="100%"
+                  height="150px"></d3-metric> 
+              </div>
+
+              <div class="tile is-child">
+                  <p class="subtitle is-family-sans-serif has-text-centered">Standard Deviation in Price </p>
                   <d3-metric :data='housing_summary["std"]'
-                  width="70%"
+                  :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                  :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#D9923B', 'metricLabelFontOpacity': '1'}"
+                  width="100%"
                   height="150px"></d3-metric>
               </div>
 
-              <div class="tile is-child"></div>
-                  <p class="is-family-sans-serif">Average Price </p> 
-                  <d3-metric :data = 'housing_summary["avg"]'
-                  width="80%"
-                  height="150px"></d3-metric> 
-              </div>
+              
             </div>
-          </div>
+
         </div>
+      </div>
     </section>
 
 
