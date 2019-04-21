@@ -113,13 +113,14 @@ def get_all_barrio_average_property_value(sqlite_db):
 # Rent Database
 class RentDB(Base):
     __tablename__ = 'RENT'
-    id = Column("b_id_", Integer, primary_key=True)
-    max_price_lc = Column("price_aprox_local_currency_max", Float)
-    avg_price_lc = Column("price_aprox_local_currency_mean", Float)
-    std_price_lc = Column("price_aprox_local_currency_std", Float)
-    max_price_us = Column("price_aprox_usd_max", Float)
-    avg_price_us = Column("price_aprox_usd_mean", Float)
-    std_price_us = Column("price_aprox_usd_std", Float)
+    id = Column("barrio", Integer, primary_key=True)
+    count = Column("count", Integer)
+    usd_price = Column("mean", Float)
+    tenth_percentile_count = Column("count 10th percentile", Integer)
+    ninty_percentile_count = Column("count 90th percentile", Integer)
+    price_min = Column("min", Float)
+    price_max = Column("max", Float)
+    price_std = Column("std", Float)
 
 @app.get('/api/rent/all/')
 def get_rent_data_all_time(sqlite_db):
@@ -131,11 +132,14 @@ def get_rent_data_all_time(sqlite_db):
 
 @app.get('/api/rent/<barrio>')
 def get_barrio_summary_stats(sqlite_db, barrio):
-    query = sqlite_db.query(RentDB.max_price_lc,
-                            RentDB.avg_price_lc,
-                            RentDB.std_price_lc)\
-                                .filter(and_(RentDB.id == barrio)).first()
-    dat = {'max': query[0], 'avg': query[1], 'std': query[2]}
+    query = sqlite_db.query(RentDB)\
+                     .filter(and_(RentDB.id == barrio))\
+                     .first()
+    dat = {
+        'max': query.price_max,
+        'avg': query.usd_price,
+        'std': query.price_std
+    }
 
     return package_data(dat)
 
@@ -152,22 +156,26 @@ def get_rent_data_all_time(sqlite_db):
 
 class PurchaseDB(Base):
     __tablename__ = 'SELL'
-    id = Column("b_id_", Integer, primary_key=True)
-    max_price_lc = Column("price_aprox_local_currency_max", Float)
-    avg_price_lc = Column("price_aprox_local_currency_mean", Float)
-    std_price_lc = Column("price_aprox_local_currency_std", Float)
-    max_price_us = Column("price_aprox_usd_max", Float)
-    avg_price_us = Column("price_aprox_usd_mean", Float)
-    std_price_us = Column("price_aprox_usd_std", Float)
+    id = Column("barrio", Integer, primary_key=True)
+    count = Column("count", Integer)
+    usd_price = Column("mean", Float)
+    tenth_percentile_count = Column("count 10th percentile", Integer)
+    ninty_percentile_count = Column("count 90th percentile", Integer)
+    price_min = Column("min", Float)
+    price_max = Column("max", Float)
+    price_std = Column("std", Float)
 
 @app.get('/api/purchase/<barrio>')
 def get_barrio_summary_stats(sqlite_db, barrio):
     if(barrio != 'all'):
-        query = sqlite_db.query(PurchaseDB.max_price_lc,
-                                PurchaseDB.avg_price_lc,
-                                PurchaseDB.std_price_lc)\
-                                    .filter(and_(PurchaseDB.id == barrio)).first()
-        dat = {'max': query[0], 'avg': query[1], 'std': query[2]}
+        query = sqlite_db.query(PurchaseDB)\
+                         .filter(and_(PurchaseDB.id == barrio))\
+                         .first()
+        dat = {
+            'max': query.price_max,
+            'avg': query.usd_price,
+            'std': query.price_std
+            }
     else:
         dat = {'max': 0, 'avg': 0, 'std': 0}
 
@@ -177,17 +185,21 @@ def get_barrio_summary_stats(sqlite_db, barrio):
 class RentMODB(Base):
     __tablename__ = 'RENT_MO'
     id = Column("index", Integer, primary_key=True)
-    b_id = Column("b_id_", Integer)
-    month = Column("month_", Integer)
-    local_price = Column("price_aprox_local_currency_mean", Float)
-    usd_price = Column("price_aprox_usd_mean", Float)
-    year = Column("year_", Integer)
+    b_id = Column("barrio", Integer)
+    count = Column("count", Integer)
+    usd_price = Column("mean", Float)
+    tenth_percentile_count = Column("count 10th percentile", Integer)
+    ninty_percentile_count = Column("count 90th percentile", Integer)
+    price_min = Column("min", Float)
+    price_max = Column("max", Float)
+    price_std = Column("std", Float)
+    date = Column("date", Date)
 
 # Barrio rental price average monthly
 @app.get('/api/rent/monthly/<barrio>')
 def get_monthly_rent(sqlite_db, barrio):
-    query = sqlite_db.query(RentMODB.b_id, BarrioDB.name, RentMODB.year,  RentMODB.month, RentMODB.usd_price, RentMODB.local_price).filter(RentMODB.b_id == barrio).join(BarrioDB, BarrioDB.id == RentMODB.b_id).all()
-    dat = [{'group': i.name, 'key': datetime_encoding(i.month, i.year), 'value': i.usd_price} for i in query]
+    query = sqlite_db.query(RentMODB.b_id, BarrioDB.name, RentMODB.date, RentMODB.usd_price).filter(RentMODB.b_id == barrio).join(BarrioDB, BarrioDB.id == RentMODB.b_id).all()
+    dat = [{'group': i.name, 'key': datetime_encoding(str(i.date)), 'value': i.usd_price} for i in query]
 
     return package_data(dat)
 
@@ -195,17 +207,21 @@ def get_monthly_rent(sqlite_db, barrio):
 class SellMODB(Base):
     __tablename__ = 'SELL_MO'
     id = Column("index", Integer, primary_key=True)
-    b_id = Column("b_id_", Integer)
-    month = Column("month_", Integer)
-    local_price = Column("price_aprox_local_currency_mean", Float)
-    usd_price = Column("price_aprox_usd_mean", Float)
-    year = Column("year_", Integer)
+    b_id = Column("barrio", Integer)
+    count = Column("count", Integer)
+    usd_price = Column("mean", Float)
+    tenth_percentile_count = Column("count 10th percentile", Integer)
+    ninty_percentile_count = Column("count 90th percentile", Integer)
+    price_min = Column("min", Float)
+    price_max = Column("max", Float)
+    price_std = Column("std", Float)
+    date = Column("date", Date)
 
 # Barrio rental price average monthly
 @app.get('/api/purchase/monthly/<barrio>')
 def get_monthly_purchase(sqlite_db, barrio):
-    query = sqlite_db.query(SellMODB.id, BarrioDB.name, SellMODB.year, SellMODB.month, SellMODB.usd_price).join(BarrioDB, BarrioDB.id == SellMODB.b_id).filter(and_(SellMODB.b_id == barrio)).all()
-    dat = [{'group': i.name, 'key': dtp.parse(str(i.month) + "/" + str(i.year)).isoformat(), 'value': i.usd_price} for i in query]
+    query = sqlite_db.query(SellMODB.id, BarrioDB.name, SellMODB.date, SellMODB.usd_price).join(BarrioDB, BarrioDB.id == SellMODB.b_id).filter(and_(SellMODB.b_id == barrio)).all()
+    dat = [{'group': i.name, 'key': datetime_encoding(str(i.date)), 'value': i.usd_price} for i in query]
 
     return package_data(dat)
 
@@ -220,8 +236,8 @@ def get_all_monthly_sell(sqlite_db):
     Month: Month and year in the format mm/yyyy
     Mean Price for the Month
     '''
-    query = sqlite_db.query(SellMODB.id, BarrioDB.name, SellMODB.year,  SellMODB.month, SellMODB.usd_price, SellMODB.local_price).join(BarrioDB, BarrioDB.id == SellMODB.b_id).all()
-    dat = [{'group': i.name, 'key': str(i.year) + ' ' + str(i.month), 'value': i.usd_price} for i in query]
+    query = sqlite_db.query(SellMODB.id, BarrioDB.name, SellMODB.date, SellMODB.usd_price, SellMODB.local_price).join(BarrioDB, BarrioDB.id == SellMODB.b_id).all()
+    dat = [{'group': i.name, 'key': datetime_encoding(str(i.date)), 'value': i.usd_price} for i in query]
        
     return package_data(dat)
 
@@ -391,8 +407,8 @@ def package_data(dat):
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'data': dat})
 
-def datetime_encoding(month, year, day=1):
-    return dtp.parse(str(i.month) + "/" + str(day) + "/" + str(i.year)).isoformat()
+def datetime_encoding(date_str):
+    return dtp.parse(date_str).isoformat()
 
 
 ###################################
