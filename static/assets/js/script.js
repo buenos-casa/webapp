@@ -6,6 +6,7 @@ import Multiline from '../components/multiline.vue'
 import Barrio from '../components/barrio.vue'
 import {
   // Basic
+  d3Metric,
   d3Pie,
   d3Line,
   d3MultiLine,
@@ -24,6 +25,7 @@ const vue_app = new Vue({
     Mapgeojson,
     Barrio,
     // TODO: Multiline,
+    d3Metric,
     d3Pie,
     d3Circle,
     d3Line,
