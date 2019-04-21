@@ -157,9 +157,10 @@ def get_barrio_summary_stats(sqlite_db, barrio):
 @app.get('/api/rent/all/us_avg')
 def get_rent_data_all_time(sqlite_db):
     """Get rent data over all time"""
-    query = sqlite_db.query(RentDB.id, RentDB.avg_price_us).all()
+    query = sqlite_db.query(RentDB.id, RentDB.usd_price).all()
 
-    dat = [0] * (max(query,key=itemgetter(1))[0] + 1)
+    dat = [0] * (max(query,key=itemgetter(0))[0] + 1)
+
     for i in query:
         dat[i[0]] = i[1]
 
@@ -415,7 +416,7 @@ class BarrioDB(Base):
 @app.get('/api/barrio/')
 def get_all_barrios(sqlite_db):
     """Get name and ID of all barrios"""
-    query = sqlite_db.query(BarrioDB).all()
+    query = sqlite_db.query(BarrioDB).order_by(BarrioDB.id).all()
     dat = [remove_inst_state(i.__dict__) for i in query]
 
     response.headers['Content-Type'] = 'application/json'
