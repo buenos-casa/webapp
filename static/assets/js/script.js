@@ -12,10 +12,6 @@ import {
   d3HorizontalBar,
   d3VerticalBar,
   d3Circle,
-
-  // Functional
-  d3HorizontalSlider,
-  d3VerticalSlider,
 } from 'd3-vs';
 
 console.log('It\'s running!');
@@ -27,7 +23,7 @@ const vue_app = new Vue({
   delimiters: ['[[', ']]'],
   components: {
     Mapgeojson,
-    Multiline,
+    // TODO: Multiline,
     d3Pie,
     d3Circle,
     d3Line,
@@ -113,12 +109,16 @@ const vue_app = new Vue({
         endpoint = '/api/' + kind + '/monthly/' + this.province.id;
         endpoint_a = '/api/' + kind + '/' + this.province.id;
       } else {
-        endpoint = '/api/' + kind + '/monthly/0';
-        endpoint_a = '/api/' + kind + '/0';
+        endpoint = '/api/' + kind + '/monthly/all';
+        endpoint_a = '/api/' + kind + '/all';
       }
       axios.get(endpoint)
            .then(response => {
               this.month_sell = response.data.data;
+
+              for(let i = 0; i < this.month_sell.length; i++){
+                this.month_sell[i].key = new Date(this.month_sell[i].key);
+              }
            })
            .catch(error => {
              console.log(error);
