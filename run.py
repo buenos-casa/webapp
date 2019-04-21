@@ -416,7 +416,7 @@ class BarrioDB(Base):
 @app.get('/api/barrio/')
 def get_all_barrios(sqlite_db):
     """Get name and ID of all barrios"""
-    query = sqlite_db.query(BarrioDB).all()
+    query = sqlite_db.query(BarrioDB).order_by(BarrioDB.id).all()
     dat = [remove_inst_state(i.__dict__) for i in query]
 
     response.headers['Content-Type'] = 'application/json'
