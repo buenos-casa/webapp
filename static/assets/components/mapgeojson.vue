@@ -159,7 +159,7 @@ export default {
 
             function clicked(d) {
                 var x, y, k;
-
+                
                 // Compute centroid of the selected path
                 if (d && centered !== d) {
                     var centroid = path.centroid(d);

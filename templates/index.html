@@ -192,6 +192,9 @@
 
   </div>
 
+
+  <!-- Analysis Section -->
+
   <div v-if="vw === 'analysis'">
     <section class="hero is-light is-medium is-bold has-text-centered">
       <div class="hero-body">
@@ -228,6 +231,16 @@
           </d3-horizontal-bar>
         </div>
       </div>
+    </section>
+    <section v-if="province" class="hero is-dark is-medium is-bold has-text-centered">
+      <barrio mapname="baires-communes"
+        v-bind:barrio="province.id"
+        v-bind:barrios_val="barrios_val"
+        v-bind:plot_points="heatmap_val"
+        :lat="-34.6"
+        :lon="-58.45"
+        :dims="{'x':800,'y':500}">
+      </barrio>
     </section>
   </div>
 
