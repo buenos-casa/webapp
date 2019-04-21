@@ -81,7 +81,7 @@ def get_all_barrio_data(sqlite_db, barrio):
         dat = dat.mean(0)
         dat = {"own": dat.loc['own'], "rent": dat.loc['rent'], "uinhab": dat.loc['uinhab']}
     else:
-        dat = {"own": 0.57, "rent": 0.18, "uinhab": 0.25}
+        dat = {"own": 0.57, "rent": 0.18, "uinhab": 0.08}
 
     return package_data(dat)
 
