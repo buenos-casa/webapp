@@ -157,9 +157,10 @@ def get_barrio_summary_stats(sqlite_db, barrio):
 @app.get('/api/rent/all/us_avg')
 def get_rent_data_all_time(sqlite_db):
     """Get rent data over all time"""
-    query = sqlite_db.query(RentDB.id, RentDB.avg_price_us).all()
+    query = sqlite_db.query(RentDB.id, RentDB.usd_price).all()
 
-    dat = [0] * (max(query,key=itemgetter(1))[0] + 1)
+    dat = [0] * (max(query,key=itemgetter(0))[0] + 1)
+
     for i in query:
         dat[i[0]] = i[1]
 
