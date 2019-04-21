@@ -2,13 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>{% block title %}{% endblock %} – Kickstart kit</title>
+    <title>{% block title %}{% endblock %} </title>
     <link rel="stylesheet" href="/static/css/style.min.css"/>
   </head>
   <body>
     <div id="app">
       {% block content %}{% endblock %}
     </div>
+    <footer class="footer">
+        <div class="content has-text-centered">
+          <p>
+            This website was made for the fulfillment of <a href="https://poloclub.github.io/cse6242-2019spring-campus/">Georgia Tech's CS6242 class</a> by Jacob Logas, 
+            Nora Mencinger, Breanna Lee, Golder Kamuzora, Zeynab Bahrami Bidoni and Majid Ahmadi.
+          </p>
+        </div>
+      </footer>
     <script src='https://d3js.org/d3.v3.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js"></script>
     <script src="/static/js/script.min.js"></script>

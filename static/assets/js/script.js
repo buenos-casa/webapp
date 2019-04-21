@@ -52,7 +52,12 @@ const vue_app = new Vue({
       housing_summary: undefined,
       province: undefined,
       month_sell: [],
-      sell_data: []
+      sell_data: [],
+      health_stats: [],
+      sports_stats: [],
+      humanity_stats: [],
+      culture_stats: []
+
     }
   },
   methods: {
@@ -139,6 +144,48 @@ const vue_app = new Vue({
              console.log(error);
            })
     },
+    getBasicStats(){
+      var health_endpoint = '/api/health/all';
+      var sports_endpoint = '/api/sports/all';
+      var humanity_endpoint = '/api/humanity/all';
+      var culture_endpoint = '/api/culture/all';
+      
+      
+      axios.get(health_endpoint)
+      .then(response => {
+        this.health_stats = response.data.data;
+        console.log('Health Data: ' + this.health_stats);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+      axios.get(sports_endpoint)
+      .then(response => {
+        this.sports_stats = response.data.data;
+        console.log('Sports Data: ' + this.sports_stats);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+      axios.get(humanity_endpoint)
+      .then(response => {
+        this.humanity_stats = response.data.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+      axios.get(culture_endpoint)
+      .then(response => {
+        this.culture_stats = response.data.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    },
     onProvinceChange: function(province) {
       if(province) {
         // Get object from barrios list
@@ -156,9 +203,6 @@ const vue_app = new Vue({
         this.province = undefined;
         this.getBarrioCensus(undefined);
       }
-    },
-    toggleCard: function(){
-      return {}
     }
   },
   mounted: function() {
@@ -166,6 +210,7 @@ const vue_app = new Vue({
     // Initial map coloring
     this.getBarrios();
     this.getBarrioCensus(undefined);
+    this.getBasicStats();
     this.getBarriosVal('/api/property/us_val/avg/');
     this.getHeatmapVal('/api/humanity/elderly_care');
   }
