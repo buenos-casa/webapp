@@ -6,6 +6,7 @@ import Mapgeojson from '../components/mapgeojson.vue'
 import Multiline from '../components/multiline.vue'
 import {
   // Basic
+  d3Metric,
   d3Pie,
   d3Line,
   d3MultiLine,
@@ -29,6 +30,7 @@ const vue_app = new Vue({
   components: {
     Mapgeojson,
     // TODO: Multiline,
+    d3Metric,
     d3Pie,
     d3Circle,
     d3Line,

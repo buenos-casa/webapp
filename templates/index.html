@@ -44,56 +44,68 @@
                   <!-- Barrio Name -->
                 <div v-if="province">
                     <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p>
+                    <p class="subtitle is-5">[[ province.text ]]</p>
                 </div>
               </div>
             </div>
      
            
 
-          <div class="tile">
-              <div class="tile is-child">
-                <div class="column">
+        <div class="tile is-parent is-vertical">
+          <div class="tile is-child">
+            <div class="columns is-vcentered">
+              <div class="column">
                 <d3-circle
                   :data="barriocensus['own']"
                   :options="{'precision': '0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
-                  :margin="{top: 10, right: 10, bottom: 10, left: 10}"
+                  :margin="{top: 10, right: 0, bottom: 10, left: 50}"
                   height="150px"
                   width="100%">
                 </d3-circle>
-                <p class="subtitle is-5 is-family-sans-serif">Percent<br>Owned</p>
               </div>
-            
-            <div class="tile is-child">
+              <div class="column">
+                <p class="subtitle is-5 is-family-sans-serif">Own<br>Their Home</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="tile is-child">
+            <div class="columns is-vcentered">
               <div class="column">
                 <d3-circle
                   :data="barriocensus['rent']"
                   :options="{'precision': '0', 'labelFontSize': '30', 'circleForeground': '#F2B705'}"
-                  :margin="{top: 10, right: 10, bottom: 10, left: 10}"
+                  :margin="{top: 10, right: 0, bottom: 10, left: 50}"
                   height="150px"
                   width="100%">
                 </d3-circle>
-                <p class="subtitle is-5 is-family-sans-serif">Percent<br>Rented</p>
+              </div>
+              <div class="column">
+                <p class="subtitle is-5 is-family-sans-serif">Rent<br>Their Home</p>
               </div>
             </div>
+          </div>
 
-            <div class="tile is-child">
+          <div class="tile is-child">
+            <div class="columns is-vcentered">
               <div class="column">
                 <d3-circle
                   :data="barriocensus['uinhab']"
                   :options="{'precision': '0', 'labelFontSize': '30','circleForeground': '#A67244'}"
-                  :margin="{top: 10, right: 10, bottom: 10, left: 10}"
+                  :margin="{top: 10, right: 0, bottom: 10, left: 50}"
                   height="150px"
                   width="100%">
                 </d3-circle>
-                <p class="subtitle is-5 is-family-sans-serif">Percent<br>Uninhabited</p>
+              </div>
+              <div class="column">
+                <p class="subtitle is-5 is-family-sans-serif">Homes<br>Uninhabited</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-  
-      
+    </div>
+
   </section>
 
  

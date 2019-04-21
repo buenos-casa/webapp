@@ -410,6 +410,7 @@ class BarrioDB(Base):
     __tablename__ = 'BARRIOS'
     id = Column("id", Integer, primary_key=True)
     name = Column("Barrio", String(255))
+    text = Column("Text", String)
 
 @app.get('/api/barrio/')
 def get_all_barrios(sqlite_db):
