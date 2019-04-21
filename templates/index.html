@@ -6,7 +6,7 @@
 
 {% block content %}
 
-  <section class="hero is-light is-medium is-bold has-text-centered">
+  <section class="hero is-medium is-bold has-text-centered">
     <div class="hero-body">
       <div class="container">
         <!-- Page Title -->
@@ -48,9 +48,8 @@
                 </div>
               </div>
             </div>
-     
-           
 
+            <!--Circles for percentages-->
         <div class="tile is-parent is-vertical">
           <div class="tile is-child">
             <div class="columns is-vcentered">
@@ -105,9 +104,36 @@
         </div>
       </div>
     </div>
+    <!--End of circles for percentages-->
 
   </section>
 
+  <section class="hero is-medium is-bold has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <div class="columns">
+              <!--Horizontal columns showing different metrics per barrio-->
+              <div class="column">
+                  <p class="title is-3">Cultural Landmarks</p>
+                  <!--d3-metric
+                  :data="barrios_val[province.id]"
+                  :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#ffffff', 'metricLabelFontOpacity': '1'}"
+                  width="100%"
+                  height="80px">
+                </d3-metric-->
+              </div>
+              <div class="column">
+                  <p class="title is-3">Health Providers</p>
+              </div>
+              <div class="column">
+                  <p class="title is-3">Humanity</p>
+              </div>
+              <div class="column">
+                  <p class="title is-3">Sports Amenities</p>
+              </div>
+        </div>
+      </div>
+  </section>
  
 
   <!-- Tabular navigation -->
@@ -132,14 +158,16 @@
       </li>
     </ul>
   </div>
+  <!--End of tabular navigation-->
 
+  <!--Overview tab-->
   <div v-if="vw === 'overview'">
-    <section class="hero is-light is-small is-bold">
+    <section class="hero is-small is-bold">
         <div v-if="housing_summary" class="container">
         <div class="tile is-ancestor">
           <div class="tile is-8 is-vertical box">
                 <p class="title is-3 is-spaced">Housing</p>      
-                  <p class="subtitle is-4">Monthly Trends</p>
+                  <p class="subtitle is-4 is-family-sans-serif ">Monthly Trends</p>
                   <div class="buttons .has-addons">
                       <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'button is-selected' : 'button']">
                         Purchase
@@ -193,7 +221,7 @@
     </section>
 
 
-    <section class="hero is-light is-small is-bold">
+    <!---section class="hero is-light is-small is-bold">
       <div class="hero-body">
         <div class="tile is-ancestor">
             <div class="tile is-3">
@@ -209,7 +237,7 @@
                 <p class="title is-3">Sports Amenities</p>
               </div>
         </div>
-    </section>
+    </section-->
 
   </div>
 

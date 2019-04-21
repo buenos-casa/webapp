@@ -13,7 +13,6 @@ import {
   d3HorizontalBar,
   d3VerticalBar,
   d3Circle,
-  d3Metric,
 
   // Functional
   d3HorizontalSlider,
@@ -30,7 +29,6 @@ const vue_app = new Vue({
   components: {
     Mapgeojson,
     // TODO: Multiline,
-    d3Metric,
     d3Pie,
     d3Circle,
     d3Line,
