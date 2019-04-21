@@ -33,6 +33,9 @@ app = bottle.default_app()
 # Install Bottle plugins
 app.install(SQLAlchemyPlugin(db_engine, keyword='sqlite_db'))
 
+###################################
+# Census ##########################
+###################################
 
 # Census Database class
 class CensusDB(Base):
@@ -87,6 +90,10 @@ def get_all_barrio_data(sqlite_db, barrio):
 
     return package_data(dat)
 
+###################################
+# Property Values #################
+###################################
+
 # Property Database
 class PropertyDB(Base):
     __tablename__ = 'PROPERTY'
@@ -109,6 +116,10 @@ def get_all_barrio_average_property_value(sqlite_db):
         dat[i[0]] = i[1]
 
     return package_data(dat)
+
+###################################
+# Rent ############################
+###################################
 
 # Rent Database
 class RentDB(Base):
@@ -154,6 +165,10 @@ def get_rent_data_all_time(sqlite_db):
 
     return package_data(dat)
 
+###################################
+# Purchase Monthly ################
+###################################
+
 class PurchaseDB(Base):
     __tablename__ = 'SELL'
     id = Column("barrio", Integer, primary_key=True)
@@ -181,6 +196,10 @@ def get_barrio_summary_stats(sqlite_db, barrio):
 
     return package_data(dat)
 
+###################################
+# Rent Monthly ####################
+###################################
+
 # Rent monthly
 class RentMODB(Base):
     __tablename__ = 'RENT_MO'
@@ -202,6 +221,10 @@ def get_monthly_rent(sqlite_db, barrio):
     dat = [{'group': i.name, 'key': datetime_encoding(str(i.date)), 'value': i.usd_price} for i in query]
 
     return package_data(dat)
+
+###################################
+# Sell Monthly ####################
+###################################
 
 # Selling monthly
 class SellMODB(Base):
@@ -241,6 +264,10 @@ def get_all_monthly_sell(sqlite_db):
        
     return package_data(dat)
 
+###################################
+# Sports DB #######################
+###################################
+
 class SportsDB(Base):
     __tablename__ = 'SPORT'
     id = Column("index", Integer, primary_key=True)
@@ -259,6 +286,10 @@ def get_all_sports_data(sqlite_db):
         dat[i[0]] = i[1]
 
     return package_data(dat)
+
+###################################
+# Health DB #######################
+###################################
 
 class HealthDB(Base):
     __tablename__ = 'HEALTH'
@@ -291,6 +322,10 @@ def get_hospitals_per_barrio(sqlite_db):
 
     return package_data(dat)
 
+###################################
+# Culture DB ######################
+###################################
+
 class CultureDB(Base):
     __tablename__ = 'CULTURE'
     id = Column("index", Integer, primary_key=True)
@@ -299,6 +334,10 @@ class CultureDB(Base):
     lat = Column("Latitude", Float)
     kind = Column("Type", String(255))
     b_id = Column(Integer)
+
+###################################
+# Humanity DB #####################
+###################################
 
 class HumanityDB(Base):
     __tablename__ = 'HUMANITY'
@@ -336,6 +375,10 @@ def get_elderly_care(sqlite_db):
 
     return package_data(dat)
 
+###################################
+# Commune DB ######################
+###################################
+
 class CommuneDB(Base):
     __tablename__ = 'COMMUNES'
     id = Column("index", Integer, primary_key=True)
@@ -359,6 +402,10 @@ def get_all_communes(sqlite_db):
 
     return package_data(dat)
 
+###################################
+# Barrio DB #######################
+###################################
+
 class BarrioDB(Base):
     __tablename__ = 'BARRIOS'
     id = Column("id", Integer, primary_key=True)
@@ -372,6 +419,11 @@ def get_all_barrios(sqlite_db):
 
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'data': dat})
+
+###################################
+# Feature Importance DB ###########
+###################################
+
 
 class ImportanceDB(Base):
     __tablename__ = 'IMPORTANCE'
@@ -397,7 +449,7 @@ def get_importance(sqlite_db, year, barrio):
 
 ###################################
 # Packaging Functions##############
-###################################git 
+###################################
 
 def remove_inst_state(a_dict):
     a_dict.pop('_sa_instance_state', None)

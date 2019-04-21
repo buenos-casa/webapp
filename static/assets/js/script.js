@@ -28,7 +28,7 @@ const vue_app = new Vue({
   delimiters: ['[[', ']]'],
   components: {
     Mapgeojson,
-    Multiline,
+    // TODO: Multiline,
     d3Pie,
     d3Circle,
     d3Line,
