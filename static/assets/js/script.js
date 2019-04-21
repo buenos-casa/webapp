@@ -12,6 +12,7 @@ import {
   d3HorizontalBar,
   d3VerticalBar,
   d3Circle,
+  d3Metric,
 
   // Functional
   d3HorizontalSlider,
@@ -32,7 +33,8 @@ const vue_app = new Vue({
     d3Circle,
     d3Line,
     d3MultiLine,
-    d3HorizontalBar
+    d3HorizontalBar,
+    d3Metric
   },
   data() {
     return {
@@ -41,6 +43,7 @@ const vue_app = new Vue({
       h_kind: 'purchase',
       barrios: undefined,
       barriocensus: {"own": 0.57, "rent": 0.18, "uinhab": 0.25},
+      opened: false,
       census: [],
       barrios_val: [],
       heatmap_val: [],
@@ -150,6 +153,9 @@ const vue_app = new Vue({
         this.province = undefined;
         this.getBarrioCensus(undefined);
       }
+    },
+    toggleCard: function(){
+      return {}
     }
   },
   mounted: function() {

@@ -224,20 +224,13 @@ export default {
 </script>
 
 <style>
-    .map-wrapper {
-        .background {
+    #map-wrapper .background {
             fill: none;
             pointer-events: all;
-        }
-        .map-layer {
+    }
+    #map-layer .axis path {
             fill: whitesmoke;
             stroke: #021019;
-            stroke-width: 1px;
+            stroke-width: 2px;
         }
-         path { 
-        stroke: black;
-        stroke-width: 2;
-        fill: nonee;
-        }
-    }
 </style>

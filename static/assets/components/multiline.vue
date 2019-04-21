@@ -160,8 +160,6 @@ export default {
 
 <style> /* set the CSS */
 
-body { font: 12px Arial;}
-
 #wrapper path { 
     stroke: steelblue;
     stroke-width: 2;

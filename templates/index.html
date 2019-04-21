@@ -99,6 +99,7 @@
  
 
   <!-- Tabular navigation -->
+  <div class="container">
   <div class="tabs is-boxed">
     <ul>
       <li :class="[ vw === 'overview' ? 'is-active' : '']">
@@ -121,68 +122,67 @@
   </div>
 
   <div v-if="vw === 'overview'">
-    <section class="hero is-warning is-small is-bold">
-      <div class="hero-body">
+    <section class="hero is-light is-small is-bold">
         <div v-if="housing_summary" class="container">
-          <p class="title is-3 is-spaced">Housing</p>
-          <p class="subtitle is-4">Monthly Trends</p>
-          <div>
-            <div class="tags">
-                <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'tag is-primary' : 'tag']">
-                  Purchase
-                </a>
-                <a v-on:click="getMonthly('rent')" @click="h_kind='rent'" :class="[ h_kind == 'rent' ? 'tag is-primary' : 'tag']">
-                  Rent
-                </a>
-            </div>
-            <multiline v-bind:year_val="month_sell"></multiline>
+        <div class="tile is-ancestor">
+          <div class="tile is-8 ">
+                <p class="title is-3 is-spaced">Housing</p>      
+              <div class="card-content">
+                  <p class="subtitle is-4">Monthly Trends</p>
+                  <div class="buttons .has-addons">
+                      <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'button is-selected' : 'button']">
+                        Purchase
+                      </a>
+                      <a v-on:click="getMonthly('rent')" @click="h_kind='rent'" :class="[ h_kind == 'rent' ? 'button is-selected' : 'button']">
+                        Rent
+                      </a> 
+                  </div>
+                  <multiline v-bind:year_val="month_sell"></multiline>
+                </div>
           </div>
-          <p class="subtitle is-5">Summary Statistics</p>
-          <div class="columns">
-            <div class="column">
-              <p>Maximum Price: [[ housing_summary["max"] ]]</p>
-            </div>
-            <div class="column">
-                <p>Standard Deviation in Price: [[ housing_summary["std"] ]]</p>
-            </div>
-            <div class="column">
-                <p>Average Price: [[ housing_summary["avg"] ]]</p>
+          <div class="tile is-4 is-parent is-vertical">
+              <p class="subtitle is-5">Summary Statistics</p>
+              <div class="is-child">
+                <p class="is-family-sans-serif">Maximum Price </p>
+                <d3-metric :data='housing_summary["max"]'
+                width="50%"
+                height="150px" ></d3-metric>
+              </div>
+              <div class="tile is-child">
+                  <p class="is-family-sans-serif">Standard Deviation in Price: </p>
+                  <d3-metric :data='housing_summary["std"]'
+                  width="70%"
+                  height="150px"></d3-metric>
+              </div>
+
+              <div class="tile is-child"></div>
+                  <p class="is-family-sans-serif">Average Price </p> 
+                  <d3-metric :data = 'housing_summary["avg"]'
+                  width="80%"
+                  height="150px"></d3-metric> 
+              </div>
             </div>
           </div>
         </div>
-      </div>
     </section>
 
-    <section class="hero is-warning is-small is-bold">
-      <div class="hero-body">
-        <div class="container">
-          <p class="title is-3">Cultural Landmarks</p>
-        </div>
-      </div>
-    </section>
 
-    <section class="hero is-warning is-small is-bold">
+    <section class="hero is-light is-small is-bold">
       <div class="hero-body">
-        <div class="container">
-          <p class="title is-3">Health Providers</p>
+        <div class="tile is-ancestor">
+            <div class="tile is-3">
+                <p class="title is-3">Cultural Landmarks</p>
+              </div>
+              <div class="tile is-3">
+                <p class="title is-3">Health Providers</p>
+              </div>
+              <div class="tile is-3">
+                <p class="title is-3">Humanity</p>
+              </div>
+              <div class="tile is-3">
+                <p class="title is-3">Sports Amenities</p>
+              </div>
         </div>
-      </div>
-    </section>
-
-    <section class="hero is-warning is-small is-bold">
-      <div class="hero-body">
-        <div class="container">
-          <p class="title is-3">Humanity</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="hero is-warning is-small is-bold">
-      <div class="hero-body">
-        <div class="container">
-          <p class="title is-3">Sports Amenities</p>
-        </div>
-      </div>
     </section>
 
   </div>
@@ -235,6 +235,7 @@
         </div>
     </section>
   </div>
+</div>
 
 {% endblock %}
 
