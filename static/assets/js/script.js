@@ -40,7 +40,7 @@ const vue_app = new Vue({
       st: 'pv',
       h_kind: 'purchase',
       barrios: undefined,
-      barriocensus: {"own": 0.57, "rent": 0.18, "uinhab": 0.25},
+      barriocensus: {"own": 0.57, "rent": 0.18, "uinhab": 0.08},
       census: [],
       barrios_val: [],
       heatmap_val: [],
@@ -93,18 +93,17 @@ const vue_app = new Vue({
     },
     getBarrioCensus(barrio) {
       // If the barrio has been set
-      if(barrio) {
+      if(barrio !== undefined) {
         axios.get('/api/census/barrio/' + barrio)
           .then(response => {
             this.barriocensus = response.data.data;
-            console.log(this.barriocensus);
           })
           .catch(error => {
             console.log(error);
           })
       } else {
         // Overall buenos aires stats
-        this.barriocensus = {"own": 0.57, "rent": 0.18, "uinhab": 0.25};
+        this.barriocensus = {"own": 0.57, "rent": 0.18, "uinhab": 0.08};
       }
     },
     getMonthly(kind) {
