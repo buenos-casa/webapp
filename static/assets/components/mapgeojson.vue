@@ -21,7 +21,8 @@ export default {
         barrios_val: Array,
         heatmap_val: {
             type: Array,
-            required:false
+            required:false,
+            default: () => []
         },
         lat: {
             type: Number,
