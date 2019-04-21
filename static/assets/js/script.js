@@ -1,9 +1,9 @@
 // Include libraries
 import Vue from 'vue'
 import axios from 'axios'
-import WebFont from 'webfontloader'
 import Mapgeojson from '../components/mapgeojson.vue'
 import Multiline from '../components/multiline.vue'
+import Barrio from '../components/barrio.vue'
 import {
   // Basic
   d3Metric,
@@ -11,7 +11,6 @@ import {
   d3Line,
   d3MultiLine,
   d3HorizontalBar,
-  d3VerticalBar,
   d3Circle,
 
   // Functional
@@ -28,6 +27,7 @@ const vue_app = new Vue({
   delimiters: ['[[', ']]'],
   components: {
     Mapgeojson,
+    Barrio,
     // TODO: Multiline,
     d3Pie,
     d3Circle,
