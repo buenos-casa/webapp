@@ -46,10 +46,10 @@ export default {
     },
     methods: {
         drawHeatmap() {
-            if(this.plot_points.length > 0 && this.plot_points[this.barrio]) {
+            if(this.plot_points.length > 0) {
                 const proj = this.projection;
                 this.mapLayer.selectAll("circle")
-                        .data(this.plot_points[this.barrio])
+                        .data(this.plot_points)
                         .enter()
                         .append("circle")
                         .attr("cx", function(d) {
