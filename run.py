@@ -149,22 +149,26 @@ def get_barrio_summary_stats(sqlite_db, barrio):
 @app.get('/api/rent/all/avg')
 def get_all_barrio_of_max(sqlite_db):
     query = sqlite_db.query(RentDB.usd_price).all()
-    return package_data(query)
+    dat = [i[0] for i in query]
+    return package_data(dat)
 
 @app.get('/api/rent/all/max')
 def get_all_barrio_of_max(sqlite_db):
     query = sqlite_db.query(RentDB.price_max).all()
-    return package_data(query)
+    dat = [i[0] for i in query]
+    return package_data(dat)
 
 @app.get('/api/rent/all/min')
 def get_all_barrio_of_min(sqlite_db):
     query = sqlite_db.query(RentDB.price_min).all()
-    return package_data(query)
+    dat = [i[0] for i in query]
+    return package_data(dat)
 
 @app.get('/api/rent/all/std')
 def get_all_barrio_of_std(sqlite_db):
     query = sqlite_db.query(RentDB.price_std).all()
-    return package_data(query)
+    dat = [i[0] for i in query]
+    return package_data(dat)
 
 @app.get('/api/rent/all/tenth')
 def get_all_barrio_of_tenth(sqlite_db):
@@ -214,29 +218,31 @@ def get_barrio_summary_stats(sqlite_db, barrio):
 
         dat = [remove_inst_state(i.__dict__) for i in query]
 
-    print(dat)
-
     return package_data(dat)
 
 @app.get('/api/purchase/all/avg')
 def get_all_barrio_of_max(sqlite_db):
     query = sqlite_db.query(PurchaseDB.usd_price).all()
-    return package_data(query)
+    dat = [i[0] for i in query]
+    return package_data(dat)
 
 @app.get('/api/purchase/all/max')
 def get_all_barrio_of_max(sqlite_db):
     query = sqlite_db.query(PurchaseDB.price_max).all()
-    return package_data(query)
+    dat = [i[0] for i in query]
+    return package_data(dat)
 
 @app.get('/api/purchase/all/min')
 def get_all_barrio_of_min(sqlite_db):
     query = sqlite_db.query(PurchaseDB.price_min).all()
-    return package_data(query)
+    dat = [i[0] for i in query]
+    return package_data(dat)
 
 @app.get('/api/purchase/all/std')
 def get_all_barrio_of_std(sqlite_db):
     query = sqlite_db.query(PurchaseDB.price_std).all()
-    return package_data(query)
+    dat = [i[0] for i in query]
+    return package_data(dat)
 
 @app.get('/api/purchase/all/tenth')
 def get_all_barrio_of_tenth(sqlite_db):
