@@ -152,7 +152,9 @@ export default {
                     .enter().append('path')
                     .attr('d', path)
                     .attr('vector-effect', 'non-scaling-stroke')
-                    .style('fill', '#000000')
+                    .style('fill', 'whitesmoke')
+                    .style('stroke', '#3B6D8C')
+                    .style('stroke-width', '2px')
                     .on('mouseover', mouseover)
                     .on('mouseout', mouseout)
                     .on('click', clicked)
@@ -225,20 +227,13 @@ export default {
 </script>
 
 <style>
-    .map-wrapper {
-        .background {
+    #map-wrapper .background {
             fill: none;
             pointer-events: all;
-        }
-        .map-layer {
+    }
+    #map-layer .axis path {
             fill: whitesmoke;
             stroke: #021019;
-            stroke-width: 1px;
+            stroke-width: 2px;
         }
-         path { 
-        stroke: black;
-        stroke-width: 2;
-        fill: nonee;
-        }
-    }
 </style>

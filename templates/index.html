@@ -6,110 +6,156 @@
 
 {% block content %}
 
-  <section class="hero is-light is-medium is-bold has-text-centered">
+  <section class="hero is-bold has-text-centered">
     <div class="hero-body">
       <div class="container">
         <!-- Page Title -->
-        <p class="title is-1">Buenos Aires</p>
+        <p class="title is-3">Buenos Aires</p>
         <!-- Map container -->
-        <div class="buttons has-addons is-centered">
-                  <span class="button" v-on:click="getBarriosVal('/api/rent/all/us_avg')" @click="st='rat'" :class="[ st === 'rat' ? 'is-active panel-block' : 'panel-block']">
-                    Rent All Time
-                  </span>
-                  <span class="button"  v-on:click="getBarriosVal('/api/property/us_val/avg/')" @click="st='pv'" :class="[ st === 'pv' ? 'is-active panel-block' : 'panel-block']">
-                    Property Value
-                  </span>
-                  <span class="button"  v-on:click="getBarriosVal('/api/sports/all')" @click="st='sf'" :class="[ st === 'sf' ? 'is-active panel-block' : 'panel-block']">
-                    Sports Facilities
-                  </span>
-                  <span class="button"  v-on:click="getBarriosVal('/api/health/hospital/count')" @click="st='hos'" :class="[ st === 'hos' ? 'is-active panel-block' : 'panel-block']">
-                    Hospitals
-                  </span>
-                  <span class="button"  v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" @click="st='ecc'" :class="[ st === 'ecc' ? 'is-active panel-block' : 'panel-block']">
-                    Elder Care Center
-                  </span>
-          </div>
+        
           <div class="tile is-ancestor">
-            <div class="tile is-parent is-vertical is-8">
+            <div class="tile is-parent is-vertical is-7">
+                <div class="buttons has-addons is-centered">
+                    <span v-on:click="getBarriosVal('/api/rent/all/us_avg')" @click="st='rat'" :class="[ st === 'rat' ? 'is-info button' : 'button']">
+                      Rent All Time
+                    </span>
+                    <span v-on:click="getBarriosVal('/api/property/us_val/avg/')" @click="st='pv'" :class="[ st === 'pv' ? 'is-info button' : 'button']">
+                      Property Value
+                    </span>
+                    <span v-on:click="getBarriosVal('/api/sports/all')" @click="st='sf'" :class="[ st === 'sf' ? 'is-info button' : 'button']">
+                      Sports Facilities
+                    </span>
+                    <span v-on:click="getBarriosVal('/api/health/hospital/count')" @click="st='hos'" :class="[ st === 'hos' ? 'is-info button' : 'button']">
+                      Hospitals
+                    </span>
+                    <span v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" @click="st='ecc'" :class="[ st === 'ecc' ? 'is-info button' : 'button']">
+                      Elder Care Center
+                    </span>
+            </div>
               <div class="tile is-child">
                     <mapgeojson mapname='baires-communes'
                     v-bind:barrios_val="barrios_val"
                     :lat="-34.6"
                     :lon="-58.45"
-                    :dims="{'x':800,'y':500}">
+                    :dims="{'x':700,'y':500}">
                 </mapgeojson>
               </div>
-              <div class="tile is-child">
-                  <!-- Barrio Name -->
-                <div v-if="province">
-                    <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
-                    <p class="subtitle is-5">[[ province.text ]]</p>
-                </div>
-              </div>
+              
             </div>
-     
-           
 
-        <div class="tile is-parent is-vertical">
+            <!--Circles for percentages-->
+        <div class="tile is-parent is-vertical is-3">
           <div class="tile is-child">
             <div class="columns is-vcentered">
               <div class="column">
                 <d3-circle
                   :data="barriocensus['own']"
                   :options="{'precision': '0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
-                  :margin="{top: 10, right: 0, bottom: 10, left: 50}"
+                  :margin="{top: 10, right: 0, bottom: 10, left: 0}"
                   height="150px"
                   width="100%">
                 </d3-circle>
-              </div>
-              <div class="column">
-                <p class="subtitle is-5 is-family-sans-serif">Own<br>Their Home</p>
+                <p class="subtitle is-5 has-text-centered is-family-sans-serif">Own<br>Their Home</p>
               </div>
             </div>
           </div>
           
           <div class="tile is-child">
             <div class="columns is-vcentered">
-              <div class="column">
+              <div class="column"> 
                 <d3-circle
                   :data="barriocensus['rent']"
                   :options="{'precision': '0', 'labelFontSize': '30', 'circleForeground': '#F2B705'}"
-                  :margin="{top: 10, right: 0, bottom: 10, left: 50}"
+                  :margin="{top: 10, right: 0, bottom: 10, left: 0}"
                   height="150px"
                   width="100%">
                 </d3-circle>
-              </div>
-              <div class="column">
-                <p class="subtitle is-5 is-family-sans-serif">Rent<br>Their Home</p>
+                <p class="subtitle is-5 has-text-centered is-family-sans-serif">Rent<br>Their Home</p>
               </div>
             </div>
           </div>
 
           <div class="tile is-child">
             <div class="columns is-vcentered">
-              <div class="column">
+              <div class="column">           
                 <d3-circle
                   :data="barriocensus['uinhab']"
                   :options="{'precision': '0', 'labelFontSize': '30','circleForeground': '#A67244'}"
-                  :margin="{top: 10, right: 0, bottom: 10, left: 50}"
+                  :margin="{top: 10, right: 0, bottom: 10, left: 0}"
                   height="150px"
                   width="100%">
                 </d3-circle>
-              </div>
-              <div class="column">
-                <p class="subtitle is-5 is-family-sans-serif">Homes<br>Uninhabited</p>
+                <p class="subtitle is-5 has-text-centered is-family-sans-serif">Homes<br>Uninhabited</p>
               </div>
             </div>
           </div>
         </div>
+        <!--End of circles for percentages-->
+
+        <!--Columns for basic stats-->
+        <div v-if="province" class="tile is-parent is-vertical">
+            <!--Horizontal columns showing different metrics per barrio-->
+            <div class="tile is-child">
+                
+                <d3-metric
+                :data="culture_stats[province.id]"
+                :options="{'metricPrecision': '0', 'metricLabelFontSize': '40', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
+                width="100%"
+                height="80px">
+              </d3-metric>
+              <p class="subtitle is-5 has-text-centered is-family-sans-serif">Cultural Landmarks</p>
+            </div>
+            <div class="tile is-child">
+               
+                <d3-metric
+                :data="health_stats[province.id]"
+                :options="{'metricPrecision': '0', 'metricLabelFontSize': '40', 'metricLabelColor': '#638CA6', 'metricLabelFontOpacity': '1'}"
+                width="100%"
+                height="80px">
+              </d3-metric>
+              <p class="subtitle is-5 has-text-centered is-family-sans-serif">Health Providers</p>
+            </div>
+            <div class="tile is-child">
+                
+                <d3-metric
+                :data="humanity_stats[province.id]"
+                :options="{'metricPrecision': '0', 'metricLabelFontSize': '40', 'metricLabelColor': '#F2B705', 'metricLabelFontOpacity': '1'}"
+                width="100%"
+                height="80px">
+              </d3-metric>
+              <p class="subtitle is-5 has-text-centered is-family-sans-serif">Social Care Centers</p>
+            </div>
+            <div class="tile is-child">
+                
+                <d3-metric
+                :data="sports_stats[province.id]"
+                :options="{'metricPrecision': '0', 'metricLabelFontSize': '40', 'metricLabelColor': '#9923B', 'metricLabelFontOpacity': '1'}"
+                width="100%"
+                height="80px">
+              </d3-metric>
+              <p class="title is-5 has-text-centered is-family-sans-serif">Sports Amenities</p>
+            </div>     
+    </div>
+      </div>
+      <div class="tile is-parent">
+          <!-- Barrio Name -->
+        <div v-if="province" class="tile is-child">
+            <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
+            <p class="subtitle is-5">[[ province.text ]]</p>
+        </div>
+      <div v-if="province" class="tile is-child">
+        <p>We need to add text that has different definitions over here.</p>
+      </div>
       </div>
     </div>
+    
+    
 
   </section>
 
- 
 
   <!-- Tabular navigation -->
+  <div class="container">
   <div class="tabs is-boxed">
     <ul>
       <li :class="[ vw === 'overview' ? 'is-active' : '']">
@@ -130,73 +176,64 @@
       </li>
     </ul>
   </div>
+  <!--End of tabular navigation-->
 
+  <!--Overview tab-->
   <div v-if="vw === 'overview'">
-    <section class="hero is-warning is-small is-bold">
-      <div class="hero-body">
+    <section class="hero is-small is-bold">
         <div v-if="housing_summary" class="container">
-          <p class="title is-3 is-spaced">Housing</p>
-          <p class="subtitle is-4">Monthly Trends</p>
-          <div>
-            <div class="tags">
-                <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'tag is-primary' : 'tag']">
-                  Purchase
-                </a>
-                <a v-on:click="getMonthly('rent')" @click="h_kind='rent'" :class="[ h_kind == 'rent' ? 'tag is-primary' : 'tag']">
-                  Rent
-                </a>
-            </div>
-            <d3-multi-line
-                :data="month_sell"
-                width="100%"
-                height="300px">
-            </d3-multi-line>
-            <!-- <multiline v-bind:year_val="month_sell"></multiline> -->
+        <div class="tile is-ancestor">
+          <div class="tile is-8 is-vertical box">
+                <p class="title is-3 is-spaced">Housing</p>      
+                  <p class="subtitle is-4 is-family-sans-serif ">Monthly Trends</p>
+                  <div class="buttons .has-addons">
+                      <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'button is-info' : 'button']">
+                        Purchase
+                      </a>
+                      <a v-on:click="getMonthly('rent')" @click="h_kind='rent'" :class="[ h_kind == 'rent' ? 'button is-info' : 'button']">
+                        Rent
+                      </a> 
+                  </div>
+                  <d3-multi-line
+                  :data="month_sell"
+                  :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                  width="100%"
+                  height="300px">
+                </d3-multi-line>
+            
           </div>
-          <p class="subtitle is-5">Summary Statistics</p>
-          <div class="columns">
-            <div class="column">
-              <p>Maximum Price: [[ housing_summary["max"] ]]</p>
+          <div class="tile is-4 is-parent is-vertical">
+              <p class="subtitle is-5">Summary Statistics</p>
+              <div class="tile is-child">
+                <p class="subtitle is-family-secondary has-text-centered">Maximum Price </p>
+                    <d3-metric :data='housing_summary["max"]'
+                    :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
+                    :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                    width="100%"
+                    height="150px" ></d3-metric>
+              </div>
+
+              <div class="tile is-child">
+                  <p class="subtitle is-family-secondary has-text-centered">Average Price </p> 
+                  <d3-metric :data = 'housing_summary["avg"]'
+                  :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                  :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#A67244', 'metricLabelFontOpacity': '1'}"
+                  width="100%"
+                  height="150px"></d3-metric> 
+              </div>
+
+              <div class="tile is-child">
+                  <p class="subtitle is-family-secondary has-text-centered">Standard Deviation in Price </p>
+                  <d3-metric :data='housing_summary["std"]'
+                  :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                  :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#D9923B', 'metricLabelFontOpacity': '1'}"
+                  width="100%"
+                  height="150px"></d3-metric>
+              </div>
+
+              
             </div>
-            <div class="column">
-                <p>Standard Deviation in Price: [[ housing_summary["std"] ]]</p>
-            </div>
-            <div class="column">
-                <p>Average Price: [[ housing_summary["avg"] ]]</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="hero is-warning is-small is-bold">
-      <div class="hero-body">
-        <div class="container">
-          <p class="title is-3">Cultural Landmarks</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="hero is-warning is-small is-bold">
-      <div class="hero-body">
-        <div class="container">
-          <p class="title is-3">Health Providers</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="hero is-warning is-small is-bold">
-      <div class="hero-body">
-        <div class="container">
-          <p class="title is-3">Humanity</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="hero is-warning is-small is-bold">
-      <div class="hero-body">
-        <div class="container">
-          <p class="title is-3">Sports Amenities</p>
         </div>
       </div>
     </section>
@@ -207,39 +244,50 @@
   <!-- Analysis Section -->
 
   <div v-if="vw === 'analysis'">
-    <section class="hero is-light is-medium is-bold has-text-centered">
+    <section class="hero is-medium is-bold has-text-centered">
       <div class="hero-body">
         <div class="container">
-          <div class="columns">
-            <div class="column">
-              First Circle
-              <d3-circle
-                :data="0.5"
-                width="100%">
-              </d3-circle>
+          <div class="tile is-ancestor is-vertical">
+            <div class="tile is-parent">
+                  <div class="tile is-child">
+                    <p class="subtitle is-5 is-family-sans-serif">This section covers some analysis on identifying how price gap changes across different barrios and different years. 
+                      This is a unique dataset that has been created by matching longitude/latitude of homes in Properati and the city of Buenos Aires datasets. The price gap analysis enables us to see how the price gap in some barrios is higher than the others.</p>
+                  </div>
+                  <div class="tile is-child">
+                      <d3-circle
+                      :data="0.5"
+                      width="100%">
+                    </d3-circle>
+                  </div>
+                </div>
+            <div class="tile is-parent">
+                  <div class="tile is-child">
+                      <d3-circle
+                      :data="0.5"
+                      width="100%">
+                    </d3-circle>
+                  </div>
+                  <div class="tile is-child">
+                      <p class="subtitle is-5 is-family-sans-serif">This section includes correlation analysis on mislabeled homes at the barrio level. The purpose of this analysis is to show what features cause higher mislabeling rate at the barrio level.
+                        Sellers might mislabel their barrio name by purpose or mistake, but our analysis reveals interesting findings about sellers' behaviour.</p>
+                    </div>
             </div>
-            <div class="column">
-                First Circle
-                <d3-circle
-                  :data="0.5"
-                  width="100%">
-                </d3-circle>
+            <div class="tile is-parent">
+                <div class="tile is-child is-10">
+                    <d3-horizontal-bar
+                    :data="importance_val"
+                    :options="{'axisXLabel': 'Mutual Information Gain'}"
+                    width="100%"
+                    height="500px">
+                  </d3-horizontal-bar>
+                </div>
+                <div class="tile is-child">
+                    <p class="subtitle is-5 is-family-sans-serif">Feature selection</p>
+                  </div>
             </div>
-            <div class="column">
-                First Circle
-                <d3-circle
-                  :data="0.5"
-                  width="100%">
-                </d3-circle>
-            </div>
+          
           </div>
-
-          <d3-horizontal-bar
-            :data="importance_val"
-            :options="{'axisXLabel': 'Mutual Information Gain'}"
-            width="100%"
-            height="500px">
-          </d3-horizontal-bar>
+          </div>
         </div>
       </div>
     </section>
@@ -264,6 +312,7 @@
         </div>
     </section>
   </div>
+</div>
 
 {% endblock %}
 

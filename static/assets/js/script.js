@@ -12,6 +12,10 @@ import {
   d3MultiLine,
   d3HorizontalBar,
   d3Circle,
+
+  // Functional
+  d3HorizontalSlider,
+  d3VerticalSlider,
 } from 'd3-vs';
 
 console.log('It\'s running!');
@@ -25,12 +29,12 @@ const vue_app = new Vue({
     Mapgeojson,
     Barrio,
     // TODO: Multiline,
-    d3Metric,
     d3Pie,
     d3Circle,
     d3Line,
     d3MultiLine,
-    d3HorizontalBar
+    d3HorizontalBar,
+    d3Metric
   },
   data() {
     return {
@@ -38,7 +42,8 @@ const vue_app = new Vue({
       st: 'pv',
       h_kind: 'purchase',
       barrios: undefined,
-      barriocensus: {"own": 0.57, "rent": 0.18, "uinhab": 0.08},
+      barriocensus: {"own": 0.57, "rent": 0.18, "uinhab": 0.25},
+      opened: false,
       census: [],
       barrios_val: [],
       heatmap_val: [],
@@ -47,7 +52,12 @@ const vue_app = new Vue({
       housing_summary: undefined,
       province: undefined,
       month_sell: [],
-      sell_data: []
+      sell_data: [],
+      health_stats: [],
+      sports_stats: [],
+      humanity_stats: [],
+      culture_stats: []
+
     }
   },
   methods: {
@@ -134,6 +144,48 @@ const vue_app = new Vue({
              console.log(error);
            })
     },
+    getBasicStats(){
+      var health_endpoint = '/api/health/all';
+      var sports_endpoint = '/api/sports/all';
+      var humanity_endpoint = '/api/humanity/all';
+      var culture_endpoint = '/api/culture/all';
+      
+      
+      axios.get(health_endpoint)
+      .then(response => {
+        this.health_stats = response.data.data;
+        console.log('Health Data: ' + this.health_stats);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+      axios.get(sports_endpoint)
+      .then(response => {
+        this.sports_stats = response.data.data;
+        console.log('Sports Data: ' + this.sports_stats);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+      axios.get(humanity_endpoint)
+      .then(response => {
+        this.humanity_stats = response.data.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+      axios.get(culture_endpoint)
+      .then(response => {
+        this.culture_stats = response.data.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    },
     onProvinceChange: function(province) {
       if(province) {
         // Get object from barrios list
@@ -143,7 +195,7 @@ const vue_app = new Vue({
         // Update importance graph
         this.getImportance(this.province.id, 2016);
 
-        this.vw = 'overview';
+        //this.vw = 'overview';
         this.h_kind = 'purchase';
         this.getMonthly(this.h_kind);
         this.getBarrioCensus(this.province.id);
@@ -158,6 +210,7 @@ const vue_app = new Vue({
     // Initial map coloring
     this.getBarrios();
     this.getBarrioCensus(undefined);
+    this.getBasicStats();
     this.getBarriosVal('/api/property/us_val/avg/');
     this.getHeatmapVal('/api/humanity/elderly_care');
   }

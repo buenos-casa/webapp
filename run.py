@@ -336,6 +336,16 @@ class CultureDB(Base):
     kind = Column("Type", String(255))
     b_id = Column(Integer)
 
+@app.get('/api/culture/all')
+def get_all_culture_data(sqlite_db):
+    """"""
+    query = sqlite_db.query(CultureDB.b_id, func.count(CultureDB.id).label('per_barrio')).group_by(CultureDB.b_id).all()
+    dat = [0] * 49 #number of barrios
+    for i in query:
+        dat[i[0]] = i[1]
+
+    return package_data(dat)
+
 ###################################
 # Humanity DB #####################
 ###################################
@@ -373,6 +383,16 @@ def get_elderly_care(sqlite_db):
             dat[row['b_id']] = list()
         row['name'] = row['name'].title()
         dat[row['b_id']].append(row)
+
+    return package_data(dat)
+
+@app.get('/api/humanity/all')
+def get_all_humanity_data(sqlite_db):
+    """"""
+    query = sqlite_db.query(HumanityDB.b_id, func.count(HumanityDB.id).label('per_barrio')).group_by(HumanityDB.b_id).all()
+    dat = [0] * 49 #number of barrios
+    for i in query:
+        dat[i[0]] = i[1]
 
     return package_data(dat)
 

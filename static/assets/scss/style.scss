@@ -9,7 +9,8 @@
 
 // Define Bulma default variables
 $family-primary: 'Alegreya', serif;
-$family-sans-serif: 'Lato', sans-serif;
+$family-secondary: 'Lato', sans-serif;
+$family-sans-serif: $family-secondary;
 
 // custom colors - based on the agreed theme
 $blue: #3B6D8C;
