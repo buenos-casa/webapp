@@ -16,25 +16,33 @@
           <div class="tile is-ancestor">
             <div class="tile is-parent is-vertical is-7">
                 <div class="buttons has-addons is-centered">
-                    <span class="button" v-on:click="getBarriosVal('/api/rent/all')" @click="st='rat'" :class="[ st === 'rat' ? 'is-active is-info panel-block' : 'panel-block']">
-                      Rent All Time
+                    <span class="button" v-on:click="getBarriosVal('/api/purchase/all/avg')" @click="st='purchase';met='avg'" :class="[ st === 'purchase' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Purchase Price
                     </span>
-                    <span class="button" v-on:click="getBarriosVal('/api/purchase/all')" @click="st='pat'" :class="[ st === 'pat' ? 'is-active is-info panel-block' : 'panel-block']">
-                        Purchase Prices All Time
-                    </span>
-                    <span class="button"  v-on:click="getBarriosVal('/api/property/us_val/avg/')" @click="st='pv'" :class="[ st === 'pv' ? 'is-active is-info panel-block' : 'panel-block']">
-                      Property Value
-                    </span>
-                    <span class="button"  v-on:click="getBarriosVal('/api/sports/all')" @click="st='sf'" :class="[ st === 'sf' ? 'is-active is-info panel-block' : 'panel-block']">
-                      Sports Facilities
-                    </span>
-                    <span class="button"  v-on:click="getBarriosVal('/api/health/hospital/count')" @click="st='hos'" :class="[ st === 'hos' ? 'is-active is-info panel-block' : 'panel-block']">
-                      Hospitals
-                    </span>
-                    <span class="button"  v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" @click="st='ecc'" :class="[ st === 'ecc' ? 'is-active is-info  panel-block' : 'panel-block']">
-                      Elder Care Center
+                    <span class="button" v-on:click="getBarriosVal('/api/rent/all/avg')" @click="st='rent';met='avg'" :class="[ st === 'rent' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Rent
                     </span>
                 </div>
+                <div v-if="st === 'purchase' || st === 'rent'" class="buttons has-addons is-centered">
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/avg')" @click="met = 'avg'" :class="[ met === 'avg' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Average
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/max')" @click="met = 'max'" :class="[ met === 'max' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Maximum
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/min')" @click="met = 'min'" :class="[ met === 'min' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Minimum
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/std')" @click="met = 'std'" :class="[ met === 'std' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Standard Deviation
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/tenth')" @click="met = 'tenth'" :class="[ met === 'tenth' ? 'is-active is-info panel-block' : 'panel-block']">
+                      > 90th Percentile
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/ninty')" @click="met = 'ninty'" :class="[ met === 'ninty' ? 'is-active is-info panel-block' : 'panel-block']">
+                      < 10th Percentile
+                    </span>
+                </div>                
                 <div class="tile is-child">
                     <mapgeojson mapname='baires-communes'
                         v-bind:barrios_val="barrios_val"
