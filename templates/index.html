@@ -18,8 +18,8 @@
           </div>
         <!-- Map container -->
         
-          <div class="tile is-ancestor">
-            <div class="tile is-parent is-vertical is-7">
+          <div class="tile is-ancestor" style="flex-wrap: wrap;">
+            <div class="tile is-parent is-vertical is-8">
                 
                 <div class="buttons has-addons is-centered">
                     <span class="button" v-on:click="getBarriosVal('/api/rent/all')" @click="st='rat'" :class="[ st === 'rat' ? 'is-active is-info panel-block' : 'panel-block']">
@@ -43,8 +43,13 @@
             </div>
 
         <!--Circles for percentages-->
-        <div class="tile is-parent is-vertical is-3">
+        <div class="tile is-parent is-vertical is-2">
           <div class="tile is-child">
+              <div class="columns is-vcentered">
+                  <div class="column">
+                    <p class="title is-5">Census Information</p>
+                  </div>
+                </div>
             <div class="columns is-vcentered">
               <div class="column">
                 <d3-circle
@@ -92,8 +97,11 @@
         <!--End of circles for percentages-->
 
         <!--Columns for basic stats-->
-        <div v-if="province" class="tile is-parent is-vertical">
+        <div v-if="province" class="tile is-parent is-vertical is-2">
             <!--Horizontal columns showing different metrics per barrio-->
+            <div class="tile is-child" style="height:20px;">
+                <p class="title is-5">Geographic information</p>
+            </div>
             <div class="tile is-child">
                 
                 <d3-metric
@@ -138,12 +146,18 @@
       </div>
       <div class="tile is-parent">
           <!-- Barrio Name -->
-        <div v-if="province" class="tile is-child">
+        <div v-if="province" class="tile is-6 is-child">
             <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
             <p class="subtitle is-5">[[ province.text ]]</p>
         </div>
+        <div v-if="province" class="tile is-child is-1"></div>
       <div v-if="province" class="tile is-child">
-        <p>We need to add text that has different definitions over here.</p>
+        <ul class="is-family-sans-serif">
+          <li><strong>Cultural landmarks</strong>  include museums, libraries and cultural centers.</li>
+          <li><strong>Health providers</strong> is a general term that includes hospitals, pharmacies, community health centers and medical centers.</li>
+          <li><strong>Social care facilities</strong> are varied and include but are not limited to: day cares, social organizations, women's shelters, elder care facilities and boys and girls' clubs. </li>
+          <li><strong>Sports amenities</strong> include sports clubs, sports centers, skate parks and last but not least, football clubs. </li>
+        </ul>
       </div>
       </div>
     </div>
@@ -183,8 +197,8 @@
   <div v-if="vw === 'overview'">
     <section class="hero is-small is-bold">
         <div v-if="housing_summary" class="container">
-        <div class="tile is-ancestor">
-          <div class="tile is-8 is-vertical box">
+        <div class="tile is-ancestor" style="flex-wrap: wrap;">
+          <div class="tile is-parent is-7 is-vertical box" style="flex-wrap: wrap;">
                 <p class="title is-3 is-spaced">Housing</p>      
                   <p class="subtitle is-4 is-family-sans-serif ">Monthly Trends</p>
                   <div class="buttons .has-addons">
@@ -204,9 +218,9 @@
                 </d3-line>
             
           </div>
-          <div class="tile is-4 is-parent is-vertical">
-              <p class="subtitle is-4 has-text-centered has-text-weight-bold">Summary Statistics</p>
+          <div class="tile is-4 is-parent is-vertical"> 
               <div class="tile is-child">
+                <p class="subtitle is-4 has-text-centered has-text-weight-bold">Summary Statistics</p>
                 <p class="subtitle is-family-secondary has-text-centered">Maximum Price  in USD</p>
                     <d3-metric :data='housing_summary["max"]'
                     :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
@@ -248,7 +262,7 @@
             <div class="hero-body">
                 <div class="container">
                     <div class="tile is-ancestor is-vertical">
-                        <div class="tile is-parent">
+                        <div class="tile is-parent" style="flex-wrap: wrap;">
                             <div class="tile is-child is-10">
                                 <d3-horizontal-bar
                                 :data="importance_val"
