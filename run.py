@@ -489,7 +489,8 @@ def get_misclass_points(sqlite_db, barrio):
     query = sqlite_db.query(MislabelledDB).filter(MislabelledDB.b_id == barrio).all()
     dat = [{'lon': i.lon,
             'lat': i.lat,
-            'data': {'price': i.price, 'misclass_as': i.c_b_id, 'kind': i.kind, 'date': datetime_encoding(i.date)},
+            'hue': i.price,
+            'data': {'misclass_as': i.c_b_id, 'kind': i.kind, 'date': datetime_encoding(i.date)},
             } for i in query]
 
     return package_data(dat)

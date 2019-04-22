@@ -13,9 +13,6 @@ import {
   d3HorizontalBar,
   d3Circle,
 
-  // Functional
-  d3HorizontalSlider,
-  d3VerticalSlider,
 } from 'd3-vs';
 
 console.log('It\'s running!');
@@ -40,6 +37,7 @@ const vue_app = new Vue({
     return {
       vw: 'overview',
       st: 'pv',
+      igy: '2015',
       h_kind: 'purchase',
       barrios: undefined,
       barriocensus: {"own": 0.57, "rent": 0.18, "uinhab": 0.25},
@@ -209,7 +207,7 @@ const vue_app = new Vue({
         } else if(this.vw === 'analysis') {
           // Update analytics
           this.getMislabelled(this.province.id);
-          this.getImportance(this.province.id, 2016); 
+          this.getImportance(this.province.id, this.igy); 
         }
       } else {
         this.province = undefined;
