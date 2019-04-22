@@ -286,6 +286,20 @@
                                 <p class="subtitle is-5 is-family-sans-serif">Feature selection</p>
                             </div>
                         </div>
+                        <div class="buttons has-addons is-centered">
+                            <span v-on:click="getImportance(province.id, 2015)" @click="igy='2015'" :class="[ igy === '2015' ? 'is-info button' : 'button']">
+                                2015
+                            </span>
+                            <span v-on:click="getImportance(province.id, 2016)" @click="igy='2016'" :class="[ igy === '2016' ? 'is-info button' : 'button']">
+                                2016
+                            </span>
+                            <span v-on:click="getImportance(province.id, 2017)" @click="igy='2017'" :class="[ igy === '2017' ? 'is-info button' : 'button']">
+                                2017
+                            </span>
+                            <span v-on:click="getImportance(province.id, 2018)" @click="igy='2018'" :class="[ igy === '2018' ? 'is-info button' : 'button']">
+                                2018
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

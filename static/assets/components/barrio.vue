@@ -47,6 +47,19 @@ export default {
     methods: {
         drawHeatmap() {
             if(this.plot_points.length > 0) {
+
+                const max_val = Math.max.apply(Math, this.plot_points.map(function(o) {return o.hue;}));
+                const min_val = Math.min.apply(Math, this.plot_points.map(function(o) {return o.hue;}));
+
+                //var colours = ["#3B6D8C", "#638CA6", "#F2B705", "#D9923B", "#A67244"];
+                var colours = ['#3b6d8c', '#00859c', '#009b92', '#1aad70', '#7fb940', '#a3b42b', '#c4ad1f', '#e3a326', '#d69531', '#c7893a', '#b77d40', '#a67244'];
+
+                var heatmapColour = d3.scale.linear()
+                .domain(d3.range(0, 1, 1.0 / (colours.length - 1)))
+                .range(colours);
+
+                var c = d3.scale.linear().domain(d3.extent(this.plot_points.map(function(o) {return o.hue;}))).range([0,1]);
+
                 const proj = this.projection;
                 this.mapLayer.selectAll("circle")
                         .data(this.plot_points)
@@ -60,7 +73,7 @@ export default {
                             return proj([d.lon, d.lat])[1];
                         })
                         .attr("r", "1px")
-                        .attr("fill", "red")
+                        .attr("fill", function(d) {return heatmapColour(c(d.hue))});
             }
         },
         drawMap() {
