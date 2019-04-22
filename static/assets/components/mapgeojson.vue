@@ -42,7 +42,9 @@ export default {
             var min_val = Math.min(newVal);
 
             //var colours = ["#3B6D8C", "#638CA6", "#F2B705", "#D9923B", "#A67244"];
-            var colours = ['#3b6d8c', '#00859c', '#009b92', '#1aad70', '#7fb940', '#a3b42b', '#c4ad1f', '#e3a326', '#d69531', '#c7893a', '#b77d40', '#a67244'];
+            //var colours = ['#3b6d8c', '#00859c', '#F2B705", "#D9923B"', '#1aad70', '#7fb940', '#a3b42b', '#c4ad1f', '#e3a326', '#d69531', '#c7893a', '#b77d40', '#a67244'];
+             //var colours = ['#ffffff', '#fceafb', '#ffd1e3', '#ffbbb6', '#ffaf7f', '#faa965', '#f0a548', '#e3a326', '#d69531', '#c7893a', '#b77d40', '#a67244']
+             var colours = ['#e7e7ee', '#ccd0de', '#afbbce', '#90a6bd', '#7e9ab3', '#6c8fa9', '#59849f', '#527e9a', '#4a7895', '#437391', '#3b6d8c']
 
             var heatmapColour = d3.scale.linear()
             .domain(d3.range(0, 1, 1.0 / (colours.length - 1)))
