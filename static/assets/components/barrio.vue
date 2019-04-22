@@ -52,7 +52,19 @@ export default {
                 const max_val = 75000; // Math.max.apply(Math, this.plot_points.map(function(o) {return o.hue;}));
                 const min_val = 495000; // Math.min.apply(Math, this.plot_points.map(function(o) {return o.hue;}));
 
-                var colours = ['#db00e5', '#de16e7', '#e22ce9', '#e543eb', '#e959ed', '#ed70f0', '#f086f2', '#f49cf4', '#f7b3f6', '#fbc9f8', '#ffe0fb'].reverse();
+                const colours = [
+                    '#A67244',
+                    '#AB794E',
+                    '#B08158',
+                    '#B58962',
+                    '#BA916D',
+                    '#BF9977',
+                    '#C4A081',
+                    '#C9A88C',
+                    '#CEB096',
+                    '#D3B8A0',
+                    '#D9C0AB'
+                ].reverse();
 
                 var heatmapColour = d3.scale.linear()
                 .domain(d3.range(0, 1, 1.0 / (colours.length - 1)))
@@ -131,7 +143,7 @@ export default {
                     .attr('d', path)
                     .style('fill', function(d) {
                         if(d.properties.barrio === vue_ref.barrio) {
-                            return "#cdd1df";
+                            return "#3b6d8c";
                         } else {
                             return "none";
                         }
