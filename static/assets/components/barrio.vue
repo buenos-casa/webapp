@@ -39,20 +39,20 @@ export default {
             default: {'x': 500, 'y': 500}
         }
     },
-    data() { 
-        return {
-            selected_province: undefined,
+    watch: {
+        plot_points: function(newVal, oldVal) {
+            this.drawHeatmap();
         }
     },
     methods: {
         drawHeatmap() {
+            this.mapLayer.selectAll("circle").remove();
             if(this.plot_points.length > 0) {
 
-                const max_val = Math.max.apply(Math, this.plot_points.map(function(o) {return o.hue;}));
-                const min_val = Math.min.apply(Math, this.plot_points.map(function(o) {return o.hue;}));
+                const max_val = 75000; // Math.max.apply(Math, this.plot_points.map(function(o) {return o.hue;}));
+                const min_val = 495000; // Math.min.apply(Math, this.plot_points.map(function(o) {return o.hue;}));
 
-                //var colours = ["#3B6D8C", "#638CA6", "#F2B705", "#D9923B", "#A67244"];
-                var colours = ['#3b6d8c', '#00859c', '#009b92', '#1aad70', '#7fb940', '#a3b42b', '#c4ad1f', '#e3a326', '#d69531', '#c7893a', '#b77d40', '#a67244'];
+                var colours = ['#db00e5', '#de16e7', '#e22ce9', '#e543eb', '#e959ed', '#ed70f0', '#f086f2', '#f49cf4', '#f7b3f6', '#fbc9f8', '#ffe0fb'].reverse();
 
                 var heatmapColour = d3.scale.linear()
                 .domain(d3.range(0, 1, 1.0 / (colours.length - 1)))
@@ -131,11 +131,19 @@ export default {
                     .attr('d', path)
                     .style('fill', function(d) {
                         if(d.properties.barrio === vue_ref.barrio) {
-                            return "#3b6d8c";
+                            return "#cdd1df";
                         } else {
                             return "none";
                         }
                     })
+                    .style('stroke', function(d) {
+                        if(d.properties.barrio === vue_ref.barrio) {
+                            return "#3B6D8C";
+                        } else {
+                            return "none";
+                        }
+                    })
+                    .style('stroke-width', '2px')
                     .attr('vector-effect', 'non-scaling-stroke')
                     .each(onLoad)
             });
