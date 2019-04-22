@@ -42,10 +42,10 @@
                     <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/std')" @click="met = 'std'" :class="[ met === 'std' ? 'is-active is-info panel-block' : 'panel-block']">
                       Standard Deviation
                     </span>
-                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/tenth')" @click="met = 'tenth'" :class="[ met === 'tenth' ? 'is-active is-info panel-block' : 'panel-block']">
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/ninty')" @click="met = 'tenth'" :class="[ met === 'tenth' ? 'is-active is-info panel-block' : 'panel-block']">
                       > 90th Percentile
                     </span>
-                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/ninty')" @click="met = 'ninty'" :class="[ met === 'ninty' ? 'is-active is-info panel-block' : 'panel-block']">
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/tenth')" @click="met = 'ninty'" :class="[ met === 'ninty' ? 'is-active is-info panel-block' : 'panel-block']">
                       < 10th Percentile
                     </span>
                 </div>                
@@ -342,36 +342,6 @@
                     </div>
                     <div class="tile is-child">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae. Enim facilisis gravida neque convallis a. Porttitor lacus luctus accumsan tortor posuere ac ut consequat semper. Nibh nisl condimentum id venenatis. Nulla aliquet enim tortor at auctor urna nunc. Vitae justo eget magna fermentum iaculis. Sit amet consectetur adipiscing elit ut aliquam purus sit. Pretium lectus quam id leo in vitae turpis massa. Volutpat odio facilisis mauris sit amet massa. Cras adipiscing enim eu turpis egestas pretium. Aliquam purus sit amet luctus venenatis lectus. In mollis nunc sed id. Suscipit tellus mauris a diam maecenas sed enim. Nam at lectus urna duis convallis convallis tellus id interdum. Enim tortor at auctor urna nunc id cursus metus aliquam. Ut sem viverra aliquet eget sit amet tellus cras adipiscing. Nam libero justo laoreet sit amet cursus sit amet. Et netus et malesuada fames. Eu augue ut lectus arcu bibendum at varius vel pharetra.
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section>
-            <div>
-                <div>
-                    <div class="tile is-parent">
-                            <div class="tile is-child">
-                                <p class="subtitle is-5 is-family-sans-serif">This section covers some analysis on identifying how price gap changes across different barrios and different years. 
-                                    This is a unique dataset that has been created by matching longitude/latitude of homes in Properati and the city of Buenos Aires datasets. The price gap analysis enables us to see how the price gap in some barrios is higher than the others.</p>
-                            </div>
-                            <div class="tile is-child">
-                                <d3-circle
-                                    :data="0.5"
-                                    width="100%">
-                                </d3-circle>
-                            </div>
-                    </div>
-                    <div class="tile is-parent">
-                        <div class="tile is-child">
-                            <d3-circle
-                            :data="0.5"
-                            width="100%">
-                        </d3-circle>
-                        </div>
-                        <div class="tile is-child">
-                            <p class="subtitle is-5 is-family-sans-serif">This section includes correlation analysis on mislabeled homes at the barrio level. The purpose of this analysis is to show what features cause higher mislabeling rate at the barrio level.
-                            Sellers might mislabel their barrio name by purpose or mistake, but our analysis reveals interesting findings about sellers' behaviour.</p>
-                        </div>
                     </div>
                 </div>
             </div>
