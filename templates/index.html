@@ -198,7 +198,7 @@
                   <d3-line
                   :data="month_sell"
                   :margin="{top: 20, right: 10, bottom: 10, left: 10}"
-                  :options="{'stroke': '#D9923B'}"
+                  :options="{axisXLaneHeight : 100, fill: '#f2b705', stroke: '#f2b705'}"
                   width="100%"
                   height="300px">
                 </d3-line>
@@ -275,8 +275,7 @@
                             <div class="tile is-child is-10">
                                 <d3-horizontal-bar
                                 :data="importance_val"
-                                :margin="{top: 0, right: 0, bottom: 0, left: 100}"
-                                :options="{'stroke': '#A67244', 'fill': '#F2B705','axisXLabel': 'Mutual Information Gain'}"
+                                :options="{'axisXLabel': 'Mutual Information Gain',axisYLaneWidth: '200', fill: '#f2b705', stroke: '#f2b705'}"
                                 width="100%"
                                 height="500px">
                                 </d3-horizontal-bar>
@@ -319,20 +318,22 @@
                     <div class="tile is-parent" style="flex-wrap: wrap;">
                         <div class="tile is-parent is-vertical" v-if="item.value > 0" v-for="(item, index) in getMislabelledCount">
                             <div class="tile is-child">
-                                <d3-circle
-                                    :data="item.value"
-                                    :options="{labelFontOpacity:'0.0'}"
-                                    width="100px"
-                                    height="100px">
-                                </d3-circle>
-                            </div>
-                            <div class="tile is-vertical">
-                                [[ item.key ]]
+                                <div class="columns is-vcentered">
+                                    <div class="column">
+                                        <d3-circle
+                                            :data="item.value"
+                                            :options="{'precision': '0', labelFontOpacity:'0.0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
+                                            height="100px"
+                                            width="100px">
+                                        </d3-circle>
+                                        <p class="subtitle is-5 has-text-centered is-family-sans-serif">[[ item.key ]]</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="tile is-child">
-                        Lorem ipsum etc
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae. Enim facilisis gravida neque convallis a. Porttitor lacus luctus accumsan tortor posuere ac ut consequat semper. Nibh nisl condimentum id venenatis. Nulla aliquet enim tortor at auctor urna nunc. Vitae justo eget magna fermentum iaculis. Sit amet consectetur adipiscing elit ut aliquam purus sit. Pretium lectus quam id leo in vitae turpis massa. Volutpat odio facilisis mauris sit amet massa. Cras adipiscing enim eu turpis egestas pretium. Aliquam purus sit amet luctus venenatis lectus. In mollis nunc sed id. Suscipit tellus mauris a diam maecenas sed enim. Nam at lectus urna duis convallis convallis tellus id interdum. Enim tortor at auctor urna nunc id cursus metus aliquam. Ut sem viverra aliquet eget sit amet tellus cras adipiscing. Nam libero justo laoreet sit amet cursus sit amet. Et netus et malesuada fames. Eu augue ut lectus arcu bibendum at varius vel pharetra.
                     </div>
                 </div>
                 <!-- TODO: Percentages of difference -->

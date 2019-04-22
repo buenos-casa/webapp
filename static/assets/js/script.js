@@ -73,7 +73,7 @@ const vue_app = new Vue({
           count.push(
             {
               key: this.barrios[i].name,
-              value: vl > 0.01 ? vl : 0,
+              value: vl > 0.05 ? vl : 0,
             }
           );
         }
