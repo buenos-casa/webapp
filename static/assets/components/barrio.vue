@@ -145,16 +145,10 @@ export default {
                         if(d.properties.barrio === vue_ref.barrio) {
                             return "#3b6d8c";
                         } else {
-                            return "none";
+                            return "#e1e2eb";
                         }
                     })
-                    .style('stroke', function(d) {
-                        if(d.properties.barrio === vue_ref.barrio) {
-                            return "#3B6D8C";
-                        } else {
-                            return "none";
-                        }
-                    })
+                    .style('stroke', "#3b6d8c")
                     .style('stroke-width', '2px')
                     .attr('vector-effect', 'non-scaling-stroke')
                     .each(onLoad)
