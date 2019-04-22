@@ -470,6 +470,31 @@ def get_importance(sqlite_db, year, barrio):
 
 
 ###################################
+# Mislabelled Importance DB #######
+###################################
+
+class MislabelledDB(Base):
+    __tablename__ = 'MISLABELLED'
+    id = Column("Unnamed: 0", Integer, primary_key=True)
+    date = Column("created_on", String(255))
+    kind = Column("property_type", String(255))
+    lat = Column(Float)
+    lon = Column(Float)
+    price = Column("price usd", Float)
+    b_id = Column(Integer)
+    c_b_id = Column(Integer)
+
+@app.get('/api/misclassified/<barrio>/points')
+def get_misclass_points(sqlite_db, barrio):
+    query = sqlite_db.query(MislabelledDB).filter(MislabelledDB.b_id == barrio).all()
+    dat = [{'lon': i.lon,
+            'lat': i.lat,
+            'data': {'price': i.price, 'misclass_as': i.c_b_id, 'kind': i.kind, 'date': datetime_encoding(i.date)},
+            } for i in query]
+
+    return package_data(dat)
+
+###################################
 # Packaging Functions##############
 ###################################
 

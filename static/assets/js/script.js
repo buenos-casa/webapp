@@ -56,8 +56,8 @@ const vue_app = new Vue({
       health_stats: [],
       sports_stats: [],
       humanity_stats: [],
-      culture_stats: []
-
+      culture_stats: [],
+      mislabelled: []
     }
   },
   methods: {
@@ -186,19 +186,31 @@ const vue_app = new Vue({
       });
 
     },
+    getMislabelled: function(barrio) {
+      var endpoint = 'api/misclassified/' + barrio + '/points';
+      axios.get(endpoint)
+           .then(response => {
+             this.mislabelled = response.data.data;
+             console.log(this.mislabelled);
+           })
+           .catch(error => {
+            console.log(error); 
+           });
+    },
     onProvinceChange: function(province) {
       if(province) {
         // Get object from barrios list
         this.province = this.barrios[province.b_id];
-        // Update the montly sell data
-        this.getMonthly('purchase');
-        // Update importance graph
-        this.getImportance(this.province.id, 2016);
-
-        //this.vw = 'overview';
-        this.h_kind = 'purchase';
-        this.getMonthly(this.h_kind);
-        this.getBarrioCensus(this.province.id);
+        if(this.vw === 'overview') {
+          //this.vw = 'overview';
+          this.h_kind = 'purchase';
+          this.getMonthly(this.h_kind);
+          this.getBarrioCensus(this.province.id);
+        } else if(this.vw === 'analysis') {
+          // Update analytics
+          this.getMislabelled(this.province.id);
+          this.getImportance(this.province.id, 2016); 
+        }
       } else {
         this.province = undefined;
         this.getBarrioCensus(undefined);
