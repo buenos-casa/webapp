@@ -39,6 +39,7 @@ const vue_app = new Vue({
       st: 'pv',
       igy: '2015',
       h_kind: 'purchase',
+      met: 'avg',
       barrios: undefined,
       barriocensus: {"own": 0.57, "rent": 0.18, "uinhab": 0.25},
       opened: false,
@@ -55,7 +56,8 @@ const vue_app = new Vue({
       sports_stats: [],
       humanity_stats: [],
       culture_stats: [],
-      mislabelled: []
+      mislabelled: [],
+      top_hide: true
     }
   },
   computed: {
@@ -111,6 +113,7 @@ const vue_app = new Vue({
       axios.get(endpoint)
            .then(response => {
             this.barrios_val = response.data.data;
+            console.log(this.barrios_val);
            })
            .catch(error => {
              console.log(error);
