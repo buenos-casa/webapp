@@ -6,11 +6,13 @@
 // Import fonts
 @import url('https://fonts.googleapis.com/css?family=Alegreya');
 @import url('https://fonts.googleapis.com/css?family=Lato');
+@import url("https://fonts.googleapis.com/css?family=Alef");
+@import url("https://fonts.googleapis.com/css?family=Hind+Guntur");
 
 // Define Bulma default variables
 $family-primary: 'Alegreya', serif;
-$family-secondary: 'Lato', sans-serif;
-$family-sans-serif: $family-secondary;
+$family-secondary: 'Alef', sans-serif; //'Hind Guntur', sans-serif;
+$family-sans-serif: 'Alef', sans-serif;
 
 // custom colors - based on the agreed theme
 $blue: #3B6D8C;
@@ -22,9 +24,12 @@ $brown: #A67244;
 // Buttons
 $button-active-color: #F2B705;
 $button-text-hover-color: black; 
+$info: #638CA6;
 
 //Color gradient:
 //background-image: linear-gradient(to right, #3b6d8c, #00859c, #009b92, #1aad70, #7fb940, #a3b42b, #c4ad1f, #e3a326, #d69531, #c7893a, #b77d40, #a67244);
+//orange-range: #ffffff, #fceafb, #ffd1e3, #ffbbb6, #ffaf7f, #faa965, #f0a548, #e3a326, #d69531, #c7893a, #b77d40, #a67244
+//blue-range: background-image: linear-gradient(to right, #ffffff, #e7e7ee, #ccd0de, #afbbce, #90a6bd, #7e9ab3, #6c8fa9, #59849f, #527e9a, #4a7895, #437391, #3b6d8c);
 
 // Import Bulma
 @import "~bulma";

@@ -58,6 +58,44 @@ const vue_app = new Vue({
       mislabelled: []
     }
   },
+  computed: {
+    getMislabelledCount: function() {
+      var count = new Array();
+
+      var filled_per = 0.0;
+
+      for(let i = 0; i < this.barrios.length; i++) {
+        var vl = this.mislabelled.reduce((acc, cur) => cur.data.misclass_as === i ? ++acc : acc, 0) / this.mislabelled.length;
+        vl = Math.round(vl * 100) / 100
+        if(vl > 0.01) {
+          filled_per += vl;
+          count.push(
+            {
+              key: this.barrios[i].name,
+              value: vl > 0.01 ? vl : 0,
+            }
+          );
+        }
+      }
+
+      if(filled_per <= 1.0) {
+        count.push(
+          {
+            key: 'Other',
+            value: Math.round((1 - filled_per) * 100) / 100
+          }
+        );
+      }
+
+      count.sort((a,b) => a.value - b.value);
+
+      count.reverse();
+
+      console.log(count);
+
+      return count;
+    }
+  },
   methods: {
     getBarrios() {
       axios.get('/api/barrio/')
@@ -199,11 +237,11 @@ const vue_app = new Vue({
       if(province) {
         // Get object from barrios list
         this.province = this.barrios[province.b_id];
+        this.getBarrioCensus(this.province.id);
         if(this.vw === 'overview') {
           //this.vw = 'overview';
           this.h_kind = 'purchase';
           this.getMonthly(this.h_kind);
-          this.getBarrioCensus(this.province.id);
         } else if(this.vw === 'analysis') {
           // Update analytics
           this.getMislabelled(this.province.id);

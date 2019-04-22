@@ -16,19 +16,22 @@
           <div class="tile is-ancestor">
             <div class="tile is-parent is-vertical is-7">
                 <div class="buttons has-addons is-centered">
-                    <span v-on:click="getBarriosVal('/api/rent/all/us_avg')" @click="st='rat'" :class="[ st === 'rat' ? 'is-info button' : 'button']">
+                    <span class="button" v-on:click="getBarriosVal('/api/rent/all')" @click="st='rat'" :class="[ st === 'rat' ? 'is-active is-info panel-block' : 'panel-block']">
                       Rent All Time
                     </span>
-                    <span v-on:click="getBarriosVal('/api/property/us_val/avg/')" @click="st='pv'" :class="[ st === 'pv' ? 'is-info button' : 'button']">
+                    <span class="button" v-on:click="getBarriosVal('/api/purchase/all')" @click="st='pat'" :class="[ st === 'pat' ? 'is-active is-info panel-block' : 'panel-block']">
+                        Purchase Prices All Time
+                    </span>
+                    <span class="button"  v-on:click="getBarriosVal('/api/property/us_val/avg/')" @click="st='pv'" :class="[ st === 'pv' ? 'is-active is-info panel-block' : 'panel-block']">
                       Property Value
                     </span>
-                    <span v-on:click="getBarriosVal('/api/sports/all')" @click="st='sf'" :class="[ st === 'sf' ? 'is-info button' : 'button']">
+                    <span class="button"  v-on:click="getBarriosVal('/api/sports/all')" @click="st='sf'" :class="[ st === 'sf' ? 'is-active is-info panel-block' : 'panel-block']">
                       Sports Facilities
                     </span>
-                    <span v-on:click="getBarriosVal('/api/health/hospital/count')" @click="st='hos'" :class="[ st === 'hos' ? 'is-info button' : 'button']">
+                    <span class="button"  v-on:click="getBarriosVal('/api/health/hospital/count')" @click="st='hos'" :class="[ st === 'hos' ? 'is-active is-info panel-block' : 'panel-block']">
                       Hospitals
                     </span>
-                    <span v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" @click="st='ecc'" :class="[ st === 'ecc' ? 'is-info button' : 'button']">
+                    <span class="button"  v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" @click="st='ecc'" :class="[ st === 'ecc' ? 'is-active is-info  panel-block' : 'panel-block']">
                       Elder Care Center
                     </span>
                 </div>
@@ -132,7 +135,7 @@
                 width="100%"
                 height="80px">
               </d3-metric>
-              <p class="title is-5 has-text-centered is-family-sans-serif">Sports Amenities</p>
+              <p class="subtitle is-5 has-text-centered is-family-sans-serif">Sports Amenities</p>
             </div>     
     </div>
       </div>
@@ -179,12 +182,12 @@
     </div>
     <!--End of tabular navigation-->
 
-    <!--Overview tab-->
-    <div v-if="vw === 'overview'">
-        <section class="hero is-small is-bold">
-            <div v-if="housing_summary" class="container">
+<!--Overview tab-->
+<div v-if="vw === 'overview'">
+    <section class="hero is-small is-bold">
+        <div v-if="housing_summary" class="container">
             <div class="tile is-ancestor">
-            <div class="tile is-8 is-vertical box">
+                <div class="tile is-8 is-vertical box">
                     <p class="title is-3 is-spaced">Housing</p>      
                     <p class="subtitle is-4 is-family-sans-serif ">Monthly Trends</p>
                     <div class="buttons .has-addons">
@@ -201,45 +204,39 @@
                     width="100%"
                     height="300px">
                     </d3-multi-line>
-                
-            </div>
-            <div class="tile is-4 is-parent is-vertical">
-                <p class="subtitle is-5">Summary Statistics</p>
-                <div class="tile is-child">
-                    <p class="subtitle is-family-secondary has-text-centered">Maximum Price </p>
+                </div>
+                <div class="tile is-4 is-parent is-vertical">
+                    <p class="subtitle is-5">Summary Statistics</p>
+                    <div class="tile is-child">
+                        <p class="subtitle is-family-secondary has-text-centered">Maximum Price </p>
                         <d3-metric :data='housing_summary["max"]'
                         :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
                         :margin="{top: 20, right: 10, bottom: 10, left: 10}"
                         width="100%"
                         height="150px" ></d3-metric>
-                </div>
+                    </div>
 
-                <div class="tile is-child">
-                    <p class="subtitle is-family-secondary has-text-centered">Average Price </p> 
-                    <d3-metric :data = 'housing_summary["avg"]'
-                    :margin="{top: 20, right: 10, bottom: 10, left: 10}"
-                    :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#A67244', 'metricLabelFontOpacity': '1'}"
-                    width="100%"
-                    height="150px"></d3-metric> 
+                    <div class="tile is-child">
+                        <p class="subtitle is-family-secondary has-text-centered">Average Price </p> 
+                        <d3-metric :data = 'housing_summary["avg"]'
+                        :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                        :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#A67244', 'metricLabelFontOpacity': '1'}"
+                        width="100%"
+                        height="150px"></d3-metric> 
+                    </div>
+                    <div class="tile is-child">
+                        <p class="subtitle is-family-secondary has-text-centered">Standard Deviation in Price </p>
+                        <d3-metric :data='housing_summary["std"]'
+                        :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                        :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#D9923B', 'metricLabelFontOpacity': '1'}"
+                        width="100%"
+                        height="150px"></d3-metric>
+                    </div>
                 </div>
-
-                <div class="tile is-child">
-                    <p class="subtitle is-family-secondary has-text-centered">Standard Deviation in Price </p>
-                    <d3-metric :data='housing_summary["std"]'
-                    :margin="{top: 20, right: 10, bottom: 10, left: 10}"
-                    :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#D9923B', 'metricLabelFontOpacity': '1'}"
-                    width="100%"
-                    height="150px"></d3-metric>
-                </div>
-
-                
-                </div>
-
             </div>
         </div>
-        </section>
-
-    </div>
+    </section>
+</div>
 
 
     <!-- Analysis Section -->
@@ -304,23 +301,49 @@
                 </div>
             </div>
         </section>
-        <section v-if="province" class="hero is-dark is-medium is-bold has-text-centered">
-            <barrio mapname="baires-communes"
-                v-bind:barrio="province.id"
-                v-bind:plot_points="mislabelled"
-                :lat="-34.6"
-                :lon="-58.45"
-                :dims="{'x':800,'y':500}">
-            </barrio>
+        <section v-if="mislabelled" class="hero is-medium is-bold has-text-centered">
+            <div class="columns">
+                <div class="column">
+                    <barrio mapname="baires-communes"
+                        v-bind:barrio="province.id"
+                        v-bind:plot_points="mislabelled"
+                        :lat="-34.6"
+                        :lon="-58.45"
+                        :dims="{'x':500,'y':500}"
+                        :key="province">
+                    </barrio>
+                </div>
+                <div class="column tile is-parent">
+                    <div class="tile is-parent" style="flex-wrap: wrap;">
+                        <div class="tile is-parent is-vertical" v-if="item.value > 0" v-for="(item, index) in getMislabelledCount">
+                            <div class="tile is-child">
+                                <d3-circle
+                                    :data="item.value"
+                                    :options="{labelFontOpacity:'0.0'}"
+                                    width="100px"
+                                    height="100px">
+                                </d3-circle>
+                            </div>
+                            <div class="tile is-vertical">
+                                [[ item.key ]]
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tile is-child">
+                        Lorem ipsum etc
+                    </div>
+                </div>
+                <!-- TODO: Percentages of difference -->
+            </div>
         </section>
     </div>
 
     <div v-if="vw === 'survey'">
         <section class="hero is-light is-medium is-bold has-text-centered">
             <div class="hero-body">
-            <div class="container">
-                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="398" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
-            </div>
+                <div class="container">
+                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="398" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+                </div>
             </div>
         </section>
     </div>
