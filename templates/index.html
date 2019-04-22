@@ -10,11 +10,17 @@
     <div class="hero-body">
       <div class="container">
         <!-- Page Title -->
-        <p class="title is-3">Buenos Aires</p>
+        <p class="title is-3">Housing Trends in Buenos Aires</p>
+        <div v-if="top_hide === true" class="notification">
+            <button @click="top_hide=false" class="delete"></button>
+            The heatmap below uses <a href='https://www.properati.com.ar'> Properati's</a> rental and property listings to show the average household rent and sale price in the 
+          <a href="http://www.buenosaires.gob.ar/">Autonomous City of Buenos Aires</a>. It also shows the average property value per neighborhood in the city. Click on each <a href="https://en.wikipedia.org/wiki/Neighbourhoods_of_Buenos_Aires"><strong>barrio</strong></a> to get more details!</p>     
+          </div>
         <!-- Map container -->
         
-          <div class="tile is-ancestor">
-            <div class="tile is-parent is-vertical is-7">
+          <div class="tile is-ancestor" style="flex-wrap: wrap;">
+            <div class="tile is-parent is-vertical is-8">
+                
                 <div class="buttons has-addons is-centered">
                     <span class="button" v-on:click="getBarriosVal('/api/purchase/all/avg')" @click="st='purchase';met='avg'" :class="[ st === 'purchase' ? 'is-active is-info panel-block' : 'panel-block']">
                       Purchase Price
@@ -54,8 +60,13 @@
             </div>
 
         <!--Circles for percentages-->
-        <div class="tile is-parent is-vertical is-3">
+        <div class="tile is-parent is-vertical is-2">
           <div class="tile is-child">
+              <div class="columns is-vcentered">
+                  <div class="column">
+                    <p class="title is-5">Census Information</p>
+                  </div>
+                </div>
             <div class="columns is-vcentered">
               <div class="column">
                 <d3-circle
@@ -103,8 +114,11 @@
         <!--End of circles for percentages-->
 
         <!--Columns for basic stats-->
-        <div v-if="province" class="tile is-parent is-vertical">
+        <div v-if="province" class="tile is-parent is-vertical is-2">
             <!--Horizontal columns showing different metrics per barrio-->
+            <div class="tile is-child" style="height:20px;">
+                <p class="title is-5">Geographic information</p>
+            </div>
             <div class="tile is-child">
                 
                 <d3-metric
@@ -149,12 +163,18 @@
       </div>
       <div class="tile is-parent">
           <!-- Barrio Name -->
-        <div v-if="province" class="tile is-child">
+        <div v-if="province" class="tile is-6 is-child">
             <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
             <p class="subtitle is-5">[[ province.text ]]</p>
         </div>
+        <div v-if="province" class="tile is-child is-1"></div>
       <div v-if="province" class="tile is-child">
-        <p>We need to add text that has different definitions over here.</p>
+        <ul class="is-family-sans-serif">
+          <li><strong>Cultural landmarks</strong>  include museums, libraries and cultural centers.</li>
+          <li><strong>Health providers</strong> is a general term that includes hospitals, pharmacies, community health centers and medical centers.</li>
+          <li><strong>Social care facilities</strong> are varied and include but are not limited to: day cares, social organizations, women's shelters, elder care facilities and boys and girls' clubs. </li>
+          <li><strong>Sports amenities</strong> include sports clubs, sports centers, skate parks and last but not least, football clubs. </li>
+        </ul>
       </div>
       </div>
     </div>
@@ -190,57 +210,60 @@
     </div>
     <!--End of tabular navigation-->
 
-<!--Overview tab-->
-<div v-if="vw === 'overview'">
+  <!--Overview tab-->
+  <div v-if="vw === 'overview'">
     <section class="hero is-small is-bold">
         <div v-if="housing_summary" class="container">
-            <div class="tile is-ancestor">
-                <div class="tile is-8 is-vertical box">
-                    <p class="title is-3 is-spaced">Housing</p>      
-                    <p class="subtitle is-4 is-family-sans-serif ">Monthly Trends</p>
-                    <div class="buttons .has-addons">
-                        <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'button is-info' : 'button']">
-                            Purchase
-                        </a>
-                        <a v-on:click="getMonthly('rent')" @click="h_kind='rent'" :class="[ h_kind == 'rent' ? 'button is-info' : 'button']">
-                            Rent
-                        </a> 
-                    </div>
-                    <d3-multi-line
-                    :data="month_sell"
-                    :margin="{top: 20, right: 10, bottom: 10, left: 10}"
-                    :options="{axisXLaneHeight : 100, fill: '#f2b705', stroke: '#f2b705'}"
+        <div class="tile is-ancestor" style="flex-wrap: wrap;">
+          <div class="tile is-parent is-7 is-vertical box" style="flex-wrap: wrap;">
+                <p class="title is-3 is-spaced">Housing</p>      
+                  <p class="subtitle is-4 is-family-sans-serif ">Monthly Trends</p>
+                  <div class="buttons .has-addons">
+                      <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'button is-info is-selected is-family-sans-serif' : 'button is-family-sans-serif']">
+                        Purchase
+                      </a>
+                      <a v-on:click="getMonthly('rent')" @click="h_kind='rent'" :class="[ h_kind == 'rent' ? 'button is-info is-selected is-family-sans-serif' : 'button is-family-sans-serif']">
+                        Rent
+                      </a> 
+                  </div>
+                  <d3-line
+                  :data="month_sell"
+                  :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                  :options="{axisXLaneHeight : 100, fill: '#f2b705', stroke: '#f2b705'}"
+                  width="100%"
+                  height="300px">
+                </d3-line>
+            
+          </div>
+          <div class="tile is-4 is-parent is-vertical"> 
+              <div class="tile is-child">
+                <p class="subtitle is-4 has-text-centered has-text-weight-bold">Summary Statistics</p>
+                <p class="subtitle is-family-secondary has-text-centered">Maximum Price  in USD</p>
+                    <d3-metric :data='housing_summary["max"]'
+                    :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
+                    :margin="{top: 0, right: 10, bottom: 0, left: 10}"
                     width="100%"
-                    height="300px">
-                    </d3-multi-line>
+                    height="50px">
+                    </d3-metric>
                 </div>
-                <div class="tile is-4 is-parent is-vertical">
-                    <p class="subtitle is-5">Summary Statistics</p>
-                    <div class="tile is-child">
-                        <p class="subtitle is-family-secondary has-text-centered">Maximum Price </p>
-                        <d3-metric :data='housing_summary["max"]'
-                        :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
-                        :margin="{top: 20, right: 10, bottom: 10, left: 10}"
-                        width="100%"
-                        height="150px" ></d3-metric>
-                    </div>
 
-                    <div class="tile is-child">
-                        <p class="subtitle is-family-secondary has-text-centered">Average Price </p> 
-                        <d3-metric :data = 'housing_summary["avg"]'
-                        :margin="{top: 20, right: 10, bottom: 10, left: 10}"
-                        :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#A67244', 'metricLabelFontOpacity': '1'}"
-                        width="100%"
-                        height="150px"></d3-metric> 
-                    </div>
-                    <div class="tile is-child">
-                        <p class="subtitle is-family-secondary has-text-centered">Standard Deviation in Price </p>
-                        <d3-metric :data='housing_summary["std"]'
-                        :margin="{top: 20, right: 10, bottom: 10, left: 10}"
-                        :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#D9923B', 'metricLabelFontOpacity': '1'}"
-                        width="100%"
-                        height="150px"></d3-metric>
-                    </div>
+              <div class="tile is-child">
+                  <p class="subtitle is-family-secondary has-text-centered">Average Price in USD</p> 
+                  <d3-metric :data = 'housing_summary["avg"]'
+                  :margin="{top: 0, right: 10, bottom: 0, left: 10}"
+                  :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#A67244', 'metricLabelFontOpacity': '1'}"
+                  width="100%"
+                  height="50px"></d3-metric> 
+              </div>
+
+                <div class="tile is-child">
+                    <p class="subtitle is-family-secondary has-text-centered">Standard Deviation in Price </p>
+                    <d3-metric :data='housing_summary["std"]'
+                    :margin="{top: 0, right: 10, bottom: 0, left: 10}"
+                    :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#D9923B', 'metricLabelFontOpacity': '1'}"
+                    width="100%"
+                    height="50px"></d3-metric>
+                </div>
                 </div>
             </div>
         </div>
@@ -256,7 +279,7 @@
             <div class="hero-body">
                 <div class="container">
                     <div class="tile is-ancestor is-vertical">
-                        <div class="tile is-parent">
+                        <div class="tile is-parent" style="flex-wrap: wrap;">
                             <div class="tile is-child is-10">
                                 <d3-horizontal-bar
                                 :data="importance_val"

@@ -56,7 +56,8 @@ const vue_app = new Vue({
       sports_stats: [],
       humanity_stats: [],
       culture_stats: [],
-      mislabelled: []
+      mislabelled: [],
+      top_hide: true
     }
   },
   computed: {
