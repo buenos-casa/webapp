@@ -7,7 +7,8 @@ module.exports = {
     'js/script.min.js': './static/assets/js/script.js',
     'css/style.min.css': './static/assets/scss/style.scss',
     'components/mapgeojson.min.vue': './static/assets/components/mapgeojson.vue',
-    'components/multiline.min.vue': './static/assets/components/multiline.vue'
+    'components/multiline.min.vue': './static/assets/components/multiline.vue',
+    'components/barrio.min.vue': './static/assets/components/barrio.vue'
   },
   output: {
     path: path.resolve(__dirname, 'static'),
@@ -63,13 +64,6 @@ module.exports = {
           scss: 'style!css!scss'
         }
       }
-    })//,
-    //new BrowserSyncPlugin({
-      // browse to http://localhost:3000/ during development,
-      // ./public directory is being served
-      //host: 'localhost',
-      //port: 8000,
-      //server: { baseDir: ['public'] }
-    //})
+    })
   ]
 }

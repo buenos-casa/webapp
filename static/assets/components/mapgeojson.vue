@@ -21,7 +21,8 @@ export default {
         barrios_val: Array,
         heatmap_val: {
             type: Array,
-            required:false
+            required:false,
+            default: () => []
         },
         lat: {
             type: Number,
@@ -163,7 +164,7 @@ export default {
 
             function clicked(d) {
                 var x, y, k;
-
+                
                 // Compute centroid of the selected path
                 if (d && centered !== d) {
                     var centroid = path.centroid(d);
