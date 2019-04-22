@@ -133,14 +133,6 @@ class RentDB(Base):
     price_max = Column("max", Float)
     price_std = Column("std", Float)
 
-@app.get('/api/rent/all/')
-def get_rent_data_all_time(sqlite_db):
-    """Get rent data over all time"""
-    query = sqlite_db.query(RentDB).all()
-    dat = [remove_inst_state(i.__dict__) for i in query]
-
-    return package_data(dat)
-
 @app.get('/api/rent/<barrio>')
 def get_barrio_summary_stats(sqlite_db, barrio):
     query = sqlite_db.query(RentDB)\
@@ -154,7 +146,7 @@ def get_barrio_summary_stats(sqlite_db, barrio):
 
     return package_data(dat)
 
-@app.get('/api/rent/all/us_avg')
+@app.get('/api/rent/all')
 def get_rent_data_all_time(sqlite_db):
     """Get rent data over all time"""
     query = sqlite_db.query(RentDB.id, RentDB.usd_price).all()
@@ -193,7 +185,13 @@ def get_barrio_summary_stats(sqlite_db, barrio):
             'std': query.price_std
             }
     else:
-        dat = {'max': 0, 'avg': 0, 'std': 0}
+        """Get rent data over all time"""
+        query = sqlite_db.query(PurchaseDB.id, PurchaseDB.usd_price).all()
+
+        dat = [0] * (max(query,key=itemgetter(0))[0] + 1)
+
+        for i in query:
+            dat[i[0]] = i[1]
 
     return package_data(dat)
 
@@ -219,7 +217,7 @@ class RentMODB(Base):
 @app.get('/api/rent/monthly/<barrio>')
 def get_monthly_rent(sqlite_db, barrio):
     query = sqlite_db.query(RentMODB.b_id, BarrioDB.name, RentMODB.date, RentMODB.usd_price).filter(RentMODB.b_id == barrio).join(BarrioDB, BarrioDB.id == RentMODB.b_id).all()
-    dat = [{'group': i.name, 'key': datetime_encoding(str(i.date)), 'value': i.usd_price} for i in query]
+    dat = [{'group': i.name.title(), 'key': datetime_encoding(str(i.date)), 'value': i.usd_price} for i in query]
 
     return package_data(dat)
 
@@ -245,7 +243,7 @@ class SellMODB(Base):
 @app.get('/api/purchase/monthly/<barrio>')
 def get_monthly_purchase(sqlite_db, barrio):
     query = sqlite_db.query(SellMODB.id, BarrioDB.name, SellMODB.date, SellMODB.usd_price).join(BarrioDB, BarrioDB.id == SellMODB.b_id).filter(and_(SellMODB.b_id == barrio)).all()
-    dat = [{'group': i.name, 'key': datetime_encoding(str(i.date)), 'value': i.usd_price} for i in query]
+    dat = [{'group': i.name.title(), 'key': datetime_encoding(str(i.date)), 'value': i.usd_price} for i in query]
 
     return package_data(dat)
 
@@ -261,7 +259,7 @@ def get_all_monthly_sell(sqlite_db):
     Mean Price for the Month
     '''
     query = sqlite_db.query(SellMODB.id, BarrioDB.name, SellMODB.date, SellMODB.usd_price, SellMODB.local_price).join(BarrioDB, BarrioDB.id == SellMODB.b_id).all()
-    dat = [{'group': i.name, 'key': datetime_encoding(str(i.date)), 'value': i.usd_price} for i in query]
+    dat = [{'group': i.name.title(), 'key': datetime_encoding(str(i.date)), 'value': i.usd_price} for i in query]
        
     return package_data(dat)
 
@@ -439,6 +437,11 @@ def get_all_barrios(sqlite_db):
     query = sqlite_db.query(BarrioDB).order_by(BarrioDB.id).all()
     dat = [remove_inst_state(i.__dict__) for i in query]
 
+    for i in dat:
+        i['name'] = i['name'].title()
+
+    print(dat)
+
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'data': dat})
 
@@ -489,7 +492,8 @@ def get_misclass_points(sqlite_db, barrio):
     query = sqlite_db.query(MislabelledDB).filter(MislabelledDB.b_id == barrio).all()
     dat = [{'lon': i.lon,
             'lat': i.lat,
-            'data': {'price': i.price, 'misclass_as': i.c_b_id, 'kind': i.kind, 'date': datetime_encoding(i.date)},
+            'hue': i.price,
+            'data': {'misclass_as': i.c_b_id, 'kind': i.kind, 'date': datetime_encoding(i.date)},
             } for i in query]
 
     return package_data(dat)

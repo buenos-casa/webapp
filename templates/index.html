@@ -10,26 +10,26 @@
     <div class="hero-body">
       <div class="container">
         <!-- Page Title -->
-        <p class="title is-3">Buenos Aires</p>
+        <p class="title is-3">Housing Trends in Buenos Aires</p>
+        <div v-if="top_hide === true" class="notification">
+            <button @click="top_hide=false" class="delete"></button>
+            The heatmap below uses <a href='https://www.properati.com.ar'> Properati's</a> rental and property listings to show the average household rent and sale price in the 
+          <a href="http://www.buenosaires.gob.ar/">Autonomous City of Buenos Aires</a>. It also shows the average property value per neighborhood in the city. Click on each <a href="https://en.wikipedia.org/wiki/Neighbourhoods_of_Buenos_Aires"><strong>barrio</strong></a> to get more details!</p>     
+          </div>
         <!-- Map container -->
         
           <div class="tile is-ancestor">
             <div class="tile is-parent is-vertical is-7">
+                
                 <div class="buttons has-addons is-centered">
-                    <span class="button" v-on:click="getBarriosVal('/api/rent/all/us_avg')" @click="st='rat'" :class="[ st === 'rat' ? 'is-active is-info panel-block' : 'panel-block']">
-                      Rent All Time
+                    <span class="button" v-on:click="getBarriosVal('/api/rent/all')" @click="st='rat'" :class="[ st === 'rat' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Average Rent Price
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/purchase/all')" @click="st='pat'" :class="[ st === 'pat' ? 'is-active is-info panel-block' : 'panel-block']">
+                        Average Sale Price
                     </span>
                     <span class="button"  v-on:click="getBarriosVal('/api/property/us_val/avg/')" @click="st='pv'" :class="[ st === 'pv' ? 'is-active is-info panel-block' : 'panel-block']">
-                      Property Value
-                    </span>
-                    <span class="button"  v-on:click="getBarriosVal('/api/sports/all')" @click="st='sf'" :class="[ st === 'sf' ? 'is-active is-info panel-block' : 'panel-block']">
-                      Sports Facilities
-                    </span>
-                    <span class="button"  v-on:click="getBarriosVal('/api/health/hospital/count')" @click="st='hos'" :class="[ st === 'hos' ? 'is-active is-info panel-block' : 'panel-block']">
-                      Hospitals
-                    </span>
-                    <span class="button"  v-on:click="getBarriosVal('/api/humanity/elderly_care/count')" @click="st='ecc'" :class="[ st === 'ecc' ? 'is-active is-info  panel-block' : 'panel-block']">
-                      Elder Care Center
+                      Average Property Value
                     </span>
                 </div>
                 <div class="tile is-child">
@@ -210,121 +210,142 @@
                 <p class="subtitle is-family-secondary has-text-centered">Maximum Price  in USD</p>
                     <d3-metric :data='housing_summary["max"]'
                     :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
-                    :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                    :margin="{top: 0, right: 10, bottom: 0, left: 10}"
                     width="100%"
-                    height="300px">
-                    </d3-multi-line>
-                
-            </div>
-            <div class="tile is-4 is-parent is-vertical">
-                <p class="subtitle is-5">Summary Statistics</p>
-                <div class="tile is-child">
-                    <p class="subtitle is-family-secondary has-text-centered">Maximum Price </p>
-                        <d3-metric :data='housing_summary["max"]'
-                        :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
-                        :margin="{top: 20, right: 10, bottom: 10, left: 10}"
-                        width="100%"
-                        height="150px" ></d3-metric>
+                    height="50px">
+                    </d3-metric>
                 </div>
 
               <div class="tile is-child">
                   <p class="subtitle is-family-secondary has-text-centered">Average Price in USD</p> 
                   <d3-metric :data = 'housing_summary["avg"]'
-                  :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                  :margin="{top: 0, right: 10, bottom: 0, left: 10}"
                   :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#A67244', 'metricLabelFontOpacity': '1'}"
                   width="100%"
-                  height="150px"></d3-metric> 
+                  height="50px"></d3-metric> 
               </div>
 
                 <div class="tile is-child">
                     <p class="subtitle is-family-secondary has-text-centered">Standard Deviation in Price </p>
                     <d3-metric :data='housing_summary["std"]'
-                    :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                    :margin="{top: 0, right: 10, bottom: 0, left: 10}"
                     :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#D9923B', 'metricLabelFontOpacity': '1'}"
                     width="100%"
-                    height="150px"></d3-metric>
+                    height="50px"></d3-metric>
                 </div>
-
-                
                 </div>
-
             </div>
         </div>
-        </section>
-
-    </div>
+    </section>
+</div>
 
 
     <!-- Analysis Section -->
 
-  <div v-if="vw === 'analysis'">
-    <section class="hero is-bold has-text-centered">
-      <div class="hero-body">
-        <div class="container">
-          <div class="tile is-ancestor is-vertical">
-              <div class="tile is-parent">
-                  <div class="tile is-child is-9">
-                      <d3-horizontal-bar
-                      :data="importance_val"
-                      :margin="{top: 0, right: 20, bottom: 10, left: 120}"
-                      :options="{'fill': '#D9923B', 'stroke': '#F2B705','axisXLabel': 'Mutual Information Gain'}"
-                      width="100%"
-                      height="500px">
-                    </d3-horizontal-bar>
-                  </div>
-                  <div class="tile is-child">
-                      <p class="subtitle is-5  is-family-sans-serif">Feature selection</p>
+    <div v-if="vw === 'analysis'">
+        <section class="hero is-medium is-bold has-text-centered">
+            <div class="hero-body">
+                <div class="container">
+                    <div class="tile is-ancestor is-vertical">
+                        <div class="tile is-parent">
+                            <div class="tile is-child">
+                                <p class="subtitle is-5 is-family-sans-serif">This section covers some analysis on identifying how price gap changes across different barrios and different years. 
+                                    This is a unique dataset that has been created by matching longitude/latitude of homes in Properati and the city of Buenos Aires datasets. The price gap analysis enables us to see how the price gap in some barrios is higher than the others.</p>
+                            </div>
+                            <div class="tile is-child">
+                                <d3-circle
+                                    :data="0.5"
+                                    width="100%">
+                                </d3-circle>
+                            </div>
+                        </div>
+                        <div class="tile is-parent">
+                            <div class="tile is-child">
+                                <d3-circle
+                                :data="0.5"
+                                width="100%">
+                            </d3-circle>
+                            </div>
+                            <div class="tile is-child">
+                                <p class="subtitle is-5 is-family-sans-serif">This section includes correlation analysis on mislabeled homes at the barrio level. The purpose of this analysis is to show what features cause higher mislabeling rate at the barrio level.
+                                Sellers might mislabel their barrio name by purpose or mistake, but our analysis reveals interesting findings about sellers' behaviour.</p>
+                            </div>
+                        </div>
+                        <div class="tile is-parent">
+                            <div class="tile is-child is-10">
+                                <d3-horizontal-bar
+                                :data="importance_val"
+                                :margin="{top: 0, right: 0, bottom: 0, left: 100}"
+                                :options="{'stroke': '#A67244', 'fill': '#F2B705','axisXLabel': 'Mutual Information Gain'}"
+                                width="100%"
+                                height="500px">
+                                </d3-horizontal-bar>
+                            </div>
+                            <div class="tile is-child">
+                                <p class="subtitle is-5 is-family-sans-serif">Feature selection</p>
+                            </div>
+                        </div>
+                        <div class="buttons has-addons is-centered">
+                            <span v-on:click="getImportance(province.id, 2015)" @click="igy='2015'" :class="[ igy === '2015' ? 'is-info button' : 'button']">
+                                2015
+                            </span>
+                            <span v-on:click="getImportance(province.id, 2016)" @click="igy='2016'" :class="[ igy === '2016' ? 'is-info button' : 'button']">
+                                2016
+                            </span>
+                            <span v-on:click="getImportance(province.id, 2017)" @click="igy='2017'" :class="[ igy === '2017' ? 'is-info button' : 'button']">
+                                2017
+                            </span>
+                            <span v-on:click="getImportance(province.id, 2018)" @click="igy='2018'" :class="[ igy === '2018' ? 'is-info button' : 'button']">
+                                2018
+                            </span>
+                        </div>
                     </div>
-              </div>
-            <div class="tile is-parent">
-                  <div class="tile is-child">
-                    <p class="subtitle is-5 is-family-sans-serif">This section covers some analysis on identifying how price gap changes across different barrios and different years. 
-                      This is a unique dataset that has been created by matching longitude/latitude of homes in Properati and the city of Buenos Aires datasets. The price gap analysis enables us to see how the price gap in some barrios is higher than the others.</p>
-                  </div>
-                  <div class="tile is-child">
-                      <d3-circle
-                      :data="0.5"
-                      width="100%">
-                    </d3-circle>
-                  </div>
                 </div>
-            <div class="tile is-parent">
-                  <div class="tile is-child">
-                      <d3-circle
-                      :data="0.5"
-                      width="100%">
-                    </d3-circle>
-                  </div>
-                  <div class="tile is-child">
-                      <p class="subtitle is-5 is-family-sans-serif">This section includes correlation analysis on mislabeled homes at the barrio level. The purpose of this analysis is to show what features cause higher mislabeling rate at the barrio level.
-                        Sellers might mislabel their barrio name by purpose or mistake, but our analysis reveals interesting findings about sellers' behaviour.</p>
-                    </div>
             </div>
-           
-          
-          </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section v-if="province" class="hero is-dark is-medium is-bold has-text-centered">
-      <barrio mapname="baires-communes"
-        v-bind:barrio="province.id"
-        v-bind:barrios_val="barrios_val"
-        v-bind:plot_points="heatmap_val"
-        :lat="-34.6"
-        :lon="-58.45"
-        :dims="{'x':800,'y':500}">
-      </barrio>
-    </section>
-  </div>
+        </section>
+        <section v-if="mislabelled" class="hero is-medium is-bold has-text-centered">
+            <div class="columns">
+                <div class="column">
+                    <barrio mapname="baires-communes"
+                        v-bind:barrio="province.id"
+                        v-bind:plot_points="mislabelled"
+                        :lat="-34.6"
+                        :lon="-58.45"
+                        :dims="{'x':500,'y':500}"
+                        :key="province">
+                    </barrio>
+                </div>
+                <div class="column tile is-parent">
+                    <div class="tile is-parent" style="flex-wrap: wrap;">
+                        <div class="tile is-parent is-vertical" v-if="item.value > 0" v-for="(item, index) in getMislabelledCount">
+                            <div class="tile is-child">
+                                <d3-circle
+                                    :data="item.value"
+                                    :options="{labelFontOpacity:'0.0'}"
+                                    width="100px"
+                                    height="100px">
+                                </d3-circle>
+                            </div>
+                            <div class="tile is-vertical">
+                                [[ item.key ]]
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tile is-child">
+                        Lorem ipsum etc
+                    </div>
+                </div>
+                <!-- TODO: Percentages of difference -->
+            </div>
+        </section>
+    </div>
 
     <div v-if="vw === 'survey'">
         <section class="hero is-light is-medium is-bold has-text-centered">
             <div class="hero-body">
-            <div class="container">
-                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="398" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
-            </div>
+                <div class="container">
+                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="398" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+                </div>
             </div>
         </section>
     </div>

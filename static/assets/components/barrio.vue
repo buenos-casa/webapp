@@ -39,14 +39,27 @@ export default {
             default: {'x': 500, 'y': 500}
         }
     },
-    data() { 
-        return {
-            selected_province: undefined,
+    watch: {
+        plot_points: function(newVal, oldVal) {
+            this.drawHeatmap();
         }
     },
     methods: {
         drawHeatmap() {
+            this.mapLayer.selectAll("circle").remove();
             if(this.plot_points.length > 0) {
+
+                const max_val = 75000; // Math.max.apply(Math, this.plot_points.map(function(o) {return o.hue;}));
+                const min_val = 495000; // Math.min.apply(Math, this.plot_points.map(function(o) {return o.hue;}));
+
+                var colours = ['#db00e5', '#de16e7', '#e22ce9', '#e543eb', '#e959ed', '#ed70f0', '#f086f2', '#f49cf4', '#f7b3f6', '#fbc9f8', '#ffe0fb'].reverse();
+
+                var heatmapColour = d3.scale.linear()
+                .domain(d3.range(0, 1, 1.0 / (colours.length - 1)))
+                .range(colours);
+
+                var c = d3.scale.linear().domain(d3.extent(this.plot_points.map(function(o) {return o.hue;}))).range([0,1]);
+
                 const proj = this.projection;
                 this.mapLayer.selectAll("circle")
                         .data(this.plot_points)
@@ -60,7 +73,7 @@ export default {
                             return proj([d.lon, d.lat])[1];
                         })
                         .attr("r", "1px")
-                        .attr("fill", "red")
+                        .attr("fill", function(d) {return heatmapColour(c(d.hue))});
             }
         },
         drawMap() {
@@ -118,11 +131,19 @@ export default {
                     .attr('d', path)
                     .style('fill', function(d) {
                         if(d.properties.barrio === vue_ref.barrio) {
-                            return "#3b6d8c";
+                            return "#cdd1df";
                         } else {
                             return "none";
                         }
                     })
+                    .style('stroke', function(d) {
+                        if(d.properties.barrio === vue_ref.barrio) {
+                            return "#3B6D8C";
+                        } else {
+                            return "none";
+                        }
+                    })
+                    .style('stroke-width', '2px')
                     .attr('vector-effect', 'non-scaling-stroke')
                     .each(onLoad)
             });
