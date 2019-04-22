@@ -60,7 +60,7 @@ export default {
                             return proj([d.lon, d.lat])[1];
                         })
                         .attr("r", "1px")
-                        .attr("fill", "red")
+                        .attr("fill", "#a67244")
             }
         },
         drawMap() {
