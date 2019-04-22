@@ -318,15 +318,17 @@
                     <div class="tile is-parent" style="flex-wrap: wrap;">
                         <div class="tile is-parent is-vertical" v-if="item.value > 0" v-for="(item, index) in getMislabelledCount">
                             <div class="tile is-child">
-                                <d3-circle
-                                    :data="item.value"
-                                    :options="{labelFontOpacity:'0.0'}"
-                                    width="100px"
-                                    height="100px">
-                                </d3-circle>
-                            </div>
-                            <div class="tile is-vertical">
-                                [[ item.key ]]
+                                <div class="columns is-vcentered">
+                                    <div class="column">
+                                        <d3-circle
+                                            :data="item.value"
+                                            :options="{'precision': '0', labelFontOpacity:'0.0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
+                                            height="100px"
+                                            width="100px">
+                                        </d3-circle>
+                                        <p class="subtitle is-5 has-text-centered is-family-sans-serif">[[ item.key ]]</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
