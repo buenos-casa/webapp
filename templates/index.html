@@ -153,15 +153,6 @@
   </section>
 
 
-<<<<<<< HEAD
-  <!-- Tabular navigation -->
-  <div v-if="province" class="container">
-  <div class="tabs is-boxed">
-    <ul>
-      <li :class="[ vw === 'overview' ? 'is-active' : '']">
-        <a @click="vw='overview'">
-          <span>Overview</span>
-=======
   
 <!-- Tabular navigation -->
 <div v-if='province' class="container">
@@ -170,7 +161,6 @@
         <li :class="[ vw === 'overview' ? 'is-active' : '']">
             <a v-on:click="getMonthly(h_kind);getBarrioCensus(province.id);" @click="vw='overview'">
             <span>Overview</span>
->>>>>>> dev
 
             </a>
         </li>
@@ -189,7 +179,6 @@
     </div>
     <!--End of tabular navigation-->
 
-<<<<<<< HEAD
   <!--Overview tab-->
   <div v-if="vw === 'overview'">
     <section class="hero is-small is-bold">
@@ -221,26 +210,6 @@
                 <p class="subtitle is-family-secondary has-text-centered">Maximum Price  in USD</p>
                     <d3-metric :data='housing_summary["max"]'
                     :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
-=======
-    <!--Overview tab-->
-    <div v-if="vw === 'overview'">
-        <section class="hero is-small is-bold">
-            <div v-if="housing_summary" class="container">
-            <div class="tile is-ancestor">
-            <div class="tile is-8 is-vertical box">
-                    <p class="title is-3 is-spaced">Housing</p>      
-                    <p class="subtitle is-4 is-family-sans-serif ">Monthly Trends</p>
-                    <div class="buttons .has-addons">
-                        <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'button is-info' : 'button']">
-                            Purchase
-                        </a>
-                        <a v-on:click="getMonthly('rent')" @click="h_kind='rent'" :class="[ h_kind == 'rent' ? 'button is-info' : 'button']">
-                            Rent
-                        </a> 
-                    </div>
-                    <d3-multi-line
-                    :data="month_sell"
->>>>>>> dev
                     :margin="{top: 20, right: 10, bottom: 10, left: 10}"
                     width="100%"
                     height="300px">
@@ -258,7 +227,6 @@
                         height="150px" ></d3-metric>
                 </div>
 
-<<<<<<< HEAD
               <div class="tile is-child">
                   <p class="subtitle is-family-secondary has-text-centered">Average Price in USD</p> 
                   <d3-metric :data = 'housing_summary["avg"]'
@@ -267,16 +235,6 @@
                   width="100%"
                   height="150px"></d3-metric> 
               </div>
-=======
-                <div class="tile is-child">
-                    <p class="subtitle is-family-secondary has-text-centered">Average Price </p> 
-                    <d3-metric :data = 'housing_summary["avg"]'
-                    :margin="{top: 20, right: 10, bottom: 10, left: 10}"
-                    :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#A67244', 'metricLabelFontOpacity': '1'}"
-                    width="100%"
-                    height="150px"></d3-metric> 
-                </div>
->>>>>>> dev
 
                 <div class="tile is-child">
                     <p class="subtitle is-family-secondary has-text-centered">Standard Deviation in Price </p>
@@ -299,7 +257,6 @@
 
     <!-- Analysis Section -->
 
-<<<<<<< HEAD
   <div v-if="vw === 'analysis'">
     <section class="hero is-bold has-text-centered">
       <div class="hero-body">
@@ -361,64 +318,6 @@
       </barrio>
     </section>
   </div>
-=======
-    <div v-if="vw === 'analysis'">
-        <section class="hero is-medium is-bold has-text-centered">
-            <div class="hero-body">
-                <div class="container">
-                    <div class="tile is-ancestor is-vertical">
-                        <div class="tile is-parent">
-                            <div class="tile is-child">
-                                <p class="subtitle is-5 is-family-sans-serif">This section covers some analysis on identifying how price gap changes across different barrios and different years. 
-                                    This is a unique dataset that has been created by matching longitude/latitude of homes in Properati and the city of Buenos Aires datasets. The price gap analysis enables us to see how the price gap in some barrios is higher than the others.</p>
-                            </div>
-                            <div class="tile is-child">
-                                <d3-circle
-                                    :data="0.5"
-                                    width="100%">
-                                </d3-circle>
-                            </div>
-                        </div>
-                        <div class="tile is-parent">
-                            <div class="tile is-child">
-                                <d3-circle
-                                :data="0.5"
-                                width="100%">
-                            </d3-circle>
-                            </div>
-                            <div class="tile is-child">
-                                <p class="subtitle is-5 is-family-sans-serif">This section includes correlation analysis on mislabeled homes at the barrio level. The purpose of this analysis is to show what features cause higher mislabeling rate at the barrio level.
-                                Sellers might mislabel their barrio name by purpose or mistake, but our analysis reveals interesting findings about sellers' behaviour.</p>
-                            </div>
-                        </div>
-                        <div class="tile is-parent">
-                            <div class="tile is-child is-10">
-                                <d3-horizontal-bar
-                                :data="importance_val"
-                                :options="{'axisXLabel': 'Mutual Information Gain'}"
-                                width="100%"
-                                height="500px">
-                                </d3-horizontal-bar>
-                            </div>
-                            <div class="tile is-child">
-                                <p class="subtitle is-5 is-family-sans-serif">Feature selection</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section v-if="province" class="hero is-dark is-medium is-bold has-text-centered">
-            <barrio mapname="baires-communes"
-                v-bind:barrio="province.id"
-                v-bind:plot_points="mislabelled"
-                :lat="-34.6"
-                :lon="-58.45"
-                :dims="{'x':800,'y':500}">
-            </barrio>
-        </section>
-    </div>
->>>>>>> dev
 
     <div v-if="vw === 'survey'">
         <section class="hero is-light is-medium is-bold has-text-centered">
