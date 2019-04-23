@@ -148,38 +148,62 @@ def get_barrio_summary_stats(sqlite_db, barrio):
 
 @app.get('/api/rent/all/avg')
 def get_all_barrio_of_max(sqlite_db):
-    query = sqlite_db.query(RentDB.usd_price).all()
-    dat = [i[0] for i in query]
+    query = sqlite_db.query(RentDB.id, RentDB.usd_price).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.usd_price
+    
     return package_data(dat)
 
 @app.get('/api/rent/all/max')
 def get_all_barrio_of_max(sqlite_db):
-    query = sqlite_db.query(RentDB.price_max).all()
-    dat = [i[0] for i in query]
+    query = sqlite_db.query(RentDB.id, RentDB.price_max).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.price_max
+
     return package_data(dat)
 
 @app.get('/api/rent/all/min')
 def get_all_barrio_of_min(sqlite_db):
-    query = sqlite_db.query(RentDB.price_min).all()
-    dat = [i[0] for i in query]
+    query = sqlite_db.query(RentDB.id, RentDB.price_min).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.price_min
+
     return package_data(dat)
 
 @app.get('/api/rent/all/std')
 def get_all_barrio_of_std(sqlite_db):
-    query = sqlite_db.query(RentDB.price_std).all()
-    dat = [i[0] for i in query]
+    query = sqlite_db.query(RentDB.id, RentDB.price_std).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.price_std
+
     return package_data(dat)
 
 @app.get('/api/rent/all/tenth')
 def get_all_barrio_of_tenth(sqlite_db):
-    query = sqlite_db.query(RentDB.tenth_percentile_count, RentDB.count).all()
-    dat = [i.tenth_percentile_count / i.count for i in query]
+    query = sqlite_db.query(RentDB.id, RentDB.tenth_percentile_count, RentDB.count).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.tenth_percentile_count / i.count
+
     return package_data(dat)
 
 @app.get('/api/rent/all/ninty')
 def get_all_barrio_of_ninty(sqlite_db):
-    query = sqlite_db.query(RentDB.ninty_percentile_count, RentDB.count).all()
-    dat = [i.ninty_percentile_count / i.count for i in query]
+    query = sqlite_db.query(RentDB.id, RentDB.ninty_percentile_count, RentDB.count).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.ninty_percentile_count / i.count
+
     return package_data(dat)
 
 
@@ -222,38 +246,62 @@ def get_barrio_summary_stats(sqlite_db, barrio):
 
 @app.get('/api/purchase/all/avg')
 def get_all_barrio_of_max(sqlite_db):
-    query = sqlite_db.query(PurchaseDB.usd_price).all()
-    dat = [i[0] for i in query]
+    query = sqlite_db.query(PurchaseDB.id, PurchaseDB.usd_price).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.usd_price
+
     return package_data(dat)
 
 @app.get('/api/purchase/all/max')
 def get_all_barrio_of_max(sqlite_db):
-    query = sqlite_db.query(PurchaseDB.price_max).all()
-    dat = [i[0] for i in query]
+    query = sqlite_db.query(PurchaseDB.id, PurchaseDB.price_max).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.price_max
+
     return package_data(dat)
 
 @app.get('/api/purchase/all/min')
 def get_all_barrio_of_min(sqlite_db):
-    query = sqlite_db.query(PurchaseDB.price_min).all()
-    dat = [i[0] for i in query]
+    query = sqlite_db.query(PurchaseDB.id, PurchaseDB.price_min).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.price_min
+
     return package_data(dat)
 
 @app.get('/api/purchase/all/std')
 def get_all_barrio_of_std(sqlite_db):
-    query = sqlite_db.query(PurchaseDB.price_std).all()
-    dat = [i[0] for i in query]
+    query = sqlite_db.query(PurchaseDB.id, PurchaseDB.price_std).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.price_std
+
     return package_data(dat)
 
 @app.get('/api/purchase/all/tenth')
 def get_all_barrio_of_tenth(sqlite_db):
-    query = sqlite_db.query(PurchaseDB.tenth_percentile_count, PurchaseDB.count).all()
-    dat = [i.tenth_percentile_count / i.count for i in query]
+    query = sqlite_db.query(PurchaseDB.id, PurchaseDB.tenth_percentile_count, PurchaseDB.count).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.tenth_percentile_count / i.count
+
     return package_data(dat)
 
 @app.get('/api/purchase/all/ninty')
 def get_all_barrio_of_ninty(sqlite_db):
-    query = sqlite_db.query(PurchaseDB.ninty_percentile_count, PurchaseDB.count).all()
-    dat = [i.ninty_percentile_count / i.count for i in query]
+    query = sqlite_db.query(PurchaseDB.id, PurchaseDB.ninty_percentile_count, PurchaseDB.count).all()
+    dat = [0] * 49
+
+    for i in query:
+        dat[i.id] = i.ninty_percentile_count / i.count
+
     return package_data(dat)
 
 ###################################
@@ -522,6 +570,7 @@ def get_importance(sqlite_db, year, barrio):
     """Get feature importance in order of importance for a barrio or all if 'all' passed in"""
     dat = []
     if barrio == 'all':
+        # TODO
         pass
     else:
         query = sqlite_db.query(ImportanceDB).filter(and_(ImportanceDB.year == year, ImportanceDB.b_id == barrio)).all()
