@@ -202,7 +202,7 @@
             </a>
         </li>
         <li :class="[ vw === 'survey' ? 'is-active' : '']">
-            <a @click="vw='survey'">
+            <a @click="vw='survey'" href="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?usp=sf_link">
             <span>Survey</span>
             </a>
         </li>
@@ -402,8 +402,8 @@
 </div>
 
 <div v-if="vw === 'survey'">
-    <section class="is-bold has-text-centered">
-        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="1737" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+    <section class="is-bold has-text-centered" style="height: 2000">
+      Thanks for taking the survey!
     </section>
 </div>
 
