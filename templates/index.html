@@ -202,7 +202,7 @@
             </a>
         </li>
         <li :class="[ vw === 'survey' ? 'is-active' : '']">
-            <a @click="vw='survey'">
+            <a @click="vw='survey'" href="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?usp=sf_link">
             <span>Survey</span>
             </a>
         </li>
@@ -210,6 +210,8 @@
     </div>
     <!--End of tabular navigation-->
 </div>
+
+<br/><br/>
 
 <!--Overview tab-->
 <div v-if="vw === 'overview'">
@@ -358,50 +360,46 @@
               When sellers maliciously or unknowingly misrepresent their property's barrio.
           </h2>
         </div>
+      </section>
+      <div class="columns">
+          <div class="column">
+              
+              <barrio mapname="baires-communes"
+                  v-bind:barrio="province.id"
+                  v-bind:plot_points="mislabelled"
+                  :lat="-34.6"
+                  :lon="-58.45"
+                  :dims="{'x':500,'y':500}"
+                  :key="province">
+              </barrio>
+          </div>
+          <div class="column">
+              <p>
+                  We found that barrios that had lower percentiles of Education and Computer literacy had a much higher likelihood of mislabelling their property location. 
+                  Also, we noted that the majority of the mislabelled households per barrio were found on the edges of the barrios.
+              </p>
+              <div class="tile is-parent" style="flex-wrap: wrap;">
+                  <div class="tile is-parent is-vertical" v-if="item.value > 0" v-for="(item, index) in getMislabelledCount">
+                      <div class="tile is-child">
+                        <d3-circle
+                            :data="item.value"
+                            :options="{'precision': '0', labelFontOpacity:'0.0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
+                            height="100px"
+                            width="100px">
+                        </d3-circle>
+                        <p class="subtitle is-6 has-text-centered is-family-sans-serif">[[ item.key ]]</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
-    </section>
-    <div class="columns">
-        <div class="column">
-            
-            <barrio mapname="baires-communes"
-                v-bind:barrio="province.id"
-                v-bind:plot_points="mislabelled"
-                :lat="-34.6"
-                :lon="-58.45"
-                :dims="{'x':500,'y':500}"
-                :key="province">
-            </barrio>
-        </div>
-        <div class="column tile is-parent">
-            <div class="tile is-parent" style="flex-wrap: wrap;">
-                <div class="tile is-parent is-vertical" v-if="item.value > 0" v-for="(item, index) in getMislabelledCount">
-                    <div class="tile is-child">
-                        <div class="columns is-vcentered">
-                            <div class="column">
-                                <d3-circle
-                                    :data="item.value"
-                                    :options="{'precision': '0', labelFontOpacity:'0.0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
-                                    height="100px"
-                                    width="100px">
-                                </d3-circle>
-                                <p class="subtitle is-6 has-text-centered is-family-sans-serif">[[ item.key ]]</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tile is-child">
-                We found that barrios that had lower percentiles of Education and Computer literacy had a much higher likelihood of mislabelling their property location. 
-                Also, we noted that the majority of the mislabelled households per barrio were found on the edges of the barrios.
-            </div>
-        </div>
     </div>
   </section>
 </div>
 
 <div v-if="vw === 'survey'">
-    <section class="is-bold has-text-centered">
-        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="1737" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+    <section class="is-bold has-text-centered" style="height: 2000">
+      Thanks for taking the survey!
     </section>
 </div>
 
