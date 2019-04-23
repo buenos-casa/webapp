@@ -209,207 +209,200 @@
         </ul>
     </div>
     <!--End of tabular navigation-->
+</div>
 
-  <!--Overview tab-->
-  <div v-if="vw === 'overview'">
-    <section class="hero is-small is-bold">
-        <div v-if="housing_summary" class="container">
+<!--Overview tab-->
+<div v-if="vw === 'overview'">
+  <section class="hero is-medium is-bold">
+      <div v-if="housing_summary" class="container">
         <div class="tile is-ancestor" style="flex-wrap: wrap;">
           <div class="tile is-parent is-7 is-vertical box" style="flex-wrap: wrap;">
-                <p class="title is-3 is-spaced">Housing</p>      
-                  <p class="subtitle is-4 is-family-sans-serif ">Monthly Trends</p>
-                  <div class="buttons .has-addons">
-                      <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'button is-info is-selected is-family-sans-serif' : 'button is-family-sans-serif']">
-                        Purchase
-                      </a>
-                      <a v-on:click="getMonthly('rent')" @click="h_kind='rent'" :class="[ h_kind == 'rent' ? 'button is-info is-selected is-family-sans-serif' : 'button is-family-sans-serif']">
-                        Rent
-                      </a> 
-                  </div>
-                  <d3-line
-                  :data="month_sell"
-                  :margin="{top: 20, right: 10, bottom: 10, left: 10}"
-                  :options="{axisXLaneHeight : 100, fill: '#f2b705', stroke: '#f2b705'}"
-                  width="100%"
-                  height="300px">
-                </d3-line>
-            
+              <p class="title is-3 is-spaced">Housing</p>      
+              <p class="subtitle is-4 is-family-sans-serif ">Monthly Trends</p>
+              <div class="buttons .has-addons">
+                <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'button is-info is-selected is-family-sans-serif' : 'button is-family-sans-serif']">
+                  Purchase
+                </a>
+                <a v-on:click="getMonthly('rent')" @click="h_kind='rent'" :class="[ h_kind == 'rent' ? 'button is-info is-selected is-family-sans-serif' : 'button is-family-sans-serif']">
+                  Rent
+                </a> 
+              </div>
+              <d3-line
+                :data="month_sell"
+                :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                :options="{axisXLaneHeight : 100, fill: '#f2b705', stroke: '#f2b705'}"
+                width="100%"
+                height="300px">
+              </d3-line>
           </div>
           <div class="tile is-4 is-parent is-vertical is-hidden-mobile"> 
-              <div class="tile is-child">
-                <p class="subtitle is-4 has-text-centered has-text-weight-bold">Summary Statistics</p>
-                <p class="subtitle is-family-secondary has-text-centered">Maximum Price  in USD</p>
-                    <d3-metric :data='housing_summary["max"]'
-                    :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
-                    :margin="{top: 0, right: 10, bottom: 0, left: 10}"
-                    width="100%"
-                    height="50px">
-                    </d3-metric>
-                </div>
-
-              <div class="tile is-child">
-                  <p class="subtitle is-family-secondary has-text-centered">Average Price in USD</p> 
-                  <d3-metric :data = 'housing_summary["avg"]'
-                  :margin="{top: 0, right: 10, bottom: 0, left: 10}"
-                  :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#A67244', 'metricLabelFontOpacity': '1'}"
-                  width="100%"
-                  height="50px"></d3-metric> 
-              </div>
-
-                <div class="tile is-child">
-                    <p class="subtitle is-family-secondary has-text-centered">Standard Deviation in Price </p>
-                    <d3-metric :data='housing_summary["std"]'
-                    :margin="{top: 0, right: 10, bottom: 0, left: 10}"
-                    :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#D9923B', 'metricLabelFontOpacity': '1'}"
-                    width="100%"
-                    height="50px"></d3-metric>
-                </div>
-                </div>
+            <div class="tile is-child">
+              <p class="subtitle is-4 has-text-centered has-text-weight-bold">Summary Statistics</p>
+              <p class="subtitle is-family-secondary has-text-centered">Maximum Price  in USD</p>
+                <d3-metric :data='housing_summary["max"]'
+                :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
+                :margin="{top: 0, right: 10, bottom: 0, left: 10}"
+                width="100%"
+                height="50px">
+                </d3-metric>
             </div>
+
+            <div class="tile is-child">
+                <p class="subtitle is-family-secondary has-text-centered">Average Price in USD</p> 
+                <d3-metric :data = 'housing_summary["avg"]'
+                :margin="{top: 0, right: 10, bottom: 0, left: 10}"
+                :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#A67244', 'metricLabelFontOpacity': '1'}"
+                width="100%"
+                height="50px"></d3-metric> 
+            </div>
+
+            <div class="tile is-child">
+                <p class="subtitle is-family-secondary has-text-centered">Standard Deviation in Price </p>
+                <d3-metric :data='housing_summary["std"]'
+                :margin="{top: 0, right: 10, bottom: 0, left: 10}"
+                :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#D9923B', 'metricLabelFontOpacity': '1'}"
+                width="100%"
+                height="50px"></d3-metric>
+            </div>
+          </div>
         </div>
-    </section>
+      </div>
+  </section>
 </div>
 
 
-    <!-- Analysis Section -->
+<!-- Analysis Section -->
 
-    <div v-if="vw === 'analysis'">
-        <!-- Feature Selection Section -->
-        <section class="hero is-bold has-text-centered">
-                <div class="container">
-                    <section class="hero is-small has-text-centered">
-                        <div class="hero-body">
-                          <div class="container">
-                            <h1 class="title">
-                                Feature selection
-                            </h1>
-                            <h2 class="subtitle">
-                                What features actually matter to buyers?
-                            </h2>
-                            
-                          </div>
-                        </div>
-                      </section>
-                    <div class="tile is-ancestor is-vertical" style="flex-wrap: wrap;">
-                            <div class="tile is-parent is-vertical">
-                              <div class="tile is-child">
-                                  <p class="subtitle is-5"> We used Linear Regression for Price Prediction and Mutual Information Regression to determine the information gain for the different features from the price prediction</p>
-                              </div>
-                              <div class="tile is-child">
-                                  <div class="columns">
-                                      <div class="column">
-                                          <p class="title is-4 is-capitalized">North</p>
-                                          <p class="subtitle is-6">Nothern barrios (which are more historic and touristic) such as Nuñez,
-                                              Belgrano and Saavedra tend to place emphasis on nearby education percent, and health and sports facilities while resulting in the smallest variance amongst feature importance.</p>  
-                                        </div>
-                                        <div class="column">
-                                            <p class="title is-4 is-capitalized">South</p>
-                                            <p class="subtitle is-6">Southern barrios, which are also the poorer and more residential barrios such as Villa Riachuelo, Villa Soldati and Nueva Pompeya, 
-                                                produce notable <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.mutual_info_regression.html">mutual information regression (MIR)</a> 
-                                                scores with public wifi and health centers.</p>
-                                          </div>
-                                      <div class="column">
-                                        <p class="title is-4 is-capitalized">East</p>
-                                         <p class="subtitle is-6">
-                                            Public transportation is the most important feature across time in all regions of Buenos Aires and is most observed in Eastern and
-                                            wealthier barrios (for example; <strong>Puerto Madero, Retiro and Palermo)</strong>. 
-                                         </p>
-                                      </div>
-                                      
-                                      <div class="column">
-                                        <p class="title is-4 is-capitalized">West</p>
-                                        <p class="subtitle is-6">Interestingly, Western Buenos Aires such as Villa Devoto, Villa Del Parque and Floresta produce higher scores pertaining to education percent despite most schools and universities being 
-                                          positioned in the East.</p>
-                                      </div>                    
-                                    </div>
-                              </div>
-
-                            </div>
-                            <div class="tile">
-                                <d3-horizontal-bar
-                                :data="importance_val"
-                                :options="{'axisXLabel': 'Mutual Information Gain',axisYLaneWidth: '200', fill: '#f2b705', stroke: '#f2b705'}"
-                                width="100%"
-                                height="500px">
-                                </d3-horizontal-bar>
-                            </div>
-                           
-                        </div>
-                        <div class="buttons has-addons is-centered">
-                            <span v-on:click="getImportance(province.id, 2015)" @click="igy='2015'" :class="[ igy === '2015' ? 'is-info button' : 'button']">
-                                2015
-                            </span>
-                            <span v-on:click="getImportance(province.id, 2016)" @click="igy='2016'" :class="[ igy === '2016' ? 'is-info button' : 'button']">
-                                2016
-                            </span>
-                            <span v-on:click="getImportance(province.id, 2017)" @click="igy='2017'" :class="[ igy === '2017' ? 'is-info button' : 'button']">
-                                2017
-                            </span>
-                            <span v-on:click="getImportance(province.id, 2018)" @click="igy='2018'" :class="[ igy === '2018' ? 'is-info button' : 'button']">
-                                2018
-                            </span>
-                        </div>
-                    </div>
-            </div>
-        </section>
-        <section v-if="mislabelled" class="hero is-medium is-bold has-text-centered">
-            <section class="hero has-text-centered">
-                <div class="hero-body">
-                  <div class="container">
-                    <h1 class="title">
-                        The Buckhead Effect
-                    </h1>
-                    <h2 class="subtitle">
-                        When sellers maliciously or unknowingly want to belong to a neighboring barrio.
-                    </h2>
-                  </div>
-                </div>
-              </section>
-               
+<div v-if="vw === 'analysis'">
+  <!-- Feature Selection Section -->
+  <section class="hero is-bold has-text-centered">
+    <div class="container">
+      <section class="hero is-small has-text-centered">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+              Feature selection
+            </h1>
+            <h2 class="subtitle">
+              What features actually matter to buyers?
+            </h2>
+          </div>
+        </div>
+      </section>
+      <div class="tile is-ancestor is-vertical" style="flex-wrap: wrap;">
+        <div class="tile is-parent is-vertical">
+          <div class="tile is-child">
+            <p class="subtitle is-5"> We used Linear Regression for Price Prediction and Mutual Information Regression to determine the information gain for the different features from the price prediction</p>
+          </div>
+          <div class="tile is-child">
             <div class="columns">
-                <div class="column">
-                    
-                    <barrio mapname="baires-communes"
-                        v-bind:barrio="province.id"
-                        v-bind:plot_points="mislabelled"
-                        :lat="-34.6"
-                        :lon="-58.45"
-                        :dims="{'x':500,'y':500}"
-                        :key="province">
-                    </barrio>
-                </div>
-                <div class="column tile is-parent">
-                    <div class="tile is-parent" style="flex-wrap: wrap;">
-                        <div class="tile is-parent is-vertical" v-if="item.value > 0" v-for="(item, index) in getMislabelledCount">
-                            <div class="tile is-child">
-                                <div class="columns is-vcentered">
-                                    <div class="column">
-                                        <d3-circle
-                                            :data="item.value"
-                                            :options="{'precision': '0', labelFontOpacity:'0.0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
-                                            height="100px"
-                                            width="100px">
-                                        </d3-circle>
-                                        <p class="subtitle is-6 has-text-centered is-family-sans-serif">[[ item.key ]]</p>
-                                    </div>
-                                </div>
+              <div class="column">
+                <p class="title is-4 is-capitalized">North</p>
+                <p class="subtitle is-6">Nothern barrios (which are more historic and touristic) such as Nuñez,
+                  Belgrano and Saavedra tend to place emphasis on nearby education percent, and health and sports facilities while resulting in the smallest variance amongst feature importance.</p>  
+              </div>
+              <div class="column">
+                  <p class="title is-4 is-capitalized">South</p>
+                  <p class="subtitle is-6">Southern barrios, which are also the poorer and more residential barrios such as Villa Riachuelo, Villa Soldati and Nueva Pompeya, 
+                      produce notable <a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.mutual_info_regression.html">mutual information regression (MIR)</a> 
+                      scores with public wifi and health centers.</p>
+              </div>
+              <div class="column">
+                <p class="title is-4 is-capitalized">East</p>
+                  <p class="subtitle is-6">
+                    Public transportation is the most important feature across time in all regions of Buenos Aires and is most observed in Eastern and
+                    wealthier barrios (for example; <strong>Puerto Madero, Retiro and Palermo)</strong>. 
+                  </p>
+              </div>
+              <div class="column">
+                <p class="title is-4 is-capitalized">West</p>
+                <p class="subtitle is-6">Interestingly, Western Buenos Aires such as Villa Devoto, Villa Del Parque and Floresta produce higher scores pertaining to education percent despite most schools and universities being 
+                  positioned in the East.</p>
+              </div>                    
+            </div>
+          </div>
+        </div>
+        <div class="tile">
+            <d3-horizontal-bar
+            :data="importance_val"
+            :options="{'axisXLabel': 'Mutual Information Gain',axisYLaneWidth: '200', fill: '#f2b705', stroke: '#f2b705'}"
+            width="100%"
+            height="500px">
+            </d3-horizontal-bar>
+        </div>
+      </div>
+      <div class="buttons has-addons is-centered">
+        <span v-on:click="getImportance(province.id, 2015)" @click="igy='2015'" :class="[ igy === '2015' ? 'is-info button' : 'button']">
+            2015
+        </span>
+        <span v-on:click="getImportance(province.id, 2016)" @click="igy='2016'" :class="[ igy === '2016' ? 'is-info button' : 'button']">
+            2016
+        </span>
+        <span v-on:click="getImportance(province.id, 2017)" @click="igy='2017'" :class="[ igy === '2017' ? 'is-info button' : 'button']">
+            2017
+        </span>
+        <span v-on:click="getImportance(province.id, 2018)" @click="igy='2018'" :class="[ igy === '2018' ? 'is-info button' : 'button']">
+            2018
+        </span>
+      </div>
+    </div>
+  </section>
+  <section v-if="mislabelled" class="hero is-medium is-bold has-text-centered">
+    <section class="hero has-text-centered">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+              The Buckhead Effect
+          </h1>
+          <h2 class="subtitle">
+              When sellers maliciously or unknowingly want to belong to a neighboring barrio.
+          </h2>
+        </div>
+      </div>
+    </section>
+    <div class="columns">
+        <div class="column">
+            
+            <barrio mapname="baires-communes"
+                v-bind:barrio="province.id"
+                v-bind:plot_points="mislabelled"
+                :lat="-34.6"
+                :lon="-58.45"
+                :dims="{'x':500,'y':500}"
+                :key="province">
+            </barrio>
+        </div>
+        <div class="column tile is-parent">
+            <div class="tile is-parent" style="flex-wrap: wrap;">
+                <div class="tile is-parent is-vertical" v-if="item.value > 0" v-for="(item, index) in getMislabelledCount">
+                    <div class="tile is-child">
+                        <div class="columns is-vcentered">
+                            <div class="column">
+                                <d3-circle
+                                    :data="item.value"
+                                    :options="{'precision': '0', labelFontOpacity:'0.0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
+                                    height="100px"
+                                    width="100px">
+                                </d3-circle>
+                                <p class="subtitle is-6 has-text-centered is-family-sans-serif">[[ item.key ]]</p>
                             </div>
                         </div>
                     </div>
-                    <div class="tile is-child">
-                        We found that barrios that had lower percentiles of Education and Computer literacy had a much higher likelihood of mislabelling their property location. 
-                        Also, we noted that the majority of the mislabelled households per barrio were found on the edges of the barrios.
-                    </div>
                 </div>
             </div>
-        </section>
+            <div class="tile is-child">
+                We found that barrios that had lower percentiles of Education and Computer literacy had a much higher likelihood of mislabelling their property location. 
+                Also, we noted that the majority of the mislabelled households per barrio were found on the edges of the barrios.
+            </div>
+        </div>
     </div>
+  </section>
+</div>
 
-    <div v-if="vw === 'survey'">
-        <section class="is-bold has-text-centered">
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="1737" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
-        </section>
-    </div>
+<div v-if="vw === 'survey'">
+    <section class="is-bold has-text-centered">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="1737" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+    </section>
 </div>
 
 {% endblock %}
