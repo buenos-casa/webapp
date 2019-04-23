@@ -570,6 +570,7 @@ def get_importance(sqlite_db, year, barrio):
     """Get feature importance in order of importance for a barrio or all if 'all' passed in"""
     dat = []
     if barrio == 'all':
+        # TODO
         pass
     else:
         query = sqlite_db.query(ImportanceDB).filter(and_(ImportanceDB.year == year, ImportanceDB.b_id == barrio)).all()
