@@ -6,7 +6,9 @@ module.exports = {
   entry: {
     'js/script.min.js': './static/assets/js/script.js',
     'css/style.min.css': './static/assets/scss/style.scss',
-    'components/mapgeojson.min.vue': './static/assets/components/mapgeojson.vue'
+    'components/mapgeojson.min.vue': './static/assets/components/mapgeojson.vue',
+    'components/multiline.min.vue': './static/assets/components/multiline.vue',
+    'components/barrio.min.vue': './static/assets/components/barrio.vue'
   },
   output: {
     path: path.resolve(__dirname, 'static'),

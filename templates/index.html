@@ -6,150 +6,354 @@
 
 {% block content %}
 
-  <section class="hero is-dark is-medium is-bold has-text-centered">
+  <section class="hero is-bold has-text-centered">
     <div class="hero-body">
       <div class="container">
         <!-- Page Title -->
-        <p class="title is-1">Buenos Aires</p>
+        <p class="title is-3">Housing Trends in Buenos Aires</p>
+        <div v-if="top_hide === true" class="notification">
+            <button @click="top_hide=false" class="delete"></button>
+            The heatmap below uses <a href='https://www.properati.com.ar'> Properati's</a> rental and property listings to show the average household rent and sale price in the 
+          <a href="http://www.buenosaires.gob.ar/">Autonomous City of Buenos Aires</a>. It also shows the average property value per neighborhood in the city. Click on each <a href="https://en.wikipedia.org/wiki/Neighbourhoods_of_Buenos_Aires"><strong>barrio</strong></a> to get more details!</p>     
+          </div>
         <!-- Map container -->
-        <div class="columns">
-          <div class="column is-one-fifth">
-            Controls
+        
+          <div class="tile is-ancestor" style="flex-wrap: wrap;">
+            <div class="tile is-parent is-vertical is-8">
+                
+                <div class="buttons has-addons is-centered">
+                    <span class="button" v-on:click="getBarriosVal('/api/purchase/all/avg')" @click="st='purchase';met='avg'" :class="[ st === 'purchase' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Purchase Price
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/rent/all/avg')" @click="st='rent';met='avg'" :class="[ st === 'rent' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Rent
+                    </span>
+                </div>
+                <div v-if="st === 'purchase' || st === 'rent'" class="buttons has-addons is-centered">
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/avg')" @click="met = 'avg'" :class="[ met === 'avg' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Average
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/max')" @click="met = 'max'" :class="[ met === 'max' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Maximum
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/min')" @click="met = 'min'" :class="[ met === 'min' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Minimum
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/std')" @click="met = 'std'" :class="[ met === 'std' ? 'is-active is-info panel-block' : 'panel-block']">
+                      Standard Deviation
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/ninty')" @click="met = 'tenth'" :class="[ met === 'tenth' ? 'is-active is-info panel-block' : 'panel-block']">
+                      > 90th Percentile
+                    </span>
+                    <span class="button" v-on:click="getBarriosVal('/api/' + st + '/all/tenth')" @click="met = 'ninty'" :class="[ met === 'ninty' ? 'is-active is-info panel-block' : 'panel-block']">
+                      < 10th Percentile
+                    </span>
+                </div>                
+                <div class="tile is-child">
+                    <mapgeojson mapname='baires-communes'
+                        v-bind:barrios_val="barrios_val"
+                        :lat="-34.6"
+                        :lon="-58.45"
+                        :dims="{'x':700,'y':500}">
+                    </mapgeojson>
+                </div>
+            </div>
+
+        <!--Circles for percentages-->
+        <div class="tile is-parent is-vertical is-2">
+          <div class="tile is-child">
+              <div class="columns is-vcentered">
+                  <div class="column">
+                    <p class="title is-5">Census Information</p>
+                  </div>
+                </div>
+            <div class="columns is-vcentered">
+              <div class="column">
+                <d3-circle
+                  :data="barriocensus['own']"
+                  :options="{'precision': '0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
+                  :margin="{top: 10, right: 0, bottom: 10, left: 0}"
+                  height="150px"
+                  width="100%">
+                </d3-circle>
+                <p class="subtitle is-5 has-text-centered is-family-sans-serif">Own<br>Their Home</p>
+              </div>
+            </div>
           </div>
-          <div class="column is-half">
-            <mapgeojson mapname='baires-communes'
-                        v-bind:barrios_val="barrios_val">
-            </mapgeojson>
+          
+          <div class="tile is-child">
+            <div class="columns is-vcentered">
+              <div class="column"> 
+                <d3-circle
+                  :data="barriocensus['rent']"
+                  :options="{'precision': '0', 'labelFontSize': '30', 'circleForeground': '#F2B705'}"
+                  :margin="{top: 10, right: 0, bottom: 10, left: 0}"
+                  height="150px"
+                  width="100%">
+                </d3-circle>
+                <p class="subtitle is-5 has-text-centered is-family-sans-serif">Rent<br>Their Home</p>
+              </div>
+            </div>
           </div>
-          <div class="column">
-            Circle thingies
+
+          <div class="tile is-child">
+            <div class="columns is-vcentered">
+              <div class="column">           
+                <d3-circle
+                  :data="barriocensus['uinhab']"
+                  :options="{'precision': '0', 'labelFontSize': '30','circleForeground': '#A67244'}"
+                  :margin="{top: 10, right: 0, bottom: 10, left: 0}"
+                  height="150px"
+                  width="100%">
+                </d3-circle>
+                <p class="subtitle is-5 has-text-centered is-family-sans-serif">Homes<br>Uninhabited</p>
+              </div>
+            </div>
           </div>
         </div>
+        <!--End of circles for percentages-->
+
+        <!--Columns for basic stats-->
+        <div v-if="province" class="tile is-parent is-vertical is-2">
+            <!--Horizontal columns showing different metrics per barrio-->
+            <div class="tile is-child" style="height:20px;">
+                <p class="title is-5">Geographic information</p>
+            </div>
+            <div class="tile is-child">
+                
+                <d3-metric
+                :data="culture_stats[province.id]"
+                :options="{'metricPrecision': '0', 'metricLabelFontSize': '40', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
+                width="100%"
+                height="80px">
+              </d3-metric>
+              <p class="subtitle is-5 has-text-centered is-family-sans-serif">Cultural Landmarks</p>
+            </div>
+            <div class="tile is-child">
+               
+                <d3-metric
+                :data="health_stats[province.id]"
+                :options="{'metricPrecision': '0', 'metricLabelFontSize': '40', 'metricLabelColor': '#638CA6', 'metricLabelFontOpacity': '1'}"
+                width="100%"
+                height="80px">
+              </d3-metric>
+              <p class="subtitle is-5 has-text-centered is-family-sans-serif">Health Providers</p>
+            </div>
+            <div class="tile is-child">
+                
+                <d3-metric
+                :data="humanity_stats[province.id]"
+                :options="{'metricPrecision': '0', 'metricLabelFontSize': '40', 'metricLabelColor': '#F2B705', 'metricLabelFontOpacity': '1'}"
+                width="100%"
+                height="80px">
+              </d3-metric>
+              <p class="subtitle is-5 has-text-centered is-family-sans-serif">Social Care Centers</p>
+            </div>
+            <div class="tile is-child">
+                
+                <d3-metric
+                :data="sports_stats[province.id]"
+                :options="{'metricPrecision': '0', 'metricLabelFontSize': '40', 'metricLabelColor': '#9923B', 'metricLabelFontOpacity': '1'}"
+                width="100%"
+                height="80px">
+              </d3-metric>
+              <p class="subtitle is-5 has-text-centered is-family-sans-serif">Sports Amenities</p>
+            </div>     
+    </div>
       </div>
-      <!-- Barrio Name -->
-      <div v-if="province">
-        <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
+      <div class="tile is-parent">
+          <!-- Barrio Name -->
+        <div v-if="province" class="tile is-6 is-child">
+            <p id="#barrio_name" class="subtitle is-3">[[ province.name ]]</p>
+            <p class="subtitle is-5">[[ province.text ]]</p>
+        </div>
+        <div v-if="province" class="tile is-child is-1"></div>
+      <div v-if="province" class="tile is-child">
+        <ul class="is-family-sans-serif">
+          <li><strong>Cultural landmarks</strong>  include museums, libraries and cultural centers.</li>
+          <li><strong>Health providers</strong> is a general term that includes hospitals, pharmacies, community health centers and medical centers.</li>
+          <li><strong>Social care facilities</strong> are varied and include but are not limited to: day cares, social organizations, women's shelters, elder care facilities and boys and girls' clubs. </li>
+          <li><strong>Sports amenities</strong> include sports clubs, sports centers, skate parks and last but not least, football clubs. </li>
+        </ul>
       </div>
-      <!-- Dropdown menu -->
-      <div class="dropdown is-hoverable">
-        <div class="dropdown-trigger">
-          <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-            <span>Dropdown button</span>
-            <span class="icon is-small">
-              <i class="fas fa-angle-down" aria-hidden="true"></i>
-            </span>
-          </button>
-        </div>
-        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-          <div class="dropdown-content">
-            <a v-on:click="getBarriosRentAT_usavg()" class="dropdown-item">
-              Rent All Time
-            </a>
-            <a v-on:click="getAvgBarriosValUS()" class="dropdown-item">
-              Average property value
-            </a>
-          </div>
-        </div>
       </div>
     </div>
+    
+    
+
   </section>
 
-  <section class="hero is-warning is-medium is-bold has-text-centered">
-    <div class="hero-body">
-      <div class="container">
-        <div v-if="result">
-          <!-- Only runs if this class is present -->
-          <div class="communes">
-            <div class="columns is-desktop">
-              <div class="column" v-for="commune in result">
-                <div class="card">
-                  <div class="card-content">
-                    <strong>[[ commune.commune ]]</strong>
-                    <div v-if="barrios">
-                      <li v-for="b_id in commune.barrios">
-                          <a v-on:click="getAvgBarrioValUS(b_id)">[[barrios[b_id].name]]</a>
-                      </li>  
+
+  
+<!-- Tabular navigation -->
+<div v-if='province' class="container">
+    <div class="tabs is-boxed">
+        <ul>
+        <li :class="[ vw === 'overview' ? 'is-active' : '']">
+            <a v-on:click="getMonthly(h_kind);getBarrioCensus(province.id);" @click="vw='overview'">
+            <span>Overview</span>
+
+            </a>
+        </li>
+        <li :class="[ vw === 'analysis' ? 'is-active' : '']">
+            <a v-on:click="getMislabelled(province.id);getImportance(province.id, 2016);"
+                @click="vw='analysis'">
+            <span>Analysis</span>
+            </a>
+        </li>
+        <li :class="[ vw === 'survey' ? 'is-active' : '']">
+            <a @click="vw='survey'">
+            <span>Survey</span>
+            </a>
+        </li>
+        </ul>
+    </div>
+    <!--End of tabular navigation-->
+
+  <!--Overview tab-->
+  <div v-if="vw === 'overview'">
+    <section class="hero is-small is-bold">
+        <div v-if="housing_summary" class="container">
+        <div class="tile is-ancestor" style="flex-wrap: wrap;">
+          <div class="tile is-parent is-7 is-vertical box" style="flex-wrap: wrap;">
+                <p class="title is-3 is-spaced">Housing</p>      
+                  <p class="subtitle is-4 is-family-sans-serif ">Monthly Trends</p>
+                  <div class="buttons .has-addons">
+                      <a v-on:click="getMonthly('purchase')" @click="h_kind='purchase'" :class="[ h_kind == 'purchase' ? 'button is-info is-selected is-family-sans-serif' : 'button is-family-sans-serif']">
+                        Purchase
+                      </a>
+                      <a v-on:click="getMonthly('rent')" @click="h_kind='rent'" :class="[ h_kind == 'rent' ? 'button is-info is-selected is-family-sans-serif' : 'button is-family-sans-serif']">
+                        Rent
+                      </a> 
+                  </div>
+                  <d3-line
+                  :data="month_sell"
+                  :margin="{top: 20, right: 10, bottom: 10, left: 10}"
+                  :options="{axisXLaneHeight : 100, fill: '#f2b705', stroke: '#f2b705'}"
+                  width="100%"
+                  height="300px">
+                </d3-line>
+            
+          </div>
+          <div class="tile is-4 is-parent is-vertical"> 
+              <div class="tile is-child">
+                <p class="subtitle is-4 has-text-centered has-text-weight-bold">Summary Statistics</p>
+                <p class="subtitle is-family-secondary has-text-centered">Maximum Price  in USD</p>
+                    <d3-metric :data='housing_summary["max"]'
+                    :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#3B6D8C', 'metricLabelFontOpacity': '1'}"
+                    :margin="{top: 0, right: 10, bottom: 0, left: 10}"
+                    width="100%"
+                    height="50px">
+                    </d3-metric>
+                </div>
+
+              <div class="tile is-child">
+                  <p class="subtitle is-family-secondary has-text-centered">Average Price in USD</p> 
+                  <d3-metric :data = 'housing_summary["avg"]'
+                  :margin="{top: 0, right: 10, bottom: 0, left: 10}"
+                  :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#A67244', 'metricLabelFontOpacity': '1'}"
+                  width="100%"
+                  height="50px"></d3-metric> 
+              </div>
+
+                <div class="tile is-child">
+                    <p class="subtitle is-family-secondary has-text-centered">Standard Deviation in Price </p>
+                    <d3-metric :data='housing_summary["std"]'
+                    :margin="{top: 0, right: 10, bottom: 0, left: 10}"
+                    :options="{'metricPrecision': '0', 'metricLabelFontSize': '50', 'metricLabelColor': '#D9923B', 'metricLabelFontOpacity': '1'}"
+                    width="100%"
+                    height="50px"></d3-metric>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+    <!-- Analysis Section -->
+
+    <div v-if="vw === 'analysis'">
+        <!-- Feature Selection Section -->
+        <section class="hero is-medium is-bold has-text-centered">
+            <div class="hero-body">
+                <div class="container">
+                    <div class="tile is-ancestor is-vertical">
+                        <div class="tile is-parent" style="flex-wrap: wrap;">
+                            <div class="tile is-child is-10">
+                                <d3-horizontal-bar
+                                :data="importance_val"
+                                :options="{'axisXLabel': 'Mutual Information Gain',axisYLaneWidth: '200', fill: '#f2b705', stroke: '#f2b705'}"
+                                width="100%"
+                                height="500px">
+                                </d3-horizontal-bar>
+                            </div>
+                            <div class="tile is-child">
+                                <p class="subtitle is-5 is-family-sans-serif">Feature selection</p>
+                            </div>
+                        </div>
+                        <div class="buttons has-addons is-centered">
+                            <span v-on:click="getImportance(province.id, 2015)" @click="igy='2015'" :class="[ igy === '2015' ? 'is-info button' : 'button']">
+                                2015
+                            </span>
+                            <span v-on:click="getImportance(province.id, 2016)" @click="igy='2016'" :class="[ igy === '2016' ? 'is-info button' : 'button']">
+                                2016
+                            </span>
+                            <span v-on:click="getImportance(province.id, 2017)" @click="igy='2017'" :class="[ igy === '2017' ? 'is-info button' : 'button']">
+                                2017
+                            </span>
+                            <span v-on:click="getImportance(province.id, 2018)" @click="igy='2018'" :class="[ igy === '2018' ? 'is-info button' : 'button']">
+                                2018
+                            </span>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </div>
-        <div v-else>
-          <h3 class="title">Oh.. I don't found any objects on Database!</h3>
-          <p>Please run <code>$ python install.py</code> from project dir.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="hero is-warning is-medium is-bold has-text-centered">
-    <div class="hero-body">
-      <div class="container">
-        <div v-if="bar_avg">
-          [[ bar_avg ]]
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="hero is-warning is-medium is-bold has-text-centered">
-    <div class="hero-body">
-      <div class="container">
-        <!-- Dropdown menu -->
-        <div class="dropdown is-hoverable">
-          <div class="dropdown-trigger">
-            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-              <span>Dropdown button</span>
-              <span class="icon is-small">
-                <i class="fas fa-angle-down" aria-hidden="true"></i>
-              </span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-menu" role="menu">
-            <div class="dropdown-content">
-              <a v-on:click="getCommuneCensus(1)" class="dropdown-item is-active">
-                Dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(2)" class="dropdown-item">
-                  Other dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(3)" class="dropdown-item">
-                  Active dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(4)" class="dropdown-item">
-                  Other dropdown item
-              </a>
-              <a v-on:click="getCommuneCensus(5)" class="dropdown-item">
-                  With a divider
-              </a>
-            </div>
-          </div>
-        </div>
-        <!-- Data show -->
-        <div v-if="census">
-          <!-- Only runs if this class is present -->
-          <div class="communasData">
-            <div class="columns is-desktop">
-              <div class="column" v-for="point in census">
-                <div class="card">
-                  <div class="card-content">
-                    <h3>[[ point.comp_percent ]]</h3>
-                    <strong>[[ point.comp_quantile ]]</strong>
-                  </div>
+        </section>
+        <section v-if="mislabelled" class="hero is-medium is-bold has-text-centered">
+            <div class="columns">
+                <div class="column">
+                    <barrio mapname="baires-communes"
+                        v-bind:barrio="province.id"
+                        v-bind:plot_points="mislabelled"
+                        :lat="-34.6"
+                        :lon="-58.45"
+                        :dims="{'x':500,'y':500}"
+                        :key="province">
+                    </barrio>
                 </div>
-              </div>
+                <div class="column tile is-parent">
+                    <div class="tile is-parent" style="flex-wrap: wrap;">
+                        <div class="tile is-parent is-vertical" v-if="item.value > 0" v-for="(item, index) in getMislabelledCount">
+                            <div class="tile is-child">
+                                <div class="columns is-vcentered">
+                                    <div class="column">
+                                        <d3-circle
+                                            :data="item.value"
+                                            :options="{'precision': '0', labelFontOpacity:'0.0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
+                                            height="100px"
+                                            width="100px">
+                                        </d3-circle>
+                                        <p class="subtitle is-5 has-text-centered is-family-sans-serif">[[ item.key ]]</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tile is-child">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Odio facilisis mauris sit amet massa vitae. Enim facilisis gravida neque convallis a. Porttitor lacus luctus accumsan tortor posuere ac ut consequat semper. Nibh nisl condimentum id venenatis. Nulla aliquet enim tortor at auctor urna nunc. Vitae justo eget magna fermentum iaculis. Sit amet consectetur adipiscing elit ut aliquam purus sit. Pretium lectus quam id leo in vitae turpis massa. Volutpat odio facilisis mauris sit amet massa. Cras adipiscing enim eu turpis egestas pretium. Aliquam purus sit amet luctus venenatis lectus. In mollis nunc sed id. Suscipit tellus mauris a diam maecenas sed enim. Nam at lectus urna duis convallis convallis tellus id interdum. Enim tortor at auctor urna nunc id cursus metus aliquam. Ut sem viverra aliquet eget sit amet tellus cras adipiscing. Nam libero justo laoreet sit amet cursus sit amet. Et netus et malesuada fames. Eu augue ut lectus arcu bibendum at varius vel pharetra.
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div v-else>
-          <h3 class="title">Oh.. I don't found any objects on Database!</h3>
-          <p>Please run <code>$ python install.py</code> from project dir.</p>
-        </div>
-      </div>
+        </section>
     </div>
-  </section>
+
+    <div v-if="vw === 'survey'">
+        <section class="is-bold has-text-centered">
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScJzOdZIZUp9wV_Ly7210NDPN3yvIo2sqOf30iTsGKtloq75Q/viewform?embedded=true" width="640" height="1737" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+        </section>
+    </div>
+</div>
 
 {% endblock %}
 
