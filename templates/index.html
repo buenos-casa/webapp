@@ -350,53 +350,51 @@
     </div>
   </section>
   <section v-if="mislabelled" class="hero is-medium is-bold has-text-centered">
-    <section class="hero has-text-centered">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-              The Buckhead Effect
-          </h1>
-          <h2 class="subtitle">
-              When sellers maliciously or unknowingly want to belong to a neighboring barrio.
-          </h2>
+    <div class="container">
+      <section class="hero has-text-centered">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+                The Buckhead Effect
+            </h1>
+            <h2 class="subtitle">
+                When sellers maliciously or unknowingly want to belong to a neighboring barrio.
+            </h2>
+          </div>
         </div>
+      </section>
+      <div class="columns">
+          <div class="column">
+              
+              <barrio mapname="baires-communes"
+                  v-bind:barrio="province.id"
+                  v-bind:plot_points="mislabelled"
+                  :lat="-34.6"
+                  :lon="-58.45"
+                  :dims="{'x':500,'y':500}"
+                  :key="province">
+              </barrio>
+          </div>
+          <div class="column">
+              <p>
+                  We found that barrios that had lower percentiles of Education and Computer literacy had a much higher likelihood of mislabelling their property location. 
+                  Also, we noted that the majority of the mislabelled households per barrio were found on the edges of the barrios.
+              </p>
+              <div class="tile is-parent" style="flex-wrap: wrap;">
+                  <div class="tile is-parent is-vertical" v-if="item.value > 0" v-for="(item, index) in getMislabelledCount">
+                      <div class="tile is-child">
+                        <d3-circle
+                            :data="item.value"
+                            :options="{'precision': '0', labelFontOpacity:'0.0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
+                            height="100px"
+                            width="100px">
+                        </d3-circle>
+                        <p class="subtitle is-6 has-text-centered is-family-sans-serif">[[ item.key ]]</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
-    </section>
-    <div class="columns">
-        <div class="column">
-            
-            <barrio mapname="baires-communes"
-                v-bind:barrio="province.id"
-                v-bind:plot_points="mislabelled"
-                :lat="-34.6"
-                :lon="-58.45"
-                :dims="{'x':500,'y':500}"
-                :key="province">
-            </barrio>
-        </div>
-        <div class="column tile is-parent">
-            <div class="tile is-parent" style="flex-wrap: wrap;">
-                <div class="tile is-parent is-vertical" v-if="item.value > 0" v-for="(item, index) in getMislabelledCount">
-                    <div class="tile is-child">
-                        <div class="columns is-vcentered">
-                            <div class="column">
-                                <d3-circle
-                                    :data="item.value"
-                                    :options="{'precision': '0', labelFontOpacity:'0.0', 'labelFontSize': '30', 'circleForeground': '#3B6D8C'}"
-                                    height="100px"
-                                    width="100px">
-                                </d3-circle>
-                                <p class="subtitle is-6 has-text-centered is-family-sans-serif">[[ item.key ]]</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tile is-child">
-                We found that barrios that had lower percentiles of Education and Computer literacy had a much higher likelihood of mislabelling their property location. 
-                Also, we noted that the majority of the mislabelled households per barrio were found on the edges of the barrios.
-            </div>
-        </div>
     </div>
   </section>
 </div>
