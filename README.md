@@ -1,3 +1,5 @@
+Hosted Website: [Here](https://buenos-casas.herokuapp.com/)
+
 ##### Dependencies
 
 If you haven't already, install `nodejs` on your machine.
@@ -12,13 +14,9 @@ Again go to the webapp directory but this time run `pip install -r requirements.
 
 To build the webapp, run `npm run build`. However you would need to do this every time you want to see changes. If you want live updates, run `npm run watch`.
 
-To run the server, run the command `python run.py`.
+To run the server, run the command `python run.py`. This must be running for the files to be served to your browser!
 
 Use a browser to go to `localhost:8080` and see your changes.
-
-If just getting started with VueJS I suggest looking at the Single File Components already in the project and see how they are structured and how they are imported into the app proper in script.js.
-
-**Important!!**: To import your SFC the variable name must be the name of the file such that "buenosaires" is imported as Buenosaires. If you do not do it this way, the component will not be imported.
 
 #### Color Theme:
 
