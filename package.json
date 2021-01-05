@@ -15,7 +15,7 @@
     "heroku-postbuild": "webpack -p"
   },
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "browser-sync": "^2.26.3",
     "bulma": "^0.7.4",
     "d3-transform": "^1.0.5",
