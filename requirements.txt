@@ -1,4 +1,4 @@
-bottle==0.12.16
+bottle==0.12.20
 bottle-sqlalchemy==0.4.3
 certifi==2019.3.9
 Jinja2==2.10.1
